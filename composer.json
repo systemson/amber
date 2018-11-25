@@ -1,0 +1,79 @@
+{
+    "name": "amber/framework",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Deivi Peña",
+            "email": "systemson@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/systemson/common"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/systemson/cache"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/systemson/collection"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/systemson/common"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/systemson/logger"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/systemson/notifier"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/systemson/sketch"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/systemson/controller"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/systemson/gemstone"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.1.0",
+        "amber/common": "dev-master",
+        "amber/cache": "dev-master",
+        "amber/gemstone": "dev-master"
+    },
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "^2.0",
+        "phpunit/phpunit": "^6.5|^7.0"
+    },
+    "scripts": {
+        "test": "phpunit --verbose --coverage-html ./tmp/coverage/",
+        "docs": "phpdoc -d './vendor/amber/*/src' -i Tests/ -t ./tmp/docs/api"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}
