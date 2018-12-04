@@ -59,8 +59,10 @@
     },
     "require": {
         "php": "^7.1.0",
-        "amber/common": "dev-master",
         "amber/cache": "dev-master",
+        "amber/common": "dev-master",
+        "amber/container": "dev-master",
+        "amber/controller": "dev-master",
         "amber/gemstone": "dev-master"
     },
     "require-dev": {

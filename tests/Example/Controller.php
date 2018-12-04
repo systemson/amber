@@ -5,14 +5,15 @@ namespace Tests\Example;
 class Controller
 {
     /**
-     * @inject Amber\Tests\Example\View
+     * @inject Tests\Example\View
      *
      * @var string
      */
     public $view;
 
     /**
-     * @var Amber\Tests\Example\Model
+     *
+     * @var Amber\Container\Tests\Example\Model
      */
     public $model;
 
