@@ -58,7 +58,7 @@
         }
     },
     "require": {
-        "php": "^7.1.0",
+        "php": "^7.2.0",
         "amber/cache": "dev-master",
         "amber/common": "dev-master",
         "amber/container": "dev-master",
@@ -66,16 +66,26 @@
         "amber/gemstone": "dev-master"
     },
     "require-dev": {
-        "phpdocumentor/phpdocumentor": "^2.0",
+        "phpdocumentor/phpdocumentor": "dev-master",
         "phpunit/phpunit": "^6.5|^7.0"
     },
     "scripts": {
-        "test": "phpunit --verbose --coverage-html ./tmp/coverage/",
-        "docs": "phpdoc -d './vendor/amber/*/src' -i Tests/ -t ./tmp/docs/api"
+        "post-install-cmd": [
+            "test"
+        ],
+        "test": [
+            "phpunit --verbose --coverage-html ./tmp/phpunit/",
+            "phpdoc"
+        ],
+        "pull": [
+            "git pull",
+            "composer update"
+        ]
     },
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "process-timeout": 0
     }
 }

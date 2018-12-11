@@ -15,12 +15,12 @@ class ConcreteWrapper extends AbstractWrapper
     	'getId',
     ];
 
-    protected static function setArguments(...$args): void
+    public static function setArguments(...$args): void
     {
     	//
     }
 
-    protected static function getArguments(): array
+    public static function getArguments(): array
     {
     	return [];
     }
