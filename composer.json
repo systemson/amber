@@ -45,11 +45,15 @@
         {
             "type": "vcs",
             "url": "https://github.com/systemson/gemstone"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/systemson/route"
         }
     ],
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "app/"
         }
     },
     "autoload-dev": {
@@ -62,21 +66,10 @@
         "amber/cache": "dev-master",
         "amber/common": "dev-master",
         "amber/container": "dev-master",
-        "amber/controller": "dev-master",
-        "amber/gemstone": "dev-master"
+        "amber/route": "dev-master"
     },
-    "require-dev": {
-        "phpdocumentor/phpdocumentor": "dev-master",
-        "phpunit/phpunit": "^6.5|^7.0"
-    },
+    "require-dev": {},
     "scripts": {
-        "post-install-cmd": [
-            "test"
-        ],
-        "test": [
-            "phpunit --verbose --coverage-html ./tmp/phpunit/",
-            "phpdoc"
-        ],
         "pull": [
             "git pull",
             "composer update"
