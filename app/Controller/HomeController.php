@@ -3,11 +3,12 @@
 namespace App\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class HomeController
 {
-    public function index()
+    public function index(): Response
     {
-        return 'Hello world';
+        return new Response('Hello world!');
     }
 }
