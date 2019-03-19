@@ -5,6 +5,9 @@ namespace Amber\Framework;
 use Amber\Utils\Implementations\AbstractWrapper;
 use Amber\Container\Injector as Container;
 use Amber\Collection\Collection;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouteCollection;
 
 class Application extends AbstractWrapper
 {
@@ -52,9 +55,13 @@ class Application extends AbstractWrapper
      */
     public static function afterConstruct(): void
     {
-        $binds = new Collection(require __DIR__ . '/../config/app.php');
-        $binds->set(Container::class, static::getInstance());
+        static::bindMultiple(require __DIR__ . '/../config/app.php');
 
-        static::bindMultiple($binds->toArray());
+        static::bind(Container::class, static::getInstance());
+
+        $context = new RequestContext();
+        $context->fromRequest(static::get(Request::class));
+        static::bind(RequestContext::class, $context);
+
     }
 }
