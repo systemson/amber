@@ -12,10 +12,6 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/systemson/sketch"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/systemson/route"
         }
     ],
