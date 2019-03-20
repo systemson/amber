@@ -3,12 +3,13 @@
 namespace App\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseContract;
+use Amber\Framework\Response;
 
 class HomeController
 {
-    public function index(): Response
+    public function index(): ResponseContract
     {
-        return new Response('Hello world!');
+        return Response::setContent('Hello world!');
     }
 }

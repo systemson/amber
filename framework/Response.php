@@ -5,6 +5,7 @@ namespace Amber\Framework;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Amber\Utils\Implementations\AbstractWrapper;
 use Amber\Framework\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Response extends AbstractWrapper
 {
@@ -34,11 +35,16 @@ class Response extends AbstractWrapper
 
     public static function notFound()
     {
-    	$response = clone static::getInstance();
+        $response = clone static::getInstance();
 
-    	$response->setStatusCode(200);
-    	$response->setContent('Not found!');
+        $response->setStatusCode(200);
+        $response->setContent('Not found!');
 
-    	return $response;
+        return $response;
+    }
+
+    public static function json($data = null)
+    {
+        return new JsonResponse($data);
     }
 }

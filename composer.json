@@ -12,39 +12,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/systemson/common"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/systemson/cache"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/systemson/collection"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/systemson/common"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/systemson/logger"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/systemson/notifier"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/systemson/sketch"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/systemson/controller"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/systemson/gemstone"
         },
         {
             "type": "vcs",
@@ -55,7 +23,10 @@
         "psr-4": {
             "App\\": "app/",
             "Amber\\Framework\\": "framework"
-        }
+        },
+        "files": [
+            "config/constants.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

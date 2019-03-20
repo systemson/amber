@@ -55,10 +55,13 @@ class Application extends AbstractWrapper
      */
     public static function afterConstruct(): void
     {
-        static::bindMultiple(require __DIR__ . '/../config/app.php');
+    	// Bind from config file
+        static::bindMultiple(require CONFIG_DIR . DIRECTORY_SEPARATOR . 'app.php');
 
+        // Bind the container to the app
         static::bind(Container::class, static::getInstance());
 
+        // Bind the request context
         $context = new RequestContext();
         $context->fromRequest(static::get(Request::class));
         static::bind(RequestContext::class, $context);

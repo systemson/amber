@@ -11,11 +11,6 @@ use Amber\Framework\Application as App;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Load the declared routes.
- */
-require __DIR__.'/../config/routes.php';
-
-/**
  * Get the request handler
  */
 $handler = App::get(Amber\Framework\Dispatch::class);
