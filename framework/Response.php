@@ -10,21 +10,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class Response extends AbstractWrapper
 {
     /**
-     * @var The class accessor.
+     * @var string The class accessor.
      */
     protected static $accessor = SymfonyResponse::class;
 
     /**
-     * @var object The instance of the accessor.
+     * @var mixed The instance of the accessor.
      */
     protected static $instance;
-
-    /**
-     * @todo MUST be moved to a ContainerAwareTrait
-     *
-     * @var The DI container.
-     */
-    protected static $container;
 
     /**
      * To expose publicy a method it should be declared protected.
@@ -33,12 +26,19 @@ class Response extends AbstractWrapper
      */
     protected static $passthru = [];
 
-    public static function notFound()
+    /**
+     * @todo MUST be moved to a ContainerAwareTrait
+     *
+     * @var The DI container.
+     */
+    protected static $container;
+
+    public static function notFound(string $message = 'Not found!')
     {
         $response = clone static::getInstance();
 
-        $response->setStatusCode(200);
-        $response->setContent('Not found!');
+        $response->setStatusCode(404);
+        $response->setContent($message);
 
         return $response;
     }

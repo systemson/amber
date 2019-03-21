@@ -1,5 +1,5 @@
 {
-    "name": "amber/framework",
+    "name": "amber/amber",
     "license": "GPL-3.0-or-later",
     "authors": [
         {
@@ -34,7 +34,8 @@
         "amber/cache": "dev-master",
         "amber/common": "dev-master",
         "amber/container": "dev-master",
-        "amber/route": "dev-master"
+        "amber/route": "dev-master",
+        "monolog/monolog": "^1.24"
     },
     "require-dev": {
         "filp/whoops": "^2.3",

@@ -2,26 +2,27 @@
 
 define('INIT_TIME', microtime(true));
 
+
 /**
  * Load the composer autoload.
  */
 require __DIR__.'/../vendor/autoload.php';
 
-use Amber\Framework\Application as App;
-use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * Load the application.
+ */
+$app = require APP_DIR . '/app/kernell.php';
+
 
 /**
  * Get the request handler
  */
-$handler = App::get(Amber\Framework\Dispatch::class);
+$handler = $app->get(Amber\Framework\Dispatch::class);
 
-/**
- * Get the response.
- */
-$response = $handler->response();
 
-/**
- * Send the response.
- */
-$response->prepare(App::get(Request::class));
-$response->send();
+
+$handler->response() // Get the response.
+->prepare($app->get(Symfony\Component\HttpFoundation\Request::class)) // Prepare the response.
+->send(); // Send the response.
+

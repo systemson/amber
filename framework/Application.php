@@ -4,20 +4,21 @@ namespace Amber\Framework;
 
 use Amber\Utils\Implementations\AbstractWrapper;
 use Amber\Container\Injector as Container;
-use Amber\Collection\Collection;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouteCollection;
+use Psr\Log\LoggerInterface;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class Application extends AbstractWrapper
 {
     /**
-     * @var The class accessor.
+     * @var string The class accessor.
      */
     protected static $accessor = Container::class;
 
     /**
-     * @var object The instance of the accessor.
+     * @var mixed The instance of the accessor.
      */
     protected static $instance;
 
@@ -30,10 +31,12 @@ class Application extends AbstractWrapper
         'bind',
         'get',
         'has',
-        'remove',
+        'unbind',
         'bindMultiple',
         'getMultiple',
         'hasMultiple',
+        'unbindMultiple',
+        'register',
     ];
 
     /**
@@ -43,8 +46,8 @@ class Application extends AbstractWrapper
      */
     public static function beforeConstruct(): void
     {
-        $whoops = new \Whoops\Run;
-        $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+        $whoops = new \Whoops\Run();
+        $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
         $whoops->register();
     }
 
@@ -55,16 +58,28 @@ class Application extends AbstractWrapper
      */
     public static function afterConstruct(): void
     {
+        foreach (config('app')->binds as $service) {
+        	// TODO should validate if the class exists
+        	static::bind($service);
+        }
+
     	// Bind from config file
-        static::bindMultiple(require CONFIG_DIR . DIRECTORY_SEPARATOR . 'app.php');
+        static::bindMultiple(config('app')->singleton);
+
 
         // Bind the container to the app
         static::bind(Container::class, static::getInstance());
+
 
         // Bind the request context
         $context = new RequestContext();
         $context->fromRequest(static::get(Request::class));
         static::bind(RequestContext::class, $context);
 
+
+		// create a log channel
+		$log = new Logger('Amber');
+		$log->pushHandler(new StreamHandler(config('logger')->path, Logger::DEBUG));
+        static::bind(LoggerInterface::class, $log);
     }
 }

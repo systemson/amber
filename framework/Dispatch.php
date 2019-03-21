@@ -15,22 +15,31 @@ class Dispatch
      */
     protected $container;
 
-    public function __construct(Container $container)
+    protected $request;
+
+    public function __construct(Container $container, Request $request)
     {
         $this->container = $container;
+        $this->request = $request;
+    }
+
+    public function getRequest()
+    {
+    	return $this->request;
     }
 
     public function response()
     {
+    	$request = $this->getRequest();
+
         try {
         	$matcher = $this->container->get(UrlMatcher::class);
-        	$request = $this->container->get(Request::class);
         	$uri = $request->getRequestUri();
 
             $default = (object) $matcher->match($uri);
 
         } catch (ResourceNotFoundException $e) {
-            return Response::notFound();
+            return Response::notFound($e->getMessage());
         }
 
 
@@ -45,13 +54,15 @@ class Dispatch
 
     protected function handleClass($default)
     {
-        $this->container->bind($default->_controller);
-        $controller = $this->container->get($default->_controller);
+    	$controller = $default->_controller;
+
+        $this->container->bind($controller);
+        $controller = $this->container->get($controller);
 
         return $controller->{$default->_action}();
     }
 
-    protected function handleClosure($callback)
+    protected function handleClosure(Closure $callback)
     {
         return $callback();
     }
