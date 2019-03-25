@@ -58,28 +58,20 @@ class Application extends AbstractWrapper
      */
     public static function afterConstruct(): void
     {
+        // Bind from config file
         foreach (config('app')->binds as $service) {
         	// TODO should validate if the class exists
         	static::bind($service);
         }
 
-    	// Bind from config file
         static::bindMultiple(config('app')->singleton);
 
-
-        // Bind the container to the app
         static::bind(Container::class, static::getInstance());
 
+        static::register(RequestContext::class)
+        ->afterConstruct('fromRequest', static::get(Request::class));
 
-        // Bind the request context
-        $context = new RequestContext();
-        $context->fromRequest(static::get(Request::class));
-        static::bind(RequestContext::class, $context);
-
-
-		// create a log channel
-		$log = new Logger('Amber');
-		$log->pushHandler(new StreamHandler(config('logger')->path, Logger::DEBUG));
-        static::bind(LoggerInterface::class, $log);
+        static::register(Logger::class, LoggerInterface::class)
+        ->afterConstruct('pushHandler', new StreamHandler(config('logger')->path, Logger::DEBUG));
     }
 }

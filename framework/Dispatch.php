@@ -56,10 +56,9 @@ class Dispatch
     {
     	$controller = $default->_controller;
 
-        $this->container->bind($controller);
-        $controller = $this->container->get($controller);
+        $callback = $this->container->getClosureFor($controller, $default->_action);
 
-        return $controller->{$default->_action}();
+        return $callback();
     }
 
     protected function handleClosure(Closure $callback)
