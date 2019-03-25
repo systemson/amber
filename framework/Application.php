@@ -3,7 +3,7 @@
 namespace Amber\Framework;
 
 use Amber\Utils\Implementations\AbstractWrapper;
-use Amber\Container\Injector as Container;
+use Amber\Container\Container;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;

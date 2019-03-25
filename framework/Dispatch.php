@@ -2,7 +2,7 @@
 
 namespace Amber\Framework;
 
-use Amber\Container\Injector as Container;
+use Amber\Container\Container;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
