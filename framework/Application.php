@@ -46,6 +46,9 @@ class Application extends AbstractWrapper
         $whoops = new \Whoops\Run();
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
         $whoops->register();
+
+        $dotenv = \Dotenv\Dotenv::create(APP_DIR);
+        $dotenv->load();
     }
 
     /**

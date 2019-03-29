@@ -9,9 +9,12 @@ return [
 	    Symfony\Component\HttpFoundation\Response::class,
 	],
 
+	// Singleton binds
     'singleton' => [
-	    // Singleton binds
 	    Symfony\Component\Routing\RouteCollection::class  => Amber\Framework\Route::getInstance(),
 	    Symfony\Component\HttpFoundation\Request::class   => Symfony\Component\HttpFoundation\Request::createFromGlobals(),
     ],
+
+    'providers' => [
+    ]
 ];
