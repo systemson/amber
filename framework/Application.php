@@ -6,9 +6,6 @@ use Amber\Utils\Implementations\AbstractWrapper;
 use Amber\Container\Container;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\Request;
-use Psr\Log\LoggerInterface;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 
 class Application extends AbstractWrapper
 {
@@ -71,7 +68,26 @@ class Application extends AbstractWrapper
         static::register(RequestContext::class)
         ->afterConstruct('fromRequest', static::get(Request::class));
 
-        static::register(Logger::class, LoggerInterface::class)
-        ->afterConstruct('pushHandler', new StreamHandler(config('logger')->path, Logger::DEBUG));
+        static::register(\Monolog\Logger::class, \Psr\Log\LoggerInterface::class)
+        ->afterConstruct('pushHandler', new \Monolog\Handler\StreamHandler(
+            config('logger')->path,
+            \Monolog\Logger::DEBUG
+        ));
+
+        $local = new \League\Flysystem\Adapter\Local(config('filesystem')->main['path']);
+        static::register(\League\Flysystem\Filesystem::class, \League\Flysystem\FilesystemInterface::class)
+        ->setArgument(\League\Flysystem\AdapterInterface::class, $local);
+
+        static::register(\Amber\Sketch\Sketch::class)
+        ->afterConstruct('setViewsFolder', 'assets/views')
+        ->afterConstruct('setCacheFolder', 'tmp/cache/views')
+        ->afterConstruct('setTemplate', function() {
+            return static::get(\Amber\Sketch\Template\Template::class);
+        });
+
+        static::register(\Amber\Sketch\Template\Template::class)
+        ->setArgument('path', 'home_index.php');
+
+        $filesystem = static::get(\Amber\Sketch\Sketch::class);
     }
 }

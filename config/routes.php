@@ -1,5 +1,5 @@
 <?php
 
-use Amber\Route\Route;
+use Amber\Framework\Route;
 
 Route::get('/', 'App\Controllers\HomeController::index');

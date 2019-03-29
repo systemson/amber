@@ -26,13 +26,6 @@ class Response extends AbstractWrapper
      */
     protected static $passthru = [];
 
-    /**
-     * @todo MUST be moved to a ContainerAwareTrait
-     *
-     * @var The DI container.
-     */
-    protected static $container;
-
     public static function notFound(string $message = 'Not found!')
     {
         $response = clone static::getInstance();

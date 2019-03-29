@@ -9,12 +9,6 @@
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/systemson/route"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "App\\": "app/",
@@ -34,9 +28,11 @@
         "amber/cache": "dev-master",
         "amber/common": "dev-master",
         "amber/container": "dev-master",
-        "amber/route": "dev-master",
+        "amber/sketch": "dev-master",
         "illuminate/database": "^5.8",
-        "monolog/monolog": "^1.24"
+        "monolog/monolog": "^1.24",
+        "symfony/http-foundation": "^4.2",
+        "symfony/routing": "^4.2"
     },
     "require-dev": {
         "filp/whoops": "^2.3",
