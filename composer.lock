@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6bb098eb6a1524bc430ba1369bd9fd0a",
+    "content-hash": "ff6118096d0821a4f4811519719372e8",
     "packages": [
         {
             "name": "amber/cache",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/cache.git",
-                "reference": "52af1021bb5cd8d7dc74a40b589367fbfea173f2"
+                "reference": "dd3224e2bfc670f688795d5264ddd51edb1f7503"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/cache/zipball/52af1021bb5cd8d7dc74a40b589367fbfea173f2",
-                "reference": "52af1021bb5cd8d7dc74a40b589367fbfea173f2",
+                "url": "https://api.github.com/repos/systemson/cache/zipball/dd3224e2bfc670f688795d5264ddd51edb1f7503",
+                "reference": "dd3224e2bfc670f688795d5264ddd51edb1f7503",
                 "shasum": ""
             },
             "require": {
@@ -49,24 +49,24 @@
                 }
             ],
             "description": "Simple Cache.",
-            "time": "2019-03-07T20:22:25+00:00"
+            "time": "2019-03-30T15:46:38+00:00"
         },
         {
             "name": "amber/collection",
-            "version": "v0.4.0",
+            "version": "v0.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/collection.git",
-                "reference": "556748d29ec48d6c4c1afe728653ebd86f8d03f8"
+                "reference": "7f6d361a1a1615d5d7b8ad923bfdb9b2b8346b14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/collection/zipball/556748d29ec48d6c4c1afe728653ebd86f8d03f8",
-                "reference": "556748d29ec48d6c4c1afe728653ebd86f8d03f8",
+                "url": "https://api.github.com/repos/systemson/collection/zipball/7f6d361a1a1615d5d7b8ad923bfdb9b2b8346b14",
+                "reference": "7f6d361a1a1615d5d7b8ad923bfdb9b2b8346b14",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.0",
+                "php": ">=7.2.0",
                 "php-ds/php-ds": "1.2"
             },
             "require-dev": {
@@ -74,7 +74,7 @@
                 "lavoiesl/php-benchmark": "^1.4",
                 "php-coveralls/php-coveralls": "^2.1",
                 "phpdocumentor/phpdocumentor": "dev-master",
-                "phpunit/phpunit": "^6.5|^7.0",
+                "phpunit/phpunit": "^8.0",
                 "squizlabs/php_codesniffer": "^3.3",
                 "tightenco/collect": "^5.7"
             },
@@ -95,7 +95,7 @@
                 }
             ],
             "description": "Wrapper class for working with arrays.",
-            "time": "2019-02-27T17:08:50+00:00"
+            "time": "2019-03-30T14:41:17+00:00"
         },
         {
             "name": "amber/common",
@@ -103,12 +103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/common.git",
-                "reference": "ecf30345fb54f649bdc44c59b946d9e0e55cf684"
+                "reference": "97c9dcbe6f46ec7a6d3502e11705e8826b3c0047"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/common/zipball/ecf30345fb54f649bdc44c59b946d9e0e55cf684",
-                "reference": "ecf30345fb54f649bdc44c59b946d9e0e55cf684",
+                "url": "https://api.github.com/repos/systemson/common/zipball/97c9dcbe6f46ec7a6d3502e11705e8826b3c0047",
+                "reference": "97c9dcbe6f46ec7a6d3502e11705e8826b3c0047",
                 "shasum": ""
             },
             "require": {
@@ -140,20 +140,20 @@
                 }
             ],
             "description": "Common Amber Project files.",
-            "time": "2019-03-29T16:58:58+00:00"
+            "time": "2019-03-30T15:47:22+00:00"
         },
         {
             "name": "amber/container",
-            "version": "dev-master",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/container.git",
-                "reference": "799073a3a2a256328a32a7666890d6e5084714fa"
+                "reference": "1278d2c66e538f7c018e70d717a660293049f7ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/container/zipball/799073a3a2a256328a32a7666890d6e5084714fa",
-                "reference": "799073a3a2a256328a32a7666890d6e5084714fa",
+                "url": "https://api.github.com/repos/systemson/container/zipball/1278d2c66e538f7c018e70d717a660293049f7ee",
+                "reference": "1278d2c66e538f7c018e70d717a660293049f7ee",
                 "shasum": ""
             },
             "require": {
@@ -184,7 +184,7 @@
                 }
             ],
             "description": "Simple PHP DI Container.",
-            "time": "2019-03-29T04:29:29+00:00"
+            "time": "2019-03-31T03:56:23+00:00"
         },
         {
             "name": "amber/phraser",
@@ -192,12 +192,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/phraser.git",
-                "reference": "54fe7376777b87b5c274e859a83fdf35cd3170c5"
+                "reference": "d18a4e2f8a244d7cd7b1a6ec8c6f47648800dcc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/phraser/zipball/54fe7376777b87b5c274e859a83fdf35cd3170c5",
-                "reference": "54fe7376777b87b5c274e859a83fdf35cd3170c5",
+                "url": "https://api.github.com/repos/systemson/phraser/zipball/d18a4e2f8a244d7cd7b1a6ec8c6f47648800dcc4",
+                "reference": "d18a4e2f8a244d7cd7b1a6ec8c6f47648800dcc4",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +205,6 @@
                 "php": ">=7.2.0"
             },
             "require-dev": {
-                "lavoiesl/php-benchmark": "^1.4",
                 "phpunit/phpunit": "^8.0",
                 "squizlabs/php_codesniffer": "^3.3"
             },
@@ -226,7 +225,7 @@
                 }
             ],
             "description": "Wrapper class for working with strings.",
-            "time": "2019-03-29T16:22:31+00:00"
+            "time": "2019-03-30T15:44:20+00:00"
         },
         {
             "name": "amber/sketch",
@@ -234,12 +233,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/sketch.git",
-                "reference": "3bc89cd0de2e839fa0785d875bd79d2e99926dd9"
+                "reference": "40d85e800e257e9b5d074e60acbb06c2a8c9fe05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/sketch/zipball/3bc89cd0de2e839fa0785d875bd79d2e99926dd9",
-                "reference": "3bc89cd0de2e839fa0785d875bd79d2e99926dd9",
+                "url": "https://api.github.com/repos/systemson/sketch/zipball/40d85e800e257e9b5d074e60acbb06c2a8c9fe05",
+                "reference": "40d85e800e257e9b5d074e60acbb06c2a8c9fe05",
                 "shasum": ""
             },
             "require": {
@@ -266,7 +265,7 @@
                 }
             ],
             "description": "Lightweight PHP templating engine.",
-            "time": "2019-03-29T04:41:32+00:00"
+            "time": "2019-03-30T16:16:56+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -547,16 +546,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.50",
+            "version": "1.0.51",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "dab4e7624efa543a943be978008f439c333f2249"
+                "reference": "755ba7bf3fb9031e6581d091db84d78275874396"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/dab4e7624efa543a943be978008f439c333f2249",
-                "reference": "dab4e7624efa543a943be978008f439c333f2249",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/755ba7bf3fb9031e6581d091db84d78275874396",
+                "reference": "755ba7bf3fb9031e6581d091db84d78275874396",
                 "shasum": ""
             },
             "require": {
@@ -627,7 +626,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2019-02-01T08:50:36+00:00"
+            "time": "2019-03-30T13:22:34+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1693,7 +1692,6 @@
     "stability-flags": {
         "amber/cache": 20,
         "amber/common": 20,
-        "amber/container": 20,
         "amber/sketch": 20
     },
     "prefer-stable": true,

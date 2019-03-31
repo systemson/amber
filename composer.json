@@ -27,7 +27,7 @@
         "php": "^7.2.0",
         "amber/cache": "dev-master",
         "amber/common": "dev-master",
-        "amber/container": "dev-master",
+        "amber/container": "^1.0.2",
         "amber/sketch": "dev-master",
         "illuminate/database": "^5.8",
         "monolog/monolog": "^1.24",
