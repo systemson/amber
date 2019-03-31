@@ -6,6 +6,7 @@ use Amber\Utils\Implementations\AbstractWrapper;
 use Amber\Container\Container;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Database\Capsule\Manager as Eloquent;
 
 class Application extends AbstractWrapper
 {
@@ -91,6 +92,21 @@ class Application extends AbstractWrapper
         static::register(\Amber\Sketch\Template\Template::class)
         ->setArgument('path', 'home_index.php');
 
-        $filesystem = static::get(\Amber\Sketch\Sketch::class);
+        $eloquent = new Eloquent();
+
+        $eloquent->addConnection([
+           "driver" => "pgsql",
+           "host" => "127.0.0.1",
+           "port" =>"5432",
+           "database" => "api",
+           "username" => "deivi",
+           "password" => "deivi"
+        ]);
+
+        //Make this Capsule instance available globally.
+        $eloquent->setAsGlobal();
+
+        // Setup the Eloquent ORM.
+        $eloquent->bootEloquent();
     }
 }

@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseContract;
 use Amber\Framework\Response;
 use Amber\Framework\View;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -18,5 +19,10 @@ class HomeController extends Controller
     	->setVar('version', 'v0.5-beta');
 
         return Response::setContent(View::toHtml());
+    }
+
+    public function users()
+    {
+    	return Response::json(User::all());
     }
 }

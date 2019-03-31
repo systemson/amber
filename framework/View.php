@@ -2,12 +2,11 @@
 
 namespace Amber\Framework;
 
-use Amber\Utils\Implementations\AbstractWrapper;
 use Amber\Framework\Application;
 use Amber\Sketch\Sketch;
 use Amber\Sketch\Template\Template;
 
-class View extends AbstractWrapper
+class View extends AbstractContainerFacade
 {
     /**
      * @var string The class accessor.
@@ -34,15 +33,6 @@ class View extends AbstractWrapper
     protected static $container;
 
     protected static $template;
-
-    public static function getInstance()
-    {
-        $accessor = static::getAccessor();
-        if (!static::$instance instanceof $accessor) {
-            static::$instance = Application::get($accessor );
-        }
-        return static::$instance;
-    }
 
     public static function template(): Template
     {
