@@ -192,12 +192,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/phraser.git",
-                "reference": "d18a4e2f8a244d7cd7b1a6ec8c6f47648800dcc4"
+                "reference": "f62b5d8d7f81257a22a637f47b7fafcd9766f83f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/phraser/zipball/d18a4e2f8a244d7cd7b1a6ec8c6f47648800dcc4",
-                "reference": "d18a4e2f8a244d7cd7b1a6ec8c6f47648800dcc4",
+                "url": "https://api.github.com/repos/systemson/phraser/zipball/f62b5d8d7f81257a22a637f47b7fafcd9766f83f",
+                "reference": "f62b5d8d7f81257a22a637f47b7fafcd9766f83f",
                 "shasum": ""
             },
             "require": {
@@ -225,7 +225,7 @@
                 }
             ],
             "description": "Wrapper class for working with strings.",
-            "time": "2019-03-30T15:44:20+00:00"
+            "time": "2019-04-01T15:58:57+00:00"
         },
         {
             "name": "amber/sketch",

@@ -35,6 +35,7 @@ class Application extends AbstractWrapper
         'hasMultiple',
         'unbindMultiple',
         'register',
+        'make',
     ];
 
     /**

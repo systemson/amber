@@ -47,17 +47,22 @@ class Route extends AbstractWrapper
         $route = new SymfonyRoute($uri);
         $route->setMethods('GET');
 
-        $defArray = Phraser::make($default)->explode('::');
+        // Returns StringArray
+        $defaultArray = Phraser::make($default)->explode('::');
 
-        $resource = $defArray[0]->replace('App\Controllers\\')->replace('Controller');
-        $resource = Phraser::fromCamelCase($resource)->toSnakeCase();
+        $resource = $defaultArray->first()
+        ->removeAll(['App\Controllers\\' , 'Controller'])
+        ->fromCamelCase()
+        ->toSnakeCase();
 
-        $action = Phraser::fromCamelCase($defArray[1])->toSnakeCase();
+        $action = $defaultArray->last()
+        ->fromCamelCase()
+        ->toSnakeCase();
 
         $route->setDefaults(
             [
-                '_controller' => $defArray[0],
-                '_action' => $defArray[1] ?? null,
+                '_controller' => $defaultArray[0],
+                '_action' => $defaultArray[1] ?? null,
             ]
         );
         $route = static::add($resource . '_' .$action, $route);
