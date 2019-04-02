@@ -7,6 +7,7 @@ use Amber\Utils\Implementations\AbstractWrapper;
 use Amber\Framework\Application;
 use Symfony\Component\Routing\RouteCollection;
 use Amber\Phraser\Phraser;
+use Amber\Phraser\Str;
 
 class Route extends AbstractWrapper
 {
@@ -34,37 +35,106 @@ class Route extends AbstractWrapper
      */
     protected static $container;
 
-    private static function name(array $default) {
-        
+    private static function handleDefault($default)
+    {
+        if (is_string($default)) {
+            $defaultArray = static::getControllerToActionArray($default);
+
+            return [
+                '_controller' => $defaultArray->first(),
+                '_action' => $defaultArray->last(),
+            ];
+        }
     }
 
-    private static function action(array $default) {
-        
+    /**
+     * Retuns an array with the controller and the action names.
+     */
+    private static function getControllerToActionArray($default)
+    {
+        return  Phraser::make($default)
+        ->explode('::');
+    }
+
+    /**
+     * Return a new Route Instance.
+     */
+    private static function routeFactory(string $method, string $uri, array $default): SymfonyRoute
+    {
+        $route = new SymfonyRoute($uri);
+        $route->setMethods(strtoupper($method));
+        $route->setDefaults($default);
+
+        return $route;
+    }
+
+    /**
+     * Return the default name of the route.
+     */
+    private static function getName(array $default) {
+        $resource = static::getResource($default[0]);
+        $action = static::getAction($default[1]);
+
+        return "{$resource}_{$action}";
+    }
+
+    /**
+     * Return the controller resource name.
+     */
+    private static function getResource(Str $default): Str
+    {
+        return $default->removeAll(['App\Controllers\\' , 'Controller'])
+        ->fromCamelCase()
+        ->toSnakeCase();
+    }
+
+    /**
+     * Return the controller action name.
+     */
+    private static function getAction(Str $default): Str
+    {
+        return $default->fromCamelCase()
+        ->toSnakeCase();
+    }
+
+    /**
+     * Adds a new route to the route collection.
+     */
+    private static function map(string $method, string $uri, $default): SymfonyRoute
+    {
+        $default = static::handleDefault($default);
+
+        $route = static::routeFactory($method, $uri, $default);
+
+        $name = static::getName(array_values($default));
+
+        static::add($name, $route);
+
+        return $route;
     }
 
     public static function get(string $uri, $default)
     {
-        $route = new SymfonyRoute($uri);
-        $route->setMethods('GET');
+        return static::map('GET', $uri, $default);
+    }
 
-        // Returns StringArray
-        $defaultArray = Phraser::make($default)->explode('::');
+    public static function post(string $uri, $default)
+    {
+        return static::map('POST', $uri, $default);
+    }
 
-        $resource = $defaultArray->first()
-        ->removeAll(['App\Controllers\\' , 'Controller'])
-        ->fromCamelCase()
-        ->toSnakeCase();
+    public static function patch(string $uri, $default)
+    {
+        return static::map('PATCH', $uri, $default);
+    }
 
-        $action = $defaultArray->last()
-        ->fromCamelCase()
-        ->toSnakeCase();
+    public static function put(string $uri, $default)
+    {
+        return static::map('PUT', $uri, $default);
+    }
 
-        $route->setDefaults(
-            [
-                '_controller' => $defaultArray[0],
-                '_action' => $defaultArray[1] ?? null,
-            ]
-        );
-        $route = static::add($resource . '_' .$action, $route);
+    public static function delete(string $uri, $default)
+    {
+        return static::map('DELETE', $uri, $default);
     }
 }
