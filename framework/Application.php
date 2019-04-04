@@ -62,52 +62,68 @@ class Application extends AbstractWrapper
     {
         // Bind from config file
         foreach (config('app')->binds as $service) {
-        	// TODO should validate if the class exists
-        	static::bind($service);
+            // TODO should validate if the class exists
+            static::bind($service);
         }
 
-        static::bindMultiple(config('app')->singleton);
 
-        static::bind(Container::class, static::getInstance());
+        static::bind(Container::class, function () {
+            return static::getInstance();
+        });
+
+
+        static::bind(\Symfony\Component\Routing\RouteCollection::class, function () {
+            return \Amber\Framework\Route::getInstance();
+        });
+
+
+        static::bind(\Symfony\Component\HttpFoundation\Request::class, function () {
+            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        });
+
 
         static::register(RequestContext::class)
-        ->afterConstruct('fromRequest', static::get(Request::class));
+        ->afterConstruct('fromRequest', function () {
+            return static::get(Request::class);
+        });
+
 
         static::register(\Monolog\Logger::class, \Psr\Log\LoggerInterface::class)
-        ->afterConstruct('pushHandler', new \Monolog\Handler\StreamHandler(
-            config('logger')->path,
-            \Monolog\Logger::DEBUG
-        ));
+        ->setArgument('name', 'AmberFramework')
+        ->afterConstruct('pushHandler', function () {
+            switch (config('logger')->driver) {
+                case 'simple':
+                    return new \Monolog\Handler\StreamHandler(config('logger')->path);
+                    break;
 
-        $local = new \League\Flysystem\Adapter\Local(config('filesystem')->main['path']);
+                case 'daily':
+                    return new \Monolog\Handler\RotatingFileHandler(config('logger')->path, config('logger')->maxFiles);
+                    break;
+                
+                default:
+                    return new \Monolog\Handler\StreamHandler(config('logger')->path);
+                    break;
+            }
+        });
+
+
         static::register(\League\Flysystem\Filesystem::class, \League\Flysystem\FilesystemInterface::class)
-        ->setArgument(\League\Flysystem\AdapterInterface::class, $local);
+        ->setArgument(\League\Flysystem\AdapterInterface::class, function () {
+            return new \League\Flysystem\Adapter\Local(config('filesystem')->main['path']);
+        });
+
 
         static::register(\Amber\Sketch\Sketch::class)
         ->afterConstruct('setViewsFolder', 'assets/views')
         ->afterConstruct('setCacheFolder', 'tmp/cache/views')
-        ->afterConstruct('setTemplate', function() {
+        ->afterConstruct('setTemplate', function () {
             return static::get(\Amber\Sketch\Template\Template::class);
         });
 
-        static::register(\Amber\Sketch\Template\Template::class)
-        ->setArgument('path', 'home_index.php');
 
         $eloquent = new Eloquent();
-
-        $eloquent->addConnection([
-           "driver" => "pgsql",
-           "host" => "127.0.0.1",
-           "port" =>"5432",
-           "database" => "api",
-           "username" => "deivi",
-           "password" => "deivi"
-        ]);
-
-        //Make this Capsule instance available globally.
+        $eloquent->addConnection(config('database')->pgsql);
         $eloquent->setAsGlobal();
-
-        // Setup the Eloquent ORM.
         $eloquent->bootEloquent();
     }
 }

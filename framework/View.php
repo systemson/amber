@@ -34,18 +34,8 @@ class View extends AbstractContainerFacade
 
     protected static $template;
 
-    public static function template(): Template
-    {
-        if (!static::$template instanceof Template) {
-            static::$template = Application::get(Template::class);
-            static::setTemplate(static::$template);
-        }
-        return static::$template;
-    }
-
     public static function view(string $view)
     {
-        static::template()->setView($view);
-        return static::template();
+        return static::getTemplate()->setView($view);
     }
 }

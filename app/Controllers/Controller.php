@@ -8,84 +8,105 @@ use Amber\Collection\Collection;
 
 abstract class Controller
 {
-	protected $layout = 'app.php';
-	protected $view;
-	protected $vars = [];
+    protected $layout = 'app.php';
+    protected $view;
+    protected $vars = [];
 
-	public function setLayout(string $layout): void
-	{
-		$this->layout = $layout;
-	}
+    public function setLayout(string $layout): void
+    {
+        $this->layout = $layout;
+    }
 
-	public function getLayout(): string
-	{
-		return $this->layout;
-	}
+    public function getLayout(): string
+    {
+        return $this->layout;
+    }
 
-	public function setView(string $view): void
-	{
-		$this->view = $view;
-	}
+    public function setView(string $view): void
+    {
+        $this->view = $view;
+    }
 
-	public function getView(): string
-	{
-		return $this->view ?? $this->getDefaultView();
-	}
+    public function getView(): string
+    {
+        return $this->view ?? $this->getDefaultView();
+    }
 
-	public function setVar(string $key, $value): void
-	{
-		$this->vars[$key] = $value;
-	}
+    public function setVar(string $key, $value): void
+    {
+        $this->vars[$key] = $value;
+    }
 
-	public function getVar(string $key)
-	{
-		return $this->vars[$key];
-	}
+    public function getVar(string $key)
+    {
+        return $this->vars[$key];
+    }
 
-	public function setVars(array $vars): void
-	{
-		foreach ($vars as $key => $value) {
-			$this->setVar($key, $value);
-		}
-	}
+    public function setVars(array $vars): void
+    {
+        foreach ($vars as $key => $value) {
+            $this->setVar($key, $value);
+        }
+    }
 
-	public function getVars(): array
-	{
-		return $this->vars;
-	}
+    public function getVars(): array
+    {
+        return $this->vars;
+    }
 
-	public function getClassFullname()
-	{
-		return (new Str(get_called_class()))
-		->replace('App\Controllers', '')
-		->explode('\\')
-		->trim();
-	}
+    public function getClassName()
+    {
+        return Phraser::make(get_called_class());
+    }
 
-	public function getResourceName()
-	{
-		$name = $this->getClassFullname()
-		->last()
-		->replace('Controller', '')
-		->lowerCaseFirst();
+    public function filterClassName()
+    {
+    	return $this->getClassName()
+        ->removeAll(['App\Controllers', 'Controller'])
+        ->explode('\\')
+        ->trim();
+    }
 
-		return Phraser::fromCamelCase($name)->toSnakeCase();
-	}
+    public function getViewPath()
+    {
+    	$array = $this->filterClassName();
+        
+        $array->delete($array->count() - 1);
 
-	public function getCalledAction()
-	{
-		return (new Collection(debug_backtrace()))
-		->where('class', get_called_class())
-		->last()
-		['function'];
-	}
+        $array = $array->map(function ($value) {
+        	return Phraser::fromCamelCase($value)->toSnakeCase();
+        });
 
-	public function getDefaultView()
-	{
-		$name = $this->getResourceName();
+        if (!$array->isEmpty()) {
+        	return $array->implode(DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        }
+    }
 
-		$action = $this->getCalledAction(); 
+    public function getResourceName()
+    {
+        return $this->filterClassName()
+        ->last()
+        ->fromCamelCase()
+        ->toSnakeCase();
+    }
 
-		return "{$name}_{$action}.php";
-	}
+    public function getCalledAction()
+    {
+        return (new Collection(debug_backtrace()))
+        ->where('class', get_called_class())
+        ->last()['function'];
+    }
+
+    public function getDefaultView()
+    {
+        $path = $this->getViewPath();
+
+        $name = $this->getResourceName();
+
+        $action = Phraser::make($this->getCalledAction())
+        ->fromCamelCase()
+        ->toSnakeCase();
+
+        return "{$path}{$name}_{$action}.php";
+    }
 }

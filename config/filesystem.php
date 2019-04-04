@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'main' => [
-		'path' => APP_DIR,
-	]
+    'main' => [
+        'path' => APP_DIR,
+    ]
 ];

@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Auth;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseContract;
 use Amber\Framework\Response;
 use Amber\Framework\View;
 use App\Models\User;
+use App\Controllers\Controller;
 
-class HomeController extends Controller
+class AuthController extends Controller
 {
-    public function index()
+    public function loginForm()
     {
         $template = View::view($this->getView())
         ->setLayout('layouts/app.php')
-        ->setVar('name', 'World')
-        ->setVar('description', 'This is a sample page.')
+        ->setVar('title', 'Login form')
+        ->setVar('description', 'Comming soon.')
         ->setVar('version', 'v0.5-beta');
 
         return Response::setContent(View::toHtml());

@@ -37,9 +37,13 @@
     },
     "require-dev": {
         "filp/whoops": "^2.3",
+        "squizlabs/php_codesniffer": "^3.4",
         "symfony/var-dumper": "^4.2"
     },
-    "scripts": {},
+    "scripts": {
+        "sniff": "phpcs --standard=PSR2 ./app ./config ./framework",
+        "fix-cs": "phpcbf --standard=PSR2 ./app ./config ./framework"
+    },
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,

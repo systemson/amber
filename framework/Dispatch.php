@@ -25,28 +25,27 @@ class Dispatch
 
     public function getRequest()
     {
-    	return $this->request;
+        return $this->request;
     }
 
     public function response()
     {
-    	$request = $this->getRequest();
+        $request = $this->getRequest();
 
         try {
-        	$matcher = $this->container->get(UrlMatcher::class);
-        	$uri = $request->getRequestUri();
+            $matcher = $this->container->get(UrlMatcher::class);
+            $uri = $request->getRequestUri();
 
             $default = (object) $matcher->match($uri);
-
         } catch (ResourceNotFoundException $e) {
             return Response::notFound($e->getMessage());
         }
 
 
         if (isset($default->_controller)) {
-        	return $this->handleClass($default);
+            return $this->handleClass($default);
         } elseif (isset($default->_callback)) {
-        	return $this->handleClosure($default);
+            return $this->handleClosure($default);
         }
 
         //return new Response(parse_str($default));
@@ -54,7 +53,7 @@ class Dispatch
 
     protected function handleClass($default)
     {
-    	$controller = $default->_controller;
+        $controller = $default->_controller;
 
         $callback = $this->container->getClosureFor($controller, $default->_action);
 

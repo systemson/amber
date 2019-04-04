@@ -1,5 +1,11 @@
 <?php
 
 return [
-	'path' => APP_DIR . 'tmp/log.log',
+
+    // Drivers: simple, daily
+    'driver' => 'daily',
+
+    'path' => APP_DIR . 'tmp/amber.log',
+
+    'maxFiles' => 7,
 ];
