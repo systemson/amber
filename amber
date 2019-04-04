@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/vendor/autoload.php';
+
+/**
+ * Load the application.
+ */
+
+$amber = require APP_DIR . '/app/kernel.php';
+
+use Symfony\Component\Console\Application;
+use Amber\Framework\Commands\CommandsCollection;
+
+
+$application = new Application();
+$application->add(new Amber\Framework\Commands\MigrationCommand());
+
+$application->run();

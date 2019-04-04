@@ -1,9 +1,9 @@
 <?php
 
+define('CONFIG_DIR', __DIR__);
+define('APP_DIR', CONFIG_DIR . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
+define('PUBLIC_DIR', APP_DIR . DIRECTORY_SEPARATOR . 'public');
 
-define('PUBLIC_DIR', getcwd());
-define('APP_DIR', PUBLIC_DIR . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
-define('CONFIG_DIR', APP_DIR . 'config');
 
 if (!function_exists('config')) {
     function config(string $name)
