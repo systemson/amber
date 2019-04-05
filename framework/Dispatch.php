@@ -34,9 +34,9 @@ class Dispatch
 
         try {
             $matcher = $this->container->get(UrlMatcher::class);
-            $uri = $request->getRequestUri();
+            $path = $request->getPathInfo();
 
-            $default = (object) $matcher->match($uri);
+            $default = (object) $matcher->match($path);
         } catch (ResourceNotFoundException $e) {
             return Response::notFound($e->getMessage());
         }

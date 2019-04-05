@@ -8,10 +8,13 @@ use Amber\Framework\Response;
 use Amber\Framework\View;
 use App\Models\User;
 use App\Controllers\Controller;
+use Amber\Framework\Request\InputParameters;
+use Amber\Framework\Request\QueryStringParameters;
 
 class AuthController extends Controller
 {
-	protected $credentials = [
+	protected $required = [
+		// Name    => DB Column
 		'username' => 'username',
 		'password' => 'password',
 	];
@@ -30,20 +33,23 @@ class AuthController extends Controller
 
     protected function getLoginNameFor(string $name): string
     {
-    	return $this->credentials[$name] ?? null;
+    	return $this->required[$name] ?? null;
+    }
+
+    protected function getCredentialsFromRequest(Request $request): array
+    {
+    	if (InputParameters::hasMultiple($this->required)) {
+    		return InputParameters::getMultiple($this->required);
+    	}
+    	$required = implode('], [', $this->required);
+    	throw new \Exception("These parameters are required: [{$required}].");
+    	
     }
 
     public function login(Request $request)
     {
-    	$username = $request->get($this->getLoginNameFor('username'));
-    	$password = $request->get($this->getLoginNameFor('password'));
+    	$user = User::where($this->getCredentialsFromRequest($request))->get();
 
-    	$user = User::where([
-	   		$this->getLoginNameFor('username') => $username,
-       		$this->getLoginNameFor('password') => $password,
-       	])->get();
-
-    	dump($user);die();
-        return Response::json(User::all());
+        return Response::json(true);
     }
 }
