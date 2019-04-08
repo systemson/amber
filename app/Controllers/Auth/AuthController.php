@@ -15,18 +15,14 @@ class AuthController extends Controller
 {
 	protected $required = [
 		// Name    => DB Column
-		'username' => 'username',
+		'email'    => 'email',
 		'password' => 'password',
 	];
 
     public function loginForm(Request $request)
     {
-    	dump($this->login($request));
         $template = View::view($this->getView())
-        ->setLayout('layouts/app.php')
-        ->setVar('title', 'Login form')
-        ->setVar('description', 'Comming soon.')
-        ->setVar('version', 'v0.5-beta');
+        ->setLayout('layouts/app.php');
 
         return Response::setContent(View::toHtml());
     }
@@ -48,6 +44,8 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $credentials = $this->getCredentialsFromRequest($request);
+        dump($credentials);die();
     	$user = User::where($this->getCredentialsFromRequest($request))->get();
 
         return Response::json(true);
