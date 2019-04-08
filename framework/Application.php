@@ -2,13 +2,12 @@
 
 namespace Amber\Framework;
 
-use Amber\Utils\Implementations\AbstractWrapper;
+use Amber\Framework\Container\ContainerFacade;
 use Amber\Container\Container;
-use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\Request;
 use Illuminate\Database\Capsule\Manager as Eloquent;
 
-class Application extends AbstractWrapper
+class Application extends ContainerFacade
 {
     /**
      * @var string The class accessor.
@@ -38,6 +37,8 @@ class Application extends AbstractWrapper
         'make',
     ];
 
+    private static $providers = [];
+
     /**
      * Runs after the class constructor.
      *
@@ -66,15 +67,19 @@ class Application extends AbstractWrapper
             static::bind($service);
         }
 
+        foreach (config('app')->providers as $provider) {
+            // TODO should validate if the class exists
+            self::$providers[] = $provider;
+            static::bind($provider);
+        }
 
-        static::bind(Container::class, function () {
-            return static::getInstance();
-        });
+        self::setUpProviders();
 
+        static::bind(
+        	\Symfony\Component\Routing\RouteCollection::class,
+        	new \Symfony\Component\Routing\RouteCollection()
+        );
 
-        static::bind(\Symfony\Component\Routing\RouteCollection::class, function () {
-            return \Amber\Framework\Route::getInstance();
-        });
 
 
         static::bind(\Symfony\Component\HttpFoundation\Request::class, function () {
@@ -82,7 +87,7 @@ class Application extends AbstractWrapper
         });
 
 
-        static::register(RequestContext::class)
+        static::register(\Symfony\Component\Routing\RequestContext::class)
         ->afterConstruct('fromRequest', function () {
             return static::get(Request::class);
         });
@@ -125,5 +130,12 @@ class Application extends AbstractWrapper
         $eloquent->addConnection(config('database')->pgsql);
         $eloquent->setAsGlobal();
         $eloquent->bootEloquent();
+    }
+
+    private static function setUpProviders(): void
+    {
+    	array_map(function ($value) {
+    		static::get($value)->setUp();
+    	}, self::$providers);
     }
 }

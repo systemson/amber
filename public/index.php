@@ -16,10 +16,14 @@ $app = require APP_DIR . '/app/kernel.php';
 
 
 /**
+ * Load the routes.
+ */
+require CONFIG_DIR . '/routes.php';
+
+/**
  * Get the request handler.
  */
 $handler = $app->get(Amber\Framework\Dispatch::class);
-
 
 /**
  * Get and send the resposne.

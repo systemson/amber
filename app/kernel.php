@@ -3,9 +3,15 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-/**
- * Load the routes.
- */
-require CONFIG_DIR . '/routes.php';
+use Amber\Container\Container;
+use Amber\Framework\Application;
+use Amber\Framework\Container\ContainerFacade;
+use Amber\Framework\Providers\ServiceProvider;
 
-return Amber\Framework\Application::getInstance();
+$app = new Container();
+$app->bind(Container::class, $app);
+
+ContainerFacade::setContainer($app);
+ServiceProvider::setContainer($app);
+
+return Application::getInstance();

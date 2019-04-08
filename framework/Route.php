@@ -3,13 +3,13 @@
 namespace Amber\Framework;
 
 use Symfony\Component\Routing\Route as SymfonyRoute;
-use Amber\Utils\Implementations\AbstractWrapper;
+use Amber\Framework\Container\ContainerFacade;
 use Amber\Framework\Application;
 use Symfony\Component\Routing\RouteCollection;
 use Amber\Phraser\Phraser;
 use Amber\Phraser\Str;
 
-class Route extends AbstractWrapper
+class Route extends ContainerFacade
 {
     /**
      * @var string The class accessor.
@@ -29,11 +29,13 @@ class Route extends AbstractWrapper
     protected static $passthru = [];
 
     /**
-     * @todo MUST be moved to a ContainerAwareTrait
+     * Runs after the class constructor.
      *
-     * @var The DI container.
+     * @return void
      */
-    protected static $container;
+    public static function afterConstruct(): void
+    {
+    }
 
     private static function handleDefault($default)
     {

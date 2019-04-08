@@ -27,6 +27,23 @@ class AuthController extends Controller
         return Response::setContent(View::toHtml());
     }
 
+    public function login(Request $request)
+    {
+        $credentials = $this->getCredentialsFromRequest($request);
+
+        $user = $this->getUser('email', $credentials['email']);
+
+        if (!$this->validateCredentials($credentials, $user)) {
+        	throw new \Exception('These credentials are not valid');
+        }
+
+        //$this->startSession();
+
+        dump($credentials);die();
+
+        return Response::json(true);
+    }
+
     protected function getLoginNameFor(string $name): string
     {
     	return $this->required[$name] ?? null;
@@ -39,15 +56,44 @@ class AuthController extends Controller
     	}
     	$required = implode('], [', $this->required);
     	throw new \Exception("These parameters are required: [{$required}].");
-    	
     }
 
-    public function login(Request $request)
+    protected function validateCredentials(array $credentials, $user)
     {
-        $credentials = $this->getCredentialsFromRequest($request);
-        dump($credentials);die();
-    	$user = User::where($this->getCredentialsFromRequest($request))->get();
+      	if (empty($user)) {
+      		return false;
+      	}
 
-        return Response::json(true);
+    	foreach ($credentials as $key => $value) {
+    		if (!$this->isValid($key, $value, $user[$key])) {
+    			return false;
+    		}
+    	}
+
+    	return true;
+    }
+
+    protected function isValid($key, $value, $userValue)
+    {
+    	$validations = $this->setValidations();
+
+    	return $validations[$key]($value, $userValue);
+    }
+
+    protected function getUser(string $key, string $value)
+    {
+    	return User::where($key, $value)->first();
+    }
+
+    protected function setValidations()
+    {
+    	return [
+    		'email' => function ($value, $userValue) {
+    			return $value == $userValue;
+    		},
+    		'password' => function ($value, $userValue) {
+    			return password_verify($value, $userValue);
+    		},
+    	];
     }
 }

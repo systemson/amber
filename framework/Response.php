@@ -3,11 +3,10 @@
 namespace Amber\Framework;
 
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Amber\Utils\Implementations\AbstractWrapper;
-use Amber\Framework\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Amber\Framework\Container\ContainerFacade;
 
-class Response extends AbstractWrapper
+class Response extends ContainerFacade
 {
     /**
      * @var string The class accessor.

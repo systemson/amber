@@ -11,5 +11,6 @@ return [
     ],
 
     'providers' => [
+    	Amber\Framework\Providers\HttpServiceProvider::class,
     ]
 ];
