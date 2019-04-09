@@ -25,12 +25,12 @@ class InputParameters extends AbstractWrapper
      * @var array The method(s) that should be publicly exposed.
      */
     protected static $passthru = [
-    	'has',
-    	'hasMultiple',
-    	'get',
-    	'getMultiple',
-    	'all',
-    	'exchangeArray',
+        'has',
+        'hasMultiple',
+        'get',
+        'getMultiple',
+        'all',
+        'exchangeArray',
     ];
 
     /**

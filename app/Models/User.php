@@ -12,15 +12,15 @@ class User extends Eloquent
      * @var array
      */
     protected $fillable = [
-    	'name',
-    	'email',
-    	'password',
-    	'status',
-    	'image',
-    	'description',
-    	'last_login',
-    	'last_password_change',
-    	'remember_token',
+        'name',
+        'email',
+        'password',
+        'status',
+        'image',
+        'description',
+        'last_login',
+        'last_password_change',
+        'remember_token',
     ];
 
     /**
@@ -29,9 +29,9 @@ class User extends Eloquent
      * @var array
      */
     protected $hidden = [
-    	'password',
-    	'last_password_change',
-    	'remember_token',
-    	'deleted_at',
+        'password',
+        'last_password_change',
+        'remember_token',
+        'deleted_at',
     ];
 }

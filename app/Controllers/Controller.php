@@ -61,7 +61,7 @@ abstract class Controller
 
     public function filterClassName()
     {
-    	return $this->getClassName()
+        return $this->getClassName()
         ->removeAll(['App\Controllers', 'Controller'])
         ->explode('\\')
         ->trim();
@@ -69,16 +69,16 @@ abstract class Controller
 
     public function getViewPath()
     {
-    	$array = $this->filterClassName();
+        $array = $this->filterClassName();
         
         $array->delete($array->count() - 1);
 
         $array = $array->map(function ($value) {
-        	return Phraser::fromCamelCase($value)->toSnakeCase();
+            return Phraser::fromCamelCase($value)->toSnakeCase();
         });
 
         if (!$array->isEmpty()) {
-        	return $array->implode(DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            return $array->implode(DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         }
     }
 

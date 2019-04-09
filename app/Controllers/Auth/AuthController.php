@@ -10,14 +10,20 @@ use App\Models\User;
 use App\Controllers\Controller;
 use Amber\Framework\Request\InputParameters;
 use Amber\Framework\Request\QueryStringParameters;
+use Amber\Framework\Container\Facades\Auth;
+use Amber\Framework\Application as App;
+use Amber\Framework\Auth\UserProvider;
+use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Amber\Container\Container;
 
 class AuthController extends Controller
 {
-	protected $required = [
-		// Name    => DB Column
-		'email'    => 'email',
-		'password' => 'password',
-	];
+    protected $required = [
+        // Name    => DB Column
+        'email'    => 'email',
+        'password' => 'password',
+    ];
 
     public function loginForm(Request $request)
     {
@@ -27,73 +33,93 @@ class AuthController extends Controller
         return Response::setContent(View::toHtml());
     }
 
-    public function login(Request $request)
+    public function login(Request $request, Container $container)
     {
         $credentials = $this->getCredentialsFromRequest($request);
 
-        $user = $this->getUser('email', $credentials['email']);
+        $provider = $container->get(UserProvider::class);
+        $user = $provider->getUserByEmail($credentials['email']);
 
-        if (!$this->validateCredentials($credentials, $user)) {
-        	throw new \Exception('These credentials are not valid');
+        if ($this->validateCredentials($credentials, $user)) {
+            $newToken = $this->newToken($user);
+
+            $user->remember_token = $newToken;
+            $user->save();
+
+            $session = $container->get(Session::class);
+
+            $session->set('_token', $newToken);
+            $session->set('_user', $user->toArray());
+
+            return Response::redirect('/login');
         }
 
-        //$this->startSession();
+        throw new \Exception('These credentials are not valid');
+    }
 
-        dump($credentials);die();
+    public function logout(Session $session)
+    {
+        $session->clear();
+        $session->invalidate();
 
-        return Response::json(true);
+        return Response::redirect('/login');
+    }
+
+    protected function newToken($user): string
+    {
+        return sha1($user->email . Carbon::now());
     }
 
     protected function getLoginNameFor(string $name): string
     {
-    	return $this->required[$name] ?? null;
+        return $this->required[$name] ?? null;
     }
 
     protected function getCredentialsFromRequest(Request $request): array
     {
-    	if (InputParameters::hasMultiple($this->required)) {
-    		return InputParameters::getMultiple($this->required);
-    	}
-    	$required = implode('], [', $this->required);
-    	throw new \Exception("These parameters are required: [{$required}].");
+        if (InputParameters::hasMultiple($this->required)) {
+            return InputParameters::getMultiple($this->required);
+        }
+        $required = implode('], [', $this->required);
+        throw new \Exception("These parameters are required: [{$required}].");
     }
 
     protected function validateCredentials(array $credentials, $user)
     {
-      	if (empty($user)) {
-      		return false;
-      	}
+        if (empty($user)) {
+            return false;
+        }
 
-    	foreach ($credentials as $key => $value) {
-    		if (!$this->isValid($key, $value, $user[$key])) {
-    			return false;
-    		}
-    	}
+        foreach ($credentials as $key => $value) {
+            if (!$this->isValid($key, $value, $user[$key])) {
+                return false;
+            }
+        }
 
-    	return true;
+        return true;
     }
 
     protected function isValid($key, $value, $userValue)
     {
-    	$validations = $this->setValidations();
+        $validations = $this->validations();
 
-    	return $validations[$key]($value, $userValue);
+        return $validations[$key]($value, $userValue);
     }
 
     protected function getUser(string $key, string $value)
     {
-    	return User::where($key, $value)->first();
+        return User::where($key, $value)->first();
     }
 
-    protected function setValidations()
+    protected function validations()
     {
-    	return [
-    		'email' => function ($value, $userValue) {
-    			return $value == $userValue;
-    		},
-    		'password' => function ($value, $userValue) {
-    			return password_verify($value, $userValue);
-    		},
-    	];
+        return [
+            'email' => function ($value, $userValue) {
+                return $value == $userValue;
+            },
+            'password' => function ($value, $userValue) {
+                return password_verify($value, $userValue);
+            },
+        ];
     }
 }

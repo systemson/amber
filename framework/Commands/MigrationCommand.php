@@ -13,7 +13,7 @@ class MigrationCommand extends Command
 
     protected function configure()
     {
-		//$this->addArgument('direction', InputArgument::REQUIRED, 'The username of the user.');
+        //$this->addArgument('direction', InputArgument::REQUIRED, 'The username of the user.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

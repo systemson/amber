@@ -73,7 +73,8 @@ class Route extends ContainerFacade
     /**
      * Return the default name of the route.
      */
-    private static function getName(array $default) {
+    private static function getName(array $default)
+    {
         $resource = static::getResource($default[0]);
         $action = static::getAction($default[1]);
 

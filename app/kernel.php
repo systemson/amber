@@ -14,4 +14,6 @@ $app->bind(Container::class, $app);
 ContainerFacade::setContainer($app);
 ServiceProvider::setContainer($app);
 
+Application::boot();
+
 return Application::getInstance();

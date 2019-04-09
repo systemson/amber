@@ -6,12 +6,12 @@ use Amber\Collection\Collection;
 
 class CommandsCollection extends Collection
 {
-	public function __construct()
-	{
-		parent::__construct([]);
+    public function __construct()
+    {
+        parent::__construct([]);
 
-		$this->push([
-			Framework\Commands\MigrationCommand::class,
-		]);
-	}
+        $this->push([
+            Framework\Commands\MigrationCommand::class,
+        ]);
+    }
 }

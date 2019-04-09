@@ -5,6 +5,7 @@ namespace Amber\Framework;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Amber\Framework\Container\ContainerFacade;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class Response extends ContainerFacade
 {
@@ -38,5 +39,10 @@ class Response extends ContainerFacade
     public static function json($data = null)
     {
         return new JsonResponse($data);
+    }
+
+    public static function redirect(string $to)
+    {
+        return new RedirectResponse($to);
     }
 }

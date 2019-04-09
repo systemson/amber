@@ -6,7 +6,7 @@ use Amber\Utils\Implementations\AbstractWrapper;
 
 class ContainerFacade extends AbstractWrapper
 {
-	use StaticContainerAwareTrait;
+    use StaticContainerAwareTrait;
 
     /**
      * Returns the instance of the class.
