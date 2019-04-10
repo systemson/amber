@@ -12,6 +12,7 @@ class CommandsCollection extends Collection
 
         $this->push([
             Framework\Commands\MigrationCommand::class,
+            Framework\Commands\AppCacheCommand::class,
         ]);
     }
 }

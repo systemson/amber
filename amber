@@ -9,11 +9,13 @@ require __DIR__.'/vendor/autoload.php';
 
 $amber = require APP_DIR . '/app/kernel.php';
 
-use Symfony\Component\Console\Application;
 use Amber\Framework\Commands\CommandsCollection;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\ConsoleEvents;
 
 
 $application = new Application();
 $application->add(new Amber\Framework\Commands\MigrationCommand());
+$application->add(new Amber\Framework\Commands\AppCacheCommand());
 
 $application->run();
