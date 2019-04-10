@@ -14,8 +14,10 @@ use Amber\Framework\Container\Facades\Auth;
 use Amber\Framework\Application as App;
 use Amber\Framework\Auth\UserProvider;
 use Carbon\Carbon;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Amber\Container\Container;
+use Amber\Framework\Container\Facades\Cache;
+use Amber\Framework\Container\Facades\Session;
+use Amber\Framework\Helpers\Hash;
 
 class AuthController extends Controller
 {
@@ -46,10 +48,8 @@ class AuthController extends Controller
             $user->remember_token = $newToken;
             $user->save();
 
-            $session = $container->get(Session::class);
-
-            $session->set('_token', $newToken);
-            $session->set('_user', $user->toArray());
+            Session::set('_token', $newToken);
+            Cache::set($newToken, $user->toArray(), 15);
 
             return Response::redirect('/login');
         }
@@ -57,17 +57,22 @@ class AuthController extends Controller
         throw new \Exception('These credentials are not valid');
     }
 
-    public function logout(Session $session)
+    public function logout()
     {
-        $session->clear();
-        $session->invalidate();
+		$token = Session::get('_token');
+
+		// Deletes the session cache
+		Cache::delete($token);
+
+        Session::clear();
+        Session::invalidate();
 
         return Response::redirect('/login');
     }
 
     protected function newToken($user): string
     {
-        return sha1($user->email . Carbon::now());
+    	return Hash::make($user->email . Carbon::now());
     }
 
     protected function getLoginNameFor(string $name): string

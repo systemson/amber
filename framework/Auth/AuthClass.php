@@ -25,7 +25,7 @@ class AuthClass
 
     public function check()
     {
-        return isset($this->user);
+        return !is_null($this->user);
     }
 
     public function __call(string $method, $args)
