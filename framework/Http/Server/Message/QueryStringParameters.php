@@ -4,10 +4,10 @@ namespace Amber\Framework\Request;
 
 use Amber\Utils\Implementations\AbstractWrapper;
 use Amber\Collection\Collection;
-use Amber\Framework\Application;
+use Amber\Framework\Container\Application;
 use Symfony\Component\HttpFoundation\Request;
 
-class InputParameters extends AbstractWrapper
+class QueryStringParameters extends AbstractWrapper
 {
     /**
      * @var string The class accessor.
@@ -42,6 +42,6 @@ class InputParameters extends AbstractWrapper
     {
         $request = Application::get(Request::class);
 
-        static::exchangeArray($request->request->all());
+        static::exchangeArray($request->query->all());
     }
 }

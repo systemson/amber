@@ -4,8 +4,8 @@ namespace App\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseContract;
-use Amber\Framework\Response;
-use Amber\Framework\View;
+use Amber\Framework\Container\Facades\Response;
+use Amber\Framework\Container\Facades\View;
 use App\Models\User;
 
 class HomeController extends Controller

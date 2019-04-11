@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework;
+namespace Amber\Framework\Container\Facades;
 
 use Amber\Framework\Application;
 use Amber\Sketch\Sketch;

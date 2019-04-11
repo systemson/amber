@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework;
+namespace Amber\Framework\Dispatch;
 
 use Amber\Container\Container;
 use Symfony\Component\Routing\Matcher\UrlMatcher;

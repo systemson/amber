@@ -4,8 +4,8 @@ namespace App\Controllers\Auth;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseContract;
-use Amber\Framework\Response;
-use Amber\Framework\View;
+use Amber\Framework\Container\Facades\Response;
+use Amber\Framework\Container\Facades\View;
 use App\Models\User;
 use App\Controllers\Controller;
 use Amber\Framework\Request\InputParameters;
@@ -59,10 +59,10 @@ class AuthController extends Controller
 
     public function logout()
     {
-		$token = Session::get('_token');
+        $token = Session::get('_token');
 
-		// Deletes the session cache
-		Cache::delete($token);
+        // Deletes the session cache
+        Cache::delete($token);
 
         Session::clear();
         Session::invalidate();
@@ -72,7 +72,7 @@ class AuthController extends Controller
 
     protected function newToken($user): string
     {
-    	return Hash::make($user->email . Carbon::now());
+        return Hash::make($user->email . Carbon::now());
     }
 
     protected function getLoginNameFor(string $name): string

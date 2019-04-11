@@ -23,13 +23,19 @@ require CONFIG_DIR . '/routes.php';
 /**
  * Get the request handler.
  */
-$handler = $app->get(Amber\Framework\Dispatch::class);
+$handler = $app->get(Amber\Framework\Dispatch\Dispatch::class);
+
+/**
+ * Get the request.
+ */
+$request = $app->get(Symfony\Component\HttpFoundation\Request::class);
+
 
 /**
  * Get and send the resposne.
  */
 $handler->response()
-->prepare($app->get(Symfony\Component\HttpFoundation\Request::class))
+->prepare($request)
 ->send();
 
 

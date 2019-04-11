@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework;
+namespace Amber\Framework\Container\Facades;
 
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;

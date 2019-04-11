@@ -7,6 +7,6 @@ return [
     ],
 
     'cache' => [
-    	'path' => APP_DIR . 'tmp/cache',
+        'path' => APP_DIR . 'tmp/cache',
     ]
 ];

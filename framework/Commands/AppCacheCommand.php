@@ -19,7 +19,6 @@ class AppCacheCommand extends Command
         $this
             ->addArgument('folder', InputArgument::REQUIRED, 'The cache folder to clear.')
         ;
-
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -40,7 +39,7 @@ class AppCacheCommand extends Command
                 }
                 break;
             
-            default:            
+            default:
                 $output->writeln('No such cache folder.');
                 break;
         }

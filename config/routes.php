@@ -1,6 +1,6 @@
 <?php
 
-use Amber\Framework\Route;
+use Amber\Framework\Container\Facades\Route;
 
 Route::get('/', 'App\Controllers\HomeController::index');
 
