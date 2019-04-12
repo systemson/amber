@@ -3,8 +3,11 @@
 namespace Amber\Framework\Middleware;
 
 use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Psr\Http\Message\ServerRequestInterface;
+use Amber\Container\Container;
 
 /**
  * Participant in processing a server request and response.
@@ -15,6 +18,11 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 abstract class RequestMiddleware implements MiddlewareInterface
 {
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * Process an incoming server request.
      *
@@ -22,5 +30,10 @@ abstract class RequestMiddleware implements MiddlewareInterface
      * If unable to produce the response itself, it may delegate to the provided
      * request handler to do so.
      */
-    abstract public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface;
+    abstract public function process(Request $request, Handler $handler): Response;
+
+    public function next(Handler $handler): Response
+    {
+        return $handler->getResponse();
+    }
 }

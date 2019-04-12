@@ -23,19 +23,30 @@ require CONFIG_DIR . '/routes.php';
 /**
  * Get the request handler.
  */
+$handlerPSR = $app->get(Psr\Http\Message\RequestHandlerInterface::class);
 $handler = $app->get(Amber\Framework\Dispatch\Dispatch::class);
+
 
 /**
  * Get the request.
  */
+$requestPSR = $app->get(Psr\Http\Message\ServerRequestInterface::class);
 $request = $app->get(Symfony\Component\HttpFoundation\Request::class);
 
 
 /**
- * Get and send the resposne.
+ * Get the response.
  */
-$handler->response()
-->prepare($request)
+$responsePSR = $handlerPSR->handle($requestPSR);
+$response = $handler->response();
+
+
+/**
+ * Send the response.
+ */
+dump(Amber\Framework\Container\Facades\Session::all());
+//$responsePSR->send();
+$response->prepare($request)
 ->send();
 
 

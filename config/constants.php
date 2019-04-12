@@ -16,3 +16,11 @@ if (!function_exists('config')) {
         return null;
     }
 }
+
+if (!function_exists('dd')) {
+    function dd(... $value)
+    {
+        call_user_func_array('dump', $value);
+        die();
+    }
+}

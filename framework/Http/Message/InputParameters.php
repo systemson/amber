@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Request;
+namespace Amber\Framework\Http\Message;
 
 use Amber\Utils\Implementations\AbstractWrapper;
 use Amber\Collection\Collection;

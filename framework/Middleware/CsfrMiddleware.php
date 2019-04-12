@@ -2,10 +2,6 @@
 
 namespace Amber\Framework\Middleware;
 
-use Amber\Framework\Container\Facades\Session;
-use Amber\Framework\Container\Facades\Auth;
-use Amber\Framework\Container\Facades\Cache;
-use Amber\Framework\Auth\UserProvider;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
@@ -17,7 +13,7 @@ use Psr\Http\Server\RequestHandlerInterface as Handler;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class SessionMiddleware extends RequestMiddleware
+class CsfrMiddleware extends RequestMiddleware
 {
     /**
      * Process an incoming server request.
@@ -28,18 +24,8 @@ class SessionMiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        if (Session::has('_token')) {
-            $token = Session::get('_token');
-
-            if (Cache::has($token)) {
-                $user = Cache::get($token);
-            } else {
-                $userProvider = $this->container->get(UserProvider::class);
-                if (!is_null($token)) {
-                    $user = $userProvider->getUserByToken($token);
-                }
-            }
-            Auth::setUser($user);
+        if (false) {
+            return $handler->getResponse()->withStatus(403, 'Unable to validate the csrf token.');
         }
 
         return $this->next($handler);

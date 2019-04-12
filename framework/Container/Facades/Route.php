@@ -67,6 +67,8 @@ class Route extends ContainerFacade
         $route->setMethods(strtoupper($method));
         $route->setDefaults($default);
 
+        //dd(get_class_methods($route));
+        //dd($route);
         return $route;
     }
 

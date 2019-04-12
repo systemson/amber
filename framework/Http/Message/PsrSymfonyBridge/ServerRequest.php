@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Http\Server\Message\PsrSymfonyBridge;
+namespace Amber\Framework\Http\Message\PsrSymfonyBridge;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Request;

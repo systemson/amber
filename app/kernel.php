@@ -11,7 +11,8 @@ use Amber\Framework\Container\ContainerAwareClass;
 use Amber\Framework\Providers\ServiceProvider;
 
 $app = new Container();
-$app->bind(Container::class, $app);
+$app->register(Container::class)
+->setInstance($app);
 
 ContainerAwareClass::setContainer($app);
 ContainerFacade::setContainer($app);

@@ -17,5 +17,6 @@ use Symfony\Component\Console\ConsoleEvents;
 $application = new Application();
 $application->add(new Amber\Framework\Commands\MigrationCommand());
 $application->add(new Amber\Framework\Commands\AppCacheCommand());
+$application->add(new Amber\Framework\Commands\ServerCommand());
 
 $application->run();

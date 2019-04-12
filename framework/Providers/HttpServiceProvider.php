@@ -10,8 +10,14 @@ use Amber\Framework\Auth\UserProvider;
 use Amber\Framework\Auth\AuthClass;
 use Amber\Framework\Container\Facades\Cache;
 use Amber\Framework\Container\Facades\Session as SessionFacade;
-use Amber\Framework\Http\Server\Message\PsrSymfonyBridge\ServerRequest;
+use Psr\Http\Message\RequestHandlerInterface;
+use Amber\Framework\Http\Server\RequestHandler;
 use Psr\Http\Message\ServerRequestInterface;
+use Amber\Framework\Http\Message\PsrSymfonyBridge\ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Amber\Framework\Http\Message\PsrSymfonyBridge\Response;
+use Psr\Http\Message\UriInterface;
+use Amber\Framework\Http\Message\PsrSymfonyBridge\Uri;
 use Amber\Framework\Helpers\Hash;
 use Carbon\Carbon;
 
@@ -21,40 +27,23 @@ class HttpServiceProvider extends ServiceProvider
     {
         $container = static::getContainer();
 
-        $container->register(RouteCollection::class)
-        ->singleton();
+        $container->singleton(RouteCollection::class);
 
         $container->register(Request::class)
         ->setInstance(Request::createFromGlobals());
 
-        $container->register(RequestContext::class)
+        $container->singleton(RequestContext::class)
         ->afterConstruct('fromRequest', function () use ($container) {
             return $container->get(Request::class);
-        })
-        ->singleton();
-
-        $container->register(Session::class)
-        ->singleton();
-
-
-        // This should be moved to SessionMiddleware
-        $container->locate(AuthClass::class)
-        ->afterConstruct('setUser', function () use ($container) {
-
-            if (SessionFacade::has('_token')) {
-                $token = SessionFacade::get('_token');
-
-                if (Cache::has($token)) {
-                    return Cache::get($token);
-                } else {
-                    $userProvider = $container->get(UserProvider::class);
-                    if (!is_null($token)) {
-                        return $userProvider->getUserByToken($token);
-                    }
-                }
-            }
         });
 
-        dump(SessionFacade::all());
+        $container->singleton(Session::class);
+
+        $container->register(ServerRequest::class, ServerRequestInterface::class);
+        $container->register(Response::class, ResponseInterface::class);
+        $container->register(RequestHandler::class, RequestHandlerInterface::class);
+        $container->register(Uri::class, UriInterface::class);
+
+        //dump(SessionFacade::all());
     }
 }

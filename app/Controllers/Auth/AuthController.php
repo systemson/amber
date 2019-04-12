@@ -8,8 +8,8 @@ use Amber\Framework\Container\Facades\Response;
 use Amber\Framework\Container\Facades\View;
 use App\Models\User;
 use App\Controllers\Controller;
-use Amber\Framework\Request\InputParameters;
-use Amber\Framework\Request\QueryStringParameters;
+use Amber\Framework\Http\Message\InputParameters;
+use Amber\Framework\Http\Message\QueryStringParameters;
 use Amber\Framework\Container\Facades\Auth;
 use Amber\Framework\Application as App;
 use Amber\Framework\Auth\UserProvider;
@@ -49,7 +49,7 @@ class AuthController extends Controller
             $user->save();
 
             Session::set('_token', $newToken);
-            Cache::set($newToken, $user->toArray(), 15);
+            Cache::set($newToken, $user, 15);
 
             return Response::redirect('/login');
         }
