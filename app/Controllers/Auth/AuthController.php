@@ -57,9 +57,13 @@ class AuthController extends Controller
         throw new \Exception('These credentials are not valid');
     }
 
-    public function logout()
+    public function logout(UserProvider $provider)
     {
         $token = Session::get('_token');
+
+        $user = $provider->getUserByToken($token);
+        $user->remember_token = null;
+        $user->save();
 
         // Deletes the session cache
         Cache::delete($token);
@@ -73,11 +77,6 @@ class AuthController extends Controller
     protected function newToken($user): string
     {
         return Hash::make($user->email . Carbon::now());
-    }
-
-    protected function getLoginNameFor(string $name): string
-    {
-        return $this->required[$name] ?? null;
     }
 
     protected function getCredentialsFromRequest(Request $request): array

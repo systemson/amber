@@ -2,11 +2,11 @@
 
 namespace Amber\Framework\Http\Server;
 
-use Psr\Http\Server\RequestHandlerInterface;
+use Amber\Container\Container;
+use Amber\Framework\Middleware\MiddlewareCollection;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Amber\Framework\Middleware\MiddlewareCollection;
-use Amber\Container\Container;
+use Psr\Http\Server\RequestHandlerInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 
 class RequestHandler implements RequestHandlerInterface
@@ -75,7 +75,10 @@ class RequestHandler implements RequestHandlerInterface
 
             $response = $middleware->process($request, $this);
 
-            $this->setResponse($response);
+            if ($response !== $this->getResponse()) {
+                $this->setResponse($response);
+                break;
+            }
         }
     }
 }

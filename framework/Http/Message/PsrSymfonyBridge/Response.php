@@ -78,10 +78,12 @@ class Response implements ResponseInterface
      */
     public function withStatus($code, $reasonPhrase = '')
     {
-        $response = $this->getResponse()->setStatusCode($code);
+        $response = clone $this;
 
-        $this->setResponse($response);
-        return $this;
+        $symfonyResponse = $this->getResponse()->setStatusCode($code);
+
+        $this->setResponse($symfonyResponse);
+        return $response;
     }
 
     /**
@@ -102,8 +104,14 @@ class Response implements ResponseInterface
         return $this->getResponse()->getContent();
     }
 
+    /**
+     * Sends HTTP headers and content.
+     *
+     * @return static
+     */
     public function send()
     {
         $this->getResponse()->send();
+        return $this;
     }
 }

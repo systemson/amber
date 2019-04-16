@@ -6,8 +6,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
-use Psr\Http\Message\ServerRequestInterface;
-use Amber\Container\Container;
+use Amber\Framework\Container\ContainerAwareClass;
 
 /**
  * Participant in processing a server request and response.
@@ -16,13 +15,8 @@ use Amber\Container\Container;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-abstract class RequestMiddleware implements MiddlewareInterface
+abstract class RequestMiddleware extends ContainerAwareClass implements MiddlewareInterface
 {
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
-
     /**
      * Process an incoming server request.
      *

@@ -1,7 +1,6 @@
 <?php
 
 use Amber\Framework\Container\Facades\Route;
-use Symfony\Component\Routing\RouteCollection;
 
 Route::get('/', 'App\Controllers\HomeController::index');
 

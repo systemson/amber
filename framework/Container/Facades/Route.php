@@ -22,65 +22,16 @@ class Route extends ContainerFacade
     protected static $instance;
 
     /**
-     * To expose publicy a method it should be declared protected.
+     * To expose publicy a method it should be declared public or protected.
      *
      * @var array The method(s) that should be publicly exposed.
      */
     protected static $passthru = [];
 
-    /**
-     * Runs after the class constructor.
-     *
-     * @return void
-     */
-    public static function afterConstruct(): void
+    public function loadRoutes()
     {
-    }
-
-    private static function handleDefault($default)
-    {
-        if (is_string($default)) {
-            $defaultArray = static::getControllerToActionArray($default);
-
-            return [
-                '_controller' => $defaultArray->first(),
-                '_action' => $defaultArray->last(),
-            ];
-        }
-    }
-
-    /**
-     * Retuns an array with the controller and the action names.
-     */
-    private static function getControllerToActionArray($default)
-    {
-        return  Phraser::make($default)
-        ->explode('::');
-    }
-
-    /**
-     * Return a new Route Instance.
-     */
-    private static function routeFactory(string $method, string $uri, array $default): SymfonyRoute
-    {
-        $route = new SymfonyRoute($uri);
-        $route->setMethods(strtoupper($method));
-        $route->setDefaults($default);
-
-        //dd(get_class_methods($route));
-        //dd($route);
-        return $route;
-    }
-
-    /**
-     * Return the default name of the route.
-     */
-    private static function getName(array $default)
-    {
-        $resource = static::getResource($default[0]);
-        $action = static::getAction($default[1]);
-
-        return "{$resource}_{$action}";
+        //$routes = self::getIntance();
+        //require CONFIG_DIR . '/routes.php';
     }
 
     /**
@@ -116,6 +67,50 @@ class Route extends ContainerFacade
         static::add($name, $route);
 
         return $route;
+    }
+
+    private static function handleDefault($default)
+    {
+        if (is_string($default)) {
+            $defaultArray = static::getControllerToActionArray($default);
+
+            return [
+                '_controller' => $defaultArray->first(),
+                '_action' => $defaultArray->last(),
+            ];
+        }
+    }
+
+    /**
+     * Retuns an array with the controller and the action names.
+     */
+    private static function getControllerToActionArray($default)
+    {
+        return  Phraser::make($default)
+        ->explode('::');
+    }
+
+    /**
+     * Return a new Route Instance.
+     */
+    private static function routeFactory(string $method, string $uri, array $default): SymfonyRoute
+    {
+        $route = new SymfonyRoute($uri);
+        $route->setMethods(strtoupper($method));
+        $route->setDefaults($default);
+
+        return $route;
+    }
+
+    /**
+     * Return the default name of the route.
+     */
+    private static function getName(array $default)
+    {
+        $resource = static::getResource($default[0]);
+        $action = static::getAction($default[1]);
+
+        return "{$resource}_{$action}";
     }
 
     public static function get(string $uri, $default)

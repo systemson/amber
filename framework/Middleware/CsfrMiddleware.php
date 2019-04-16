@@ -5,6 +5,8 @@ namespace Amber\Framework\Middleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
+use Amber\Framework\Container\Facades\Csrf;
+use Amber\Framework\Container\Facades\Response as ResponseFacade;
 
 /**
  * Participant in processing a server request and response.
@@ -24,10 +26,9 @@ class CsfrMiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        if (false) {
-            return $handler->getResponse()->withStatus(403, 'Unable to validate the csrf token.');
+        if ($request->getMethod() == 'POST' && !Csrf::validate()) {
+            return ResponseFacade::forbidden('Unable to validate the csrf token.');
         }
-
         return $this->next($handler);
     }
 }

@@ -20,6 +20,7 @@ use Psr\Http\Message\UriInterface;
 use Amber\Framework\Http\Message\PsrSymfonyBridge\Uri;
 use Amber\Framework\Helpers\Hash;
 use Carbon\Carbon;
+use Amber\Framework\Http\Security\Csrf;
 
 class HttpServiceProvider extends ServiceProvider
 {
@@ -43,7 +44,6 @@ class HttpServiceProvider extends ServiceProvider
         $container->register(Response::class, ResponseInterface::class);
         $container->register(RequestHandler::class, RequestHandlerInterface::class);
         $container->register(Uri::class, UriInterface::class);
-
-        //dump(SessionFacade::all());
+        $container->singleton(Csrf::class);
     }
 }

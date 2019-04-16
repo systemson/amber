@@ -34,10 +34,8 @@ class SessionMiddleware extends RequestMiddleware
             if (Cache::has($token)) {
                 $user = Cache::get($token);
             } else {
-                $userProvider = $this->container->get(UserProvider::class);
-                if (!is_null($token)) {
-                    $user = $userProvider->getUserByToken($token);
-                }
+                $userProvider = $this->getContainer()->get(UserProvider::class);
+                $user = $userProvider->getUserByToken($token);
             }
             Auth::setUser($user);
         }

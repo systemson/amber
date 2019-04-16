@@ -44,13 +44,11 @@ $response = $handler->response();
 /**
  * Send the response.
  */
-dump(Amber\Framework\Container\Facades\Session::all());
 //$responsePSR->send();
-$response->prepare($request)
-->send();
+$response->send();
 
 
-$app->get(\Psr\Log\LoggerInterface::class)->info('Sistem report', [
+$app->get(Psr\Log\LoggerInterface::class)->info('Sistem report', [
     'Memory - ' . memory_get_peak_usage(true)/1000/1000,
     'Execution - ' . number_format(microtime(true) - INIT_TIME, 6),
 ]);
