@@ -51,7 +51,7 @@ class AuthController extends Controller
             Session::set('_token', $newToken);
             Cache::set($newToken, $user, 15);
 
-            return Response::redirect('/login');
+            return Response::redirect('/');
         }
 
         throw new \Exception('These credentials are not valid');

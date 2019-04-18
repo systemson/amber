@@ -16,11 +16,6 @@ $app = require APP_DIR . '/app/kernel.php';
 
 
 /**
- * Load the routes.
- */
-require CONFIG_DIR . '/routes.php';
-
-/**
  * Get the request handler.
  */
 $handlerPSR = $app->get(Psr\Http\Message\RequestHandlerInterface::class);
@@ -46,6 +41,7 @@ $response = $handler->response();
  */
 //$responsePSR->send();
 $response->send();
+die();
 
 
 $app->get(Psr\Log\LoggerInterface::class)->info('Sistem report', [

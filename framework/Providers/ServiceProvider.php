@@ -3,11 +3,10 @@
 namespace Amber\Framework\Providers;
 
 use Amber\Framework\Container\StaticContainerAwareTrait;
+use Amber\Framework\Container\ContainerAwareClass;
 
-class ServiceProvider
+class ServiceProvider extends ContainerAwareClass
 {
-    use StaticContainerAwareTrait;
-
     public static function boot(): void
     {
         //

@@ -28,10 +28,9 @@ class Route extends ContainerFacade
      */
     protected static $passthru = [];
 
-    public function loadRoutes()
+    public static function boot(): void
     {
-        //$routes = self::getIntance();
-        //require CONFIG_DIR . '/routes.php';
+        require CONFIG_DIR . '/routes.php';
     }
 
     /**

@@ -8,16 +8,18 @@ use Amber\Container\Container;
 use Amber\Framework\Container\Application;
 use Amber\Framework\Container\ContainerFacade;
 use Amber\Framework\Container\ContainerAwareClass;
-use Amber\Framework\Providers\ServiceProvider;
+use Amber\Framework\Container\Facades\Route;
 
 $app = new Container();
 $app->register(Container::class)
 ->setInstance($app);
 
-ContainerAwareClass::setContainer($app);
-ContainerFacade::setContainer($app);
-ServiceProvider::setContainer($app);
-
 Application::boot();
 
-return Application::getInstance();
+ContainerAwareClass::setContainer($app);
+ContainerFacade::setContainer($app);
+
+$app = Application::getInstance();
+Route::boot();
+
+return $app;
