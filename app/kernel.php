@@ -10,16 +10,26 @@ use Amber\Framework\Container\ContainerFacade;
 use Amber\Framework\Container\ContainerAwareClass;
 use Amber\Framework\Container\Facades\Route;
 
+$array['Start'] = microtime(true) - INIT_TIME;
+
 $app = new Container();
+$array['Container instantiation'] = microtime(true) - INIT_TIME;
+
 $app->register(Container::class)
 ->setInstance($app);
-
-Application::boot();
+$array['Container self-registration'] = microtime(true) - INIT_TIME;
 
 ContainerAwareClass::setContainer($app);
+$array['ContainerAwareClass setContainer'] = microtime(true) - INIT_TIME;
+
 ContainerFacade::setContainer($app);
+$array['ContainerFacade setContainer'] = microtime(true) - INIT_TIME;
 
 $app = Application::getInstance();
-Route::boot();
+$array['Application init'] = microtime(true) - INIT_TIME;
 
+Route::boot();
+$array['Routes boot'] = microtime(true) - INIT_TIME;
+
+//dd($array);
 return $app;

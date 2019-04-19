@@ -3,15 +3,12 @@
 namespace App\Controllers\Auth;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response as ResponseContract;
 use Amber\Framework\Container\Facades\Response;
 use Amber\Framework\Container\Facades\View;
 use App\Models\User;
 use App\Controllers\Controller;
 use Amber\Framework\Http\Message\InputParameters;
 use Amber\Framework\Http\Message\QueryStringParameters;
-use Amber\Framework\Container\Facades\Auth;
-use Amber\Framework\Application as App;
 use Amber\Framework\Auth\UserProvider;
 use Carbon\Carbon;
 use Amber\Container\Container;
@@ -29,7 +26,7 @@ class AuthController extends Controller
 
     public function loginForm(Request $request)
     {
-        $template = View::view($this->getView())
+        View::view($this->getView())
         ->setLayout('layouts/app.php');
 
         return Response::setContent(View::toHtml());

@@ -31,12 +31,15 @@ class HttpServiceProvider extends ServiceProvider
         $container->singleton(RouteCollection::class);
 
         $container->register(Request::class)
-        ->setInstance(Request::createFromGlobals());
+            ->setInstance(Request::createFromGlobals());
 
         $container->singleton(RequestContext::class)
-        ->afterConstruct('fromRequest', function () use ($container) {
-            return $container->get(Request::class);
-        });
+            ->afterConstruct(
+                'fromRequest',
+                function () use ($container) {
+                    return $container->get(Request::class);
+                }
+            );
 
         $container->singleton(Session::class);
 

@@ -62,9 +62,9 @@ abstract class Controller
     public function filterClassName()
     {
         return $this->getClassName()
-        ->removeAll(['App\Controllers', 'Controller'])
-        ->explode('\\')
-        ->trim();
+            ->removeAll(['App\Controllers', 'Controller'])
+            ->explode('\\')
+            ->trim();
     }
 
     public function getViewPath()
@@ -73,9 +73,11 @@ abstract class Controller
         
         $array->delete($array->count() - 1);
 
-        $array = $array->map(function ($value) {
-            return Phraser::fromCamelCase($value)->toSnakeCase();
-        });
+        $array = $array->map(
+            function ($value) {
+                return Phraser::fromCamelCase($value)->toSnakeCase();
+            }
+        );
 
         if (!$array->isEmpty()) {
             return $array->implode(DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
@@ -85,16 +87,16 @@ abstract class Controller
     public function getResourceName()
     {
         return $this->filterClassName()
-        ->last()
-        ->fromCamelCase()
-        ->toSnakeCase();
+            ->last()
+            ->fromCamelCase()
+            ->toSnakeCase();
     }
 
     public function getCalledAction()
     {
         return (new Collection(debug_backtrace()))
-        ->where('class', get_called_class())
-        ->last()['function'];
+            ->where('class', get_called_class())
+            ->last()['function'];
     }
 
     public function getDefaultView()

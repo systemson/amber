@@ -69,7 +69,7 @@ class ServerRequest implements ServerRequestInterface
      * immutability of the message, and MUST return an instance that has the
      * updated cookie values.
      *
-     * @param array $cookies Array of key/value pairs representing cookies.
+     * @param  array $cookies Array of key/value pairs representing cookies.
      * @return static
      */
     public function withCookieParams(array $cookies)
@@ -114,8 +114,8 @@ class ServerRequest implements ServerRequestInterface
      * immutability of the message, and MUST return an instance that has the
      * updated query string arguments.
      *
-     * @param array $query Array of query string arguments, typically from
-     *     $_GET.
+     * @param  array $query Array of query string arguments, typically from
+     *                      $_GET.
      * @return static
      */
     public function withQueryParams(array $query)
@@ -146,7 +146,7 @@ class ServerRequest implements ServerRequestInterface
      * immutability of the message, and MUST return an instance that has the
      * updated body parameters.
      *
-     * @param array $uploadedFiles An array tree of UploadedFileInterface instances.
+     * @param  array $uploadedFiles An array tree of UploadedFileInterface instances.
      * @return static
      * @throws \InvalidArgumentException if an invalid structure is provided.
      */
@@ -196,8 +196,8 @@ class ServerRequest implements ServerRequestInterface
      * immutability of the message, and MUST return an instance that has the
      * updated body parameters.
      *
-     * @param null|array|object $data The deserialized body data. This will
-     *     typically be in an array or object.
+     * @param  null|array|object $data The deserialized body data. This will
+     *                                 typically be in an array or object.
      * @return static
      * @throws \InvalidArgumentException if an unsupported argument type is
      *     provided.
@@ -232,9 +232,9 @@ class ServerRequest implements ServerRequestInterface
      * This method obviates the need for a hasAttribute() method, as it allows
      * specifying a default value to return if the attribute is not found.
      *
-     * @see getAttributes()
-     * @param string $name The attribute name.
-     * @param mixed $default Default value to return if the attribute does not exist.
+     * @see    getAttributes()
+     * @param  string $name    The attribute name.
+     * @param  mixed  $default Default value to return if the attribute does not exist.
      * @return mixed
      */
     public function getAttribute($name, $default = null)
@@ -251,9 +251,9 @@ class ServerRequest implements ServerRequestInterface
      * immutability of the message, and MUST return an instance that has the
      * updated attribute.
      *
-     * @see getAttributes()
-     * @param string $name The attribute name.
-     * @param mixed $value The value of the attribute.
+     * @see    getAttributes()
+     * @param  string $name  The attribute name.
+     * @param  mixed  $value The value of the attribute.
      * @return static
      */
     public function withAttribute($name, $value)
@@ -270,8 +270,8 @@ class ServerRequest implements ServerRequestInterface
      * immutability of the message, and MUST return an instance that removes
      * the attribute.
      *
-     * @see getAttributes()
-     * @param string $name The attribute name.
+     * @see    getAttributes()
+     * @param  string $name The attribute name.
      * @return static
      */
     public function withoutAttribute($name)

@@ -41,10 +41,11 @@ $response = $handler->response();
  */
 //$responsePSR->send();
 $response->send();
-die();
 
 
-$app->get(Psr\Log\LoggerInterface::class)->info('Sistem report', [
+/*$app->get(Psr\Log\LoggerInterface::class)->info('Sistem report', [
     'Memory - ' . memory_get_peak_usage(true)/1000/1000,
     'Execution - ' . number_format(microtime(true) - INIT_TIME, 6),
-]);
+    '_GET - ' . json_encode($request->query->all()),
+    '_POST - ' . json_encode($request->request->all()),
+]);*/

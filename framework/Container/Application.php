@@ -38,11 +38,6 @@ class Application extends ContainerFacade
 
     private static $providers = [];
 
-    public static function boot(): void
-    {
-        self::$providers = config('app')->providers;
-    }
-
     /**
      * Runs after the class constructor.
      *
@@ -70,22 +65,32 @@ class Application extends ContainerFacade
 
     private static function bootProviders(): void
     {
-        array_map(function ($value) {
-            $value::boot();
-        }, self::$providers);
+        self::$providers = config('app')->providers;
+        array_map(
+            function ($value) {
+                $value::boot();
+            },
+            self::$providers
+        );
     }
 
     private static function setUpProviders(): void
     {
-        array_map(function ($value) {
-            static::make($value)->setUp();
-        }, self::$providers);
+        array_map(
+            function ($value) {
+                static::make($value)->setUp();
+            },
+            self::$providers
+        );
     }
 
     private static function setDownProviders(): void
     {
-        array_map(function ($value) {
-            static::make($value)->setDown();
-        }, self::$providers);
+        array_map(
+            function ($value) {
+                static::make($value)->setDown();
+            },
+            self::$providers
+        );
     }
 }

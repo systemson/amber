@@ -30,7 +30,7 @@ class Route extends ContainerFacade
 
     public static function boot(): void
     {
-        require CONFIG_DIR . '/routes.php';
+        include CONFIG_DIR . '/routes.php';
     }
 
     /**
@@ -39,8 +39,8 @@ class Route extends ContainerFacade
     private static function getResource(Str $default): Str
     {
         return $default->removeAll(['App\Controllers\\' , 'Controller'])
-        ->fromCamelCase()
-        ->toSnakeCase();
+            ->fromCamelCase()
+            ->toSnakeCase();
     }
 
     /**
@@ -49,7 +49,7 @@ class Route extends ContainerFacade
     private static function getAction(Str $default): Str
     {
         return $default->fromCamelCase()
-        ->toSnakeCase();
+            ->toSnakeCase();
     }
 
     /**

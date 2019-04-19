@@ -14,8 +14,11 @@ class FilesystemServiceProvider extends ServiceProvider
         $container = static::getContainer();
 
         $container->register(Filesystem::class, FilesystemInterface::class)
-        ->setArgument(AdapterInterface::class, function () {
-            return new Local(config('filesystem')->main['path']);
-        });
+            ->setArgument(
+                AdapterInterface::class,
+                function () {
+                    return new Local(config('filesystem')->main['path']);
+                }
+            );
     }
 }

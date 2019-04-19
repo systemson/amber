@@ -36,6 +36,17 @@ class Response extends ContainerFacade
         return $response;
     }
 
+
+    public static function forbidden(string $message = 'Not found!')
+    {
+        $response = clone static::getInstance();
+
+        $response->setStatusCode(503);
+        $response->setContent($message);
+
+        return $response;
+    }
+
     public static function json($data = null)
     {
         return new JsonResponse($data);

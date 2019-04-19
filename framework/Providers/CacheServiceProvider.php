@@ -13,9 +13,12 @@ class CacheServiceProvider extends ServiceProvider
         $container = static::getContainer();
 
         $container->register(Cache::class, CacheInterface::class)
-        ->afterConstruct('pushHandler', function () {
-            return new SimpleCache(config('cache')->path);
-        })
+            ->afterConstruct(
+                'pushHandler',
+                function () {
+                    return new SimpleCache(config('cache')->path);
+                }
+            )
         ->singleton();
     }
 }

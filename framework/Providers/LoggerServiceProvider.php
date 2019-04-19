@@ -31,13 +31,4 @@ class LoggerServiceProvider extends ServiceProvider
             }
         });
     }
-
-    public function setDown(): void
-    {
-        static::getContainer()->get(LoggerInterface::class)
-        ->info('Sistem report', [
-            'Memory - ' . memory_get_peak_usage(true)/1000/1000,
-            'Execution - ' . number_format(microtime(true) - INIT_TIME, 6),
-        ]);
-    }
 }

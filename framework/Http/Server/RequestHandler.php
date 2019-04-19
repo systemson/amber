@@ -40,6 +40,11 @@ class RequestHandler implements RequestHandlerInterface
         return $this->response;
     }
 
+    public function newResponse(): Response
+    {
+        return $this->responseFactory();
+    }
+
     protected function responseFactory(): Response
     {
         return $this->getContainer()->get(Response::class);
@@ -55,7 +60,9 @@ class RequestHandler implements RequestHandlerInterface
         $defaults = $this->match($request);
         $middlewares = $defaults['_middlewares'] ?? [];
 
-        $this->middlewares($request, $middlewares);
+        if (!is_null($response = $this->middlewares($request, $middlewares))) {
+            return $response;
+        }
 
         return $this->getResponse();
     }
@@ -76,7 +83,7 @@ class RequestHandler implements RequestHandlerInterface
             $response = $middleware->process($request, $this);
 
             if ($response !== $this->getResponse()) {
-                $this->setResponse($response);
+                return $response;
                 break;
             }
         }
