@@ -74,8 +74,9 @@ class Route extends ContainerFacade
             $defaultArray = static::getControllerToActionArray($default);
 
             return [
-                '_controller' => $defaultArray->first(),
-                '_action' => $defaultArray->last(),
+                '_controller'  => $defaultArray->first(),
+                '_action'      => $defaultArray->last(),
+                '_middlewares' => self::middlewares(),
             ];
         }
     }
@@ -99,6 +100,14 @@ class Route extends ContainerFacade
         $route->setDefaults($default);
 
         return $route;
+    }
+
+    private static function middlewares()
+    {
+    	return [
+		    'Amber\Framework\Middleware\SessionMiddleware',
+		    'Amber\Framework\Middleware\CsfrMiddleware',
+    	];
     }
 
     /**

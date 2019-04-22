@@ -1,18 +1,19 @@
 #!/usr/bin/env php
 <?php
 
+define('INIT_TIME', microtime(true));
+
 require __DIR__.'/vendor/autoload.php';
 
-/**
- * Load the application.
- */
-
-$amber = require APP_DIR . '/app/kernel.php';
 
 use Amber\Framework\Commands\CommandsCollection;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\ConsoleEvents;
 
+/**
+ * Load the application.
+ */
+$amber = require APP_DIR . '/app/kernel.php';
 
 $application = new Application();
 $application->add(new Amber\Framework\Commands\MigrationCommand());
