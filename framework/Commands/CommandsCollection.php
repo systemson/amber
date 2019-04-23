@@ -10,11 +10,9 @@ class CommandsCollection extends Collection
     {
         parent::__construct([]);
 
-        $this->push(
-            [
+        $this->push([
             Framework\Commands\MigrationCommand::class,
             Framework\Commands\AppCacheCommand::class,
-            ]
-        );
+        ]);
     }
 }

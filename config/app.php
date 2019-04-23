@@ -14,13 +14,13 @@ return [
     ],
 
     'providers' => [
-        Amber\Framework\Providers\DotenvServiceProvider::class,
-        Amber\Framework\Providers\DebugServiceProvider::class,
-        Amber\Framework\Providers\ModelServiceProvider::class,
-        Amber\Framework\Providers\CacheServiceProvider::class,
-        Amber\Framework\Providers\HttpServiceProvider::class,
-        Amber\Framework\Providers\LoggerServiceProvider::class,
-        Amber\Framework\Providers\FilesystemServiceProvider::class,
-        Amber\Framework\Providers\ViewServiceProvider::class,
+        Amber\Framework\Container\Providers\DotenvServiceProvider::class,
+        Amber\Framework\Container\Providers\DebugServiceProvider::class,
+        Amber\Framework\Container\Providers\ModelServiceProvider::class,
+        Amber\Framework\Container\Providers\CacheServiceProvider::class,
+        Amber\Framework\Container\Providers\HttpServiceProvider::class,
+        Amber\Framework\Container\Providers\LoggerServiceProvider::class,
+        Amber\Framework\Container\Providers\FilesystemServiceProvider::class,
+        Amber\Framework\Container\Providers\ViewServiceProvider::class,
     ]
 ];

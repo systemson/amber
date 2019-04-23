@@ -204,6 +204,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withParsedBody($data)
     {
+        return $this->getRequest()->request->add($name, $value);
     }
 
     /**
@@ -239,6 +240,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getAttribute($name, $default = null)
     {
+        return $this->getRequest()->attributes->get($name) ?? $default;
     }
 
     /**
@@ -258,6 +260,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withAttribute($name, $value)
     {
+        return $this->getRequest()->attributes->add($name, $value);
     }
 
     /**
@@ -276,5 +279,6 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withoutAttribute($name)
     {
+        return $this->getRequest()->attributes->remove($name, $value);
     }
 }

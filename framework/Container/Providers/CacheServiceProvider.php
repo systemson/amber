@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Providers;
+namespace Amber\Framework\Container\Providers;
 
 use Amber\Cache\Cache;
 use Amber\Cache\Driver\SimpleCache;

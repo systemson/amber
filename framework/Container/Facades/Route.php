@@ -105,8 +105,9 @@ class Route extends ContainerFacade
     private static function middlewares()
     {
     	return [
-		    'Amber\Framework\Middleware\SessionMiddleware',
-		    'Amber\Framework\Middleware\CsfrMiddleware',
+		    'Amber\Framework\Http\Server\Middleware\SessionMiddleware',
+		    'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
+		    //'Amber\Framework\Http\Server\Middleware\AuthenticatedMiddleware',
     	];
     }
 

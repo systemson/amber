@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Providers;
+namespace Amber\Framework\Container\Providers;
 
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;

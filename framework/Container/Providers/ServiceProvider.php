@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Providers;
+namespace Amber\Framework\Container\Providers;
 
 use Amber\Framework\Container\StaticContainerAwareTrait;
 use Amber\Framework\Container\ContainerAwareClass;

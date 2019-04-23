@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Providers;
+namespace Amber\Framework\Container\Providers;
 
 use Whoops\Run;
 use Whoops\Handler\PrettyPageHandler;

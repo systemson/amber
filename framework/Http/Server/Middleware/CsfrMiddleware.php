@@ -1,12 +1,12 @@
 <?php
 
-namespace Amber\Framework\Middleware;
+namespace Amber\Framework\Http\Server\Middleware;
 
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
-use Amber\Framework\Container\ContainerAwareClass;
+use Amber\Framework\Container\Facades\Csrf;
+use Amber\Framework\Container\Facades\Response as ResponseFacade;
 
 /**
  * Participant in processing a server request and response.
@@ -15,7 +15,7 @@ use Amber\Framework\Container\ContainerAwareClass;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-abstract class RequestMiddleware extends ContainerAwareClass implements MiddlewareInterface
+class CsfrMiddleware extends RequestMiddleware
 {
     /**
      * Process an incoming server request.
@@ -24,10 +24,11 @@ abstract class RequestMiddleware extends ContainerAwareClass implements Middlewa
      * If unable to produce the response itself, it may delegate to the provided
      * request handler to do so.
      */
-    abstract public function process(Request $request, Handler $handler): Response;
-
-    public function next(Handler $handler): Response
+    public function process(Request $request, Handler $handler): Response
     {
-        return $handler->getResponse();
+        if ($request->getMethod() == 'POST' && !Csrf::validate()) {
+            return ResponseFacade::forbidden('Unable to validate the csrf token.');
+        }
+        return $this->next($handler);
     }
 }

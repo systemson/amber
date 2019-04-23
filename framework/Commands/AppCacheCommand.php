@@ -16,8 +16,7 @@ class AppCacheCommand extends Command
 
     protected function configure()
     {
-        $this
-            ->addArgument('folder', InputArgument::REQUIRED, 'The cache folder to clear.');
+        $this->addArgument('folder', InputArgument::REQUIRED, 'The cache folder to clear.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
