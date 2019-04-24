@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Database\Capsule\Manager;
+use App\Models\User;
+use Amber\Framework\Helpers\Hash;
 
-Manager::schema()->drop('users');
+Manager::schema()->dropIfExists('users');
 
 Manager::schema()->create('users', function ($table) {
             $table->increments('id');
@@ -17,3 +19,10 @@ Manager::schema()->create('users', function ($table) {
             $table->timestamps();
             $table->softDeletes();
 });
+
+$user = new User();
+
+$user->name = 'Administrator';
+$user->email = 'admin@admin.com';
+$user->password = Hash::make('1234');
+$user->save();
