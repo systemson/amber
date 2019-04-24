@@ -40,7 +40,8 @@ class Route extends ContainerFacade
     {
         return $default->removeAll(['App\Controllers\\' , 'Controller'])
             ->fromCamelCase()
-            ->toSnakeCase();
+            ->toSnakeCase()
+        ;
     }
 
     /**
@@ -49,17 +50,18 @@ class Route extends ContainerFacade
     private static function getAction(Str $default): Str
     {
         return $default->fromCamelCase()
-            ->toSnakeCase();
+            ->toSnakeCase()
+        ;
     }
 
     /**
      * Adds a new route to the route collection.
      */
-    private static function map(string $method, string $uri, $default): SymfonyRoute
+    private static function map(string $method, string $url, $default): SymfonyRoute
     {
         $default = static::handleDefault($default);
 
-        $route = static::routeFactory($method, $uri, $default);
+        $route = static::routeFactory($method, $url, $default);
 
         $name = static::getName(array_values($default));
 
@@ -87,28 +89,26 @@ class Route extends ContainerFacade
     private static function getControllerToActionArray($default)
     {
         return  Phraser::make($default)
-        ->explode('::');
+        	->explode('::');
     }
 
     /**
      * Return a new Route Instance.
      */
-    private static function routeFactory(string $method, string $uri, array $default): SymfonyRoute
+    private static function routeFactory(string $method, string $url, array $default): SymfonyRoute
     {
-        $route = new SymfonyRoute($uri);
-        $route->setMethods(strtoupper($method));
-        $route->setDefaults($default);
-
-        return $route;
+        return (new SymfonyRoute($url))
+        	->setMethods(strtoupper($method))
+        	->setDefaults($default);
     }
 
     private static function middlewares()
     {
-    	return [
-		    'Amber\Framework\Http\Server\Middleware\SessionMiddleware',
-		    'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
-		    //'Amber\Framework\Http\Server\Middleware\AuthenticatedMiddleware',
-    	];
+        return [
+            'Amber\Framework\Http\Server\Middleware\SessionMiddleware',
+            'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
+            //'Amber\Framework\Http\Server\Middleware\AuthenticatedMiddleware',
+        ];
     }
 
     /**
@@ -122,28 +122,28 @@ class Route extends ContainerFacade
         return "{$resource}_{$action}";
     }
 
-    public static function get(string $uri, $default)
+    public static function get(string $url, $default)
     {
-        return static::map('GET', $uri, $default);
+        return static::map('GET', $url, $default);
     }
 
-    public static function post(string $uri, $default)
+    public static function post(string $url, $default)
     {
-        return static::map('POST', $uri, $default);
+        return static::map('POST', $url, $default);
     }
 
-    public static function patch(string $uri, $default)
+    public static function patch(string $url, $default)
     {
-        return static::map('PATCH', $uri, $default);
+        return static::map('PATCH', $url, $default);
     }
 
-    public static function put(string $uri, $default)
+    public static function put(string $url, $default)
     {
-        return static::map('PUT', $uri, $default);
+        return static::map('PUT', $url, $default);
     }
 
-    public static function delete(string $uri, $default)
+    public static function delete(string $url, $default)
     {
-        return static::map('DELETE', $uri, $default);
+        return static::map('DELETE', $url, $default);
     }
 }
