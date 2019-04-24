@@ -6,7 +6,7 @@ use Carbon\Carbon;
 
 class Amber
 {
-	const VERSION = 'v-beta';
+	const VERSION = 'v-dev';
 	const NAME = 'Amber Framework';
 
 	public function version(): string
