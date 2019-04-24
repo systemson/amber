@@ -19,6 +19,27 @@ class ViewServiceProvider extends ServiceProvider
                 function () use ($container) {
                     return $container->get(Template::class);
                 }
-            );
+            )
+            ->afterConstruct(
+                'setTag',
+                'authname',
+                '<?= Amber\Framework\Container\Facades\Auth::name(); ?>'
+            )
+            ->afterConstruct(
+                'setTag',
+                'appname',
+                '<?= getenv(\'APP_NAME\'); ?>'
+            )
+            ->afterConstruct(
+                'setTag',
+                'lap',
+                '<?= number_format(microtime(true) - INIT_TIME, 6); ?>'
+            )
+            ->afterConstruct(
+                'setTag',
+                'version',
+                '<?= Amber\Framework\Container\Facades\Amber::version(); ?>'
+            )
+        ;
     }
 }
