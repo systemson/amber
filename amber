@@ -16,7 +16,10 @@ use Symfony\Component\Console\ConsoleEvents;
 $amber = require APP_DIR . '/app/kernel.php';
 
 $application = new Application();
-$application->add(new Amber\Framework\Commands\MigrationCommand());
+$application->add(new Amber\Framework\Commands\MigrateUpCommand());
+$application->add(new Amber\Framework\Commands\MigrateDownCommand());
+$application->add(new Amber\Framework\Commands\MigrateSeedsCommand());
+$application->add(new Amber\Framework\Commands\MigrateRestartCommand());
 $application->add(new Amber\Framework\Commands\AppCacheCommand());
 $application->add(new Amber\Framework\Commands\ServerCommand());
 

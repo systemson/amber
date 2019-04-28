@@ -34,6 +34,7 @@ class Application extends ContainerFacade
         'unbindMultiple',
         'register',
         'make',
+        'getClosureFor',
     ];
 
     private static $providers = [];
@@ -67,8 +68,8 @@ class Application extends ContainerFacade
     {
         self::$providers = config('app')->providers;
         array_map(
-            function ($value) {
-                $value::boot();
+            function ($service) {
+                $service::boot();
             },
             self::$providers
         );
@@ -77,8 +78,8 @@ class Application extends ContainerFacade
     private static function setUpProviders(): void
     {
         array_map(
-            function ($value) {
-                static::make($value)->setUp();
+            function ($service) {
+                static::make($service)->setUp();
             },
             self::$providers
         );
@@ -87,8 +88,8 @@ class Application extends ContainerFacade
     private static function setDownProviders(): void
     {
         array_map(
-            function ($value) {
-                static::make($value)->setDown();
+            function ($service) {
+                static::make($service)->setDown();
             },
             self::$providers
         );
