@@ -12,7 +12,7 @@ class DataMapperServiceProvider extends ServiceProvider
         $container = static::getContainer();
 
         $container->bind(Schema::class, function () {
-        	return Manager::schema();
+            return Manager::schema();
         });
     }
 }

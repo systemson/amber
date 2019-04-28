@@ -2,7 +2,8 @@
 
 namespace Amber\Framework\Container\Providers;
 
-use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouteCollection as SymfonyRouter;
+use Amber\Framework\Http\Routing\RouteCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -29,6 +30,7 @@ class HttpServiceProvider extends ServiceProvider
         $container = static::getContainer();
 
         $container->singleton(RouteCollection::class);
+        $container->singleton(SymfonyRouter::class);
 
         $container->register(Request::class)
             ->setInstance(Request::createFromGlobals());
