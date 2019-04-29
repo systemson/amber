@@ -1,9 +1,9 @@
 <?php
 
-use Amber\Framework\Container\Facades\Route;
+use Amber\Framework\Container\Facades\Router;
 
-Route::get('/', 'App\Controllers\HomeController::index');
+Router::get('/', 'App\Controllers\HomeController::index');
 
-Route::get('/login', 'App\Controllers\Auth\AuthController::loginForm');
-Route::post('/login', 'App\Controllers\Auth\AuthController::login');
-Route::get('/logout', 'App\Controllers\Auth\AuthController::logout');
+Router::get('/login', 'App\Controllers\Auth\AuthController::loginForm');
+Router::post('/login', 'App\Controllers\Auth\AuthController::login');
+Router::get('/logout', 'App\Controllers\Auth\AuthController::logout');

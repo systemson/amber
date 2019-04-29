@@ -19,6 +19,8 @@ use Psr\Http\Message\ResponseInterface;
 use Amber\Framework\Http\Message\PsrSymfonyBridge\Response;
 use Psr\Http\Message\UriInterface;
 use Amber\Framework\Http\Message\PsrSymfonyBridge\Uri;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Amber\Framework\Http\Message\ResponseFactory;
 use Amber\Framework\Helpers\Hash;
 use Carbon\Carbon;
 use Amber\Framework\Http\Security\Csrf;
@@ -33,7 +35,8 @@ class HttpServiceProvider extends ServiceProvider
         $container->singleton(SymfonyRouter::class);
 
         $container->register(Request::class)
-            ->setInstance(Request::createFromGlobals());
+            ->setInstance(Request::createFromGlobals())
+        ;
 
         $container->singleton(RequestContext::class)
             ->afterConstruct(
@@ -49,6 +52,7 @@ class HttpServiceProvider extends ServiceProvider
         $container->register(Response::class, ResponseInterface::class);
         $container->register(RequestHandler::class, RequestHandlerInterface::class);
         $container->register(Uri::class, UriInterface::class);
+        $container->register(ResponseFactory::class, ResponseFactoryInterface::class);
         $container->singleton(Csrf::class);
     }
 }

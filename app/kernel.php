@@ -8,7 +8,7 @@ use Amber\Container\Container;
 use Amber\Framework\Container\Application;
 use Amber\Framework\Container\ContainerFacade;
 use Amber\Framework\Container\ContainerAwareClass;
-use Amber\Framework\Container\Facades\Route;
+use Amber\Framework\Container\Facades\Router;
 
 $array['Start'] = microtime(true) - INIT_TIME;
 
@@ -28,7 +28,7 @@ $array['ContainerFacade setContainer'] = microtime(true) - INIT_TIME;
 $app = Application::getInstance();
 $array['Application init'] = microtime(true) - INIT_TIME;
 
-Route::boot();
+Router::boot();
 $array['Routes boot'] = microtime(true) - INIT_TIME;
 
 //dd($array);

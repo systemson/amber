@@ -30,13 +30,10 @@ class Dispatch
 
     public function response()
     {
-        $request = $this->getRequest();
-
         try {
             $matcher = $this->container->get(UrlMatcher::class);
-            $path = $request->getPathInfo();
 
-            $default = (object) $matcher->match($path);
+            $default = (object) $matcher->matchRequest($this->getRequest());
         } catch (ResourceNotFoundException $e) {
             return Response::notFound($e->getMessage());
         }
@@ -53,9 +50,7 @@ class Dispatch
 
     protected function handleClass($default)
     {
-        $controller = $default->_controller;
-
-        $callback = $this->container->getClosureFor($controller, $default->_action);
+        $callback = $this->container->getClosureFor($default->_controller, $default->_action);
 
         return $callback();
     }

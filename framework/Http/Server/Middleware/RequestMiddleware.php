@@ -6,6 +6,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Amber\Framework\Container\ContainerAwareClass;
 
 /**
@@ -17,6 +18,11 @@ use Amber\Framework\Container\ContainerAwareClass;
  */
 abstract class RequestMiddleware extends ContainerAwareClass implements MiddlewareInterface
 {
+    public function __construct(ResponseFactoryInterface $responseFactory)
+    {
+        $this->responseFactory = $responseFactory;
+    }
+
     /**
      * Process an incoming server request.
      *

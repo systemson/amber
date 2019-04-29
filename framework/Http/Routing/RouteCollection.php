@@ -46,8 +46,7 @@ class RouteCollection //extends SymfonyRoute
     private function handleDefault($default)
     {
         if (is_string($default)) {
-            $defaultArray = static::getControllerToActionArray($default)
-        ;
+            $defaultArray = static::getControllerToActionArray($default);
 
             return [
                 '_controller'  => $defaultArray->first(),

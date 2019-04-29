@@ -10,7 +10,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Amber\Phraser\Phraser;
 use Amber\Phraser\Str;
 
-class Route extends ContainerFacade
+class Router extends ContainerFacade
 {
     /**
      * @var string The class accessor.
@@ -100,7 +100,8 @@ class Route extends ContainerFacade
     {
         return (new AmberRoute($url))
             ->setMethods(strtoupper($method))
-            ->setDefaults($default);
+            ->setDefaults($default)
+        ;
     }
 
     private static function middlewares()
