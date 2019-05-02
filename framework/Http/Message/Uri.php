@@ -12,8 +12,6 @@ class Uri implements UriInterface
         if (!is_null($request)) {
             $this->setRequest($request);
         }
-        dump($request->getUri());
-        die();
     }
 
     public function setRequest(Request $request): void

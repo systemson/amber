@@ -4,9 +4,11 @@ namespace Amber\Framework\Http\Message;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Amber\Framework\Http\Message\Utils\StatusCodeInterface;
+use Amber\Framework\Container\ContainerAwareClass;
+use Carbon\Carbon;
 
-class ResponseFactory implements ResponseFactoryInterface
+class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInterface, StatusCodeInterface
 {
     /**
      * Create a new response.
@@ -18,10 +20,19 @@ class ResponseFactory implements ResponseFactoryInterface
      *
      * @return ResponseInterface
      */
-    public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
+    public function createResponse(int $code = self::STATUS_OK, string $reasonPhrase = ''): ResponseInterface
     {
-        $response = new Response();
+        $response = static::getContainer()->get(ResponseInterface::class);
 
-        return $response->withStatusCode($code, $reasonPhrase);
+        return $response->withHeader('Content-Type', 'text/html')
+            ->withHeader('Cache-Control', ['no-cache', 'private'])
+            ->withHeader('Date', gmdate('D, d M Y H:i:s T'))
+            ->withStatus($code, $reasonPhrase)
+        ;
+    }
+
+    public function forbidden(string $reasonPhrase = ''): ResponseInterface
+    {
+        return $this->createResponse(403, $reasonPhrase);
     }
 }

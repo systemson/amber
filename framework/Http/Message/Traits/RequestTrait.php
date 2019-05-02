@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Http\Message;
+namespace Amber\Framework\Http\Message\Traits;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
@@ -50,8 +50,8 @@ trait RequestTrait
      */
     public function getRequestTarget()
     {
-        if (!is_null($uri)) {
-            return $uri;
+        if (!is_null($this->uri)) {
+            return $this->uri;
         }
 
         return '/';

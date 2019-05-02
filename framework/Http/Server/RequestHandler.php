@@ -8,26 +8,19 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Amber\Framework\Container\ContainerAwareClass;
 
-class RequestHandler implements RequestHandlerInterface
+class RequestHandler extends ContainerAwareClass implements RequestHandlerInterface
 {
     protected $middlewares = [];
     protected $response;
+    protected $responseFactory;
 
-    public function __construct(Container $container, Response $response)
+    public function __construct(ResponseFactoryInterface $responseFactory)
     {
-        $this->setContainer($container);
-        $this->setResponse($response);
-    }
-
-    public function setContainer(Container $container): void
-    {
-        $this->container = $container;
-    }
-
-    public function getContainer(): Container
-    {
-        return $this->container;
+        $this->responseFactory = $responseFactory;
+        $this->setResponse($this->newResponse());
     }
 
     public function setResponse(Response $response): void
@@ -40,14 +33,9 @@ class RequestHandler implements RequestHandlerInterface
         return $this->response;
     }
 
-    public function newResponse(): Response
+    public function newResponse(int $code = 200, string $reasonPhrase = ''): Response
     {
-        return $this->responseFactory();
-    }
-
-    protected function responseFactory(): Response
-    {
-        return $this->getContainer()->get(Response::class);
+        return $this->responseFactory->createResponse($code, $reasonPhrase);
     }
 
     /**
@@ -69,7 +57,7 @@ class RequestHandler implements RequestHandlerInterface
 
     protected function match(Request $request)
     {
-        $matcher = $this->container->get(UrlMatcher::class);
+        $matcher = static::getContainer()->get(UrlMatcher::class);
         $uri = $request->getUri();
 
         return $matcher->match($uri->getpath());
@@ -78,7 +66,7 @@ class RequestHandler implements RequestHandlerInterface
     protected function middlewares(Request $request, $middlewares = [])
     {
         foreach ($middlewares as $class) {
-            $middleware = $this->getContainer()->make($class);
+            $middleware = static::getContainer()->make($class);
 
             $response = $middleware->process($request, $this);
 

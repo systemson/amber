@@ -39,7 +39,7 @@ $response = $handler->response();
 /**
  * Send the response.
  */
-//$responsePSR->send();
+//$app->get(Amber\Framework\Http\Server\ResponseDispatcher::class)->send($responsePSR);
 $response->send();
 
 

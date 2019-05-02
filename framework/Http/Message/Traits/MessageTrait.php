@@ -1,21 +1,9 @@
 <?php
 
-namespace Amber\Framework\Http\Message;
+namespace Amber\Framework\Http\Message\Traits;
 
 use Psr\Http\Message\StreamInterface;
 
-/**
- * HTTP messages consist of requests from a client to a server and responses
- * from a server to a client. This interface defines the methods common to
- * each.
- *
- * Messages are considered immutable; all methods that might change state MUST
- * be implemented such that they retain the internal state of the current
- * message and return an instance that contains the changed state.
- *
- * @link http://www.ietf.org/rfc/rfc7230.txt
- * @link http://www.ietf.org/rfc/rfc7231.txt
- */
 trait MessageTrait
 {
     /**
@@ -27,7 +15,7 @@ trait MessageTrait
      */
     public function getProtocolVersion()
     {
-        return $this->version;
+        return $this->protocol;
     }
 
     /**
@@ -45,9 +33,9 @@ trait MessageTrait
      */
     public function withProtocolVersion($version)
     {
-        $new = $this->copy();
+        $new = $this->clone();
 
-        $new->version = $version;
+        $new->protocol = $version;
 
         return $new;
     }
@@ -79,7 +67,7 @@ trait MessageTrait
      */
     public function getHeaders()
     {
-        return $this->headers;
+        return $this->headers->all();
     }
 
     /**
@@ -135,7 +123,10 @@ trait MessageTrait
      */
     public function getHeaderLine($name)
     {
-        return implode(', ', $this->getHeader());
+        if ($this->hasHeader($name)) {
+            return implode(',', $this->headers[$name]);
+        }
+        return '';
     }
 
     /**
@@ -155,13 +146,9 @@ trait MessageTrait
      */
     public function withHeader($name, $value)
     {
-        $new = $this->copy();
+        $new = $this->clone();
 
-        if (!is_array($value)) {
-            $value = [$value];
-        }
-
-        $new->headers->set($name, $value);
+        $new->headers->set($name, (array) $value);
 
         return $new;
     }
@@ -184,9 +171,11 @@ trait MessageTrait
      */
     public function withAddedHeader($name, $value)
     {
-        $new = $this->copy();
+        $new = $this->clone();
 
-        $new->headers->pushTo($name, $value);
+        foreach ((array )$value as $value) {
+            $new->headers[] = $value;
+        }
 
         return $new;
     }
@@ -205,9 +194,9 @@ trait MessageTrait
      */
     public function withoutHeader($name)
     {
-        $new = $this->copy();
+        $new = $this->clone();
 
-        $new->headers->unset($name);
+        $this->headers->unset($name);
 
         return $new;
     }
@@ -237,9 +226,9 @@ trait MessageTrait
      */
     public function withBody(StreamInterface $body)
     {
-        $new = $this->copy();
+        $new = $this->clone();
 
-        $new->body = $body;
+        $this->body = $body;
 
         return $new;
     }

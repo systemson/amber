@@ -32,8 +32,13 @@ abstract class RequestMiddleware extends ContainerAwareClass implements Middlewa
      */
     abstract public function process(Request $request, Handler $handler): Response;
 
-    public function next(Handler $handler): Response
+    protected function next(Handler $handler): Response
     {
         return $handler->getResponse();
+    }
+
+    protected function newResponse(int $code = 200, string $reasonPhrase = ''): Response
+    {
+        return $this->responseFactory->createResponse($code, $reasonPhrase);
     }
 }
