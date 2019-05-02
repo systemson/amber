@@ -4,14 +4,14 @@
         <ul class="navbar-nav px-3">
             <?php if (Amber\Framework\Container\Facades\Auth::check()) : ?>
                 <li class="nav-item text-nowrap">
-                    <p><sketch-authname></p>
-                </li>
-                <li class="nav-item text-nowrap">
-                    <a class="nav-link" href="/logout">Sign out</a>
+                    <form action="/logout" method="POST">
+                        <input type="hidden" name="_csrf" value="<?= Amber\Framework\Container\Facades\Csrf::token(); ?>">
+                        <button class="btn btn-sm btn-danger">Sign out</button>
+                    </form>
                 </li>
             <?php else : ?>
                 <li class="nav-item text-nowrap">
-                    <a class="nav-link" href="/login">Sign in</a>
+                    <a class="btn btn-sm btn-primary" href="/login">Sign in</a>
                 </li>
             <?php endif; ?>
         </ul>

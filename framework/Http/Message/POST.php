@@ -7,7 +7,7 @@ use Amber\Collection\Collection;
 use Amber\Framework\Container\Application;
 use Symfony\Component\HttpFoundation\Request;
 
-class InputParameters extends AbstractWrapper
+class POST extends AbstractWrapper
 {
     /**
      * @var string The class accessor.

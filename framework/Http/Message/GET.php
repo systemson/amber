@@ -7,7 +7,7 @@ use Amber\Collection\Collection;
 use Amber\Framework\Container\Application;
 use Symfony\Component\HttpFoundation\Request;
 
-class QueryStringParameters extends AbstractWrapper
+class GET extends AbstractWrapper
 {
     /**
      * @var string The class accessor.

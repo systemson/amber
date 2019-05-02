@@ -7,8 +7,7 @@ use Amber\Framework\Container\Facades\Response;
 use Amber\Framework\Container\Facades\View;
 use App\Models\User;
 use App\Controllers\Controller;
-use Amber\Framework\Http\Message\InputParameters;
-use Amber\Framework\Http\Message\QueryStringParameters;
+use Amber\Framework\Http\Message\POST;
 use Amber\Framework\Auth\UserProvider;
 use Carbon\Carbon;
 use Amber\Container\Container;
@@ -78,8 +77,8 @@ class AuthController extends Controller
 
     protected function getCredentialsFromRequest(Request $request): array
     {
-        if (InputParameters::hasMultiple($this->required)) {
-            return InputParameters::getMultiple($this->required);
+        if (POST::hasMultiple($this->required)) {
+            return POST::getMultiple($this->required);
         }
         $required = implode('], [', $this->required);
         throw new \Exception("These parameters are required: [{$required}].");
