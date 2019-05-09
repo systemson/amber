@@ -4,7 +4,7 @@ namespace Amber\Framework\Http\Routing;
 
 use Symfony\Component\Routing\RouteCollection as SymfonyRoute;
 
-class RouteCollection //extends SymfonyRoute
+class RouteCollections //extends SymfonyRoute
 {
     /**
      * Return the controller resource name.
