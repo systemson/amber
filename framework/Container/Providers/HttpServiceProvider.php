@@ -2,8 +2,8 @@
 
 namespace Amber\Framework\Container\Providers;
 
-use Symfony\Component\Routing\RouteCollection as SymfonyRouter;
-use Amber\Framework\Http\Routing\RouteCollection;
+use Symfony\Component\Routing\RouteCollection;
+use Amber\Framework\Http\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -25,6 +25,7 @@ use Amber\Framework\Http\Server\ResponseDispatcher;
 use Amber\Framework\Helpers\Hash;
 use Carbon\Carbon;
 use Amber\Framework\Http\Security\Csrf;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
 
 class HttpServiceProvider extends ServiceProvider
 {
@@ -32,12 +33,23 @@ class HttpServiceProvider extends ServiceProvider
     {
         $container = static::getContainer();
 
-        $container->singleton(RouteCollection::class);
-        $container->singleton(SymfonyRouter::class);
+        $container->bind(RouteCollection::class);
+
+        $container->singleton(Router::class);
 
         $container->register(Request::class)
             ->setInstance(Request::createFromGlobals())
         ;
+
+        $container->register(UrlMatcher::class)
+            ->setArgument(
+                RouteCollection::class,
+                function () use ($container) {
+                    return $container->get(Router::class)->all();
+                }
+            );
+        ;
+
 
         $container->singleton(RequestContext::class)
             ->afterConstruct(
