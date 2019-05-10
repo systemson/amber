@@ -25,7 +25,6 @@ use Amber\Framework\Http\Server\ResponseDispatcher;
 use Amber\Framework\Helpers\Hash;
 use Carbon\Carbon;
 use Amber\Framework\Http\Security\Csrf;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
 
 class HttpServiceProvider extends ServiceProvider
 {
@@ -33,25 +32,21 @@ class HttpServiceProvider extends ServiceProvider
     {
         $container = static::getContainer();
 
-        $container->bind(RouteCollection::class);
 
         $container->singleton(Router::class);
 
-        $container->register(Request::class)
+        $container
+            ->register(RouteCollection::class)
+            ->setInstance($container->get(Router::class)->all())
+        ;
+
+        $container
+            ->register(Request::class)
             ->setInstance(Request::createFromGlobals())
         ;
 
-        $container->register(UrlMatcher::class)
-            ->setArgument(
-                RouteCollection::class,
-                function () use ($container) {
-                    return $container->get(Router::class)->all();
-                }
-            );
-        ;
-
-
-        $container->singleton(RequestContext::class)
+        $container
+            ->singleton(RequestContext::class)
             ->afterConstruct(
                 'fromRequest',
                 function () use ($container) {

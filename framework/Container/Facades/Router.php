@@ -34,17 +34,4 @@ class Router extends ContainerFacade
     {
         include CONFIG_DIR . '/routes.php';
     }
-
-    public static function group(\Closure $callback)
-    {
-        $collection = new RouteCollection();
-
-        dump($collection);
-
-        $callback($collection);
-
-        dump($collection);
-
-        static::addCollection($collection);
-    }
 }
