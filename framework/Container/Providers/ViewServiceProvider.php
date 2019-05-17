@@ -42,6 +42,7 @@ class ViewServiceProvider extends ServiceProvider
                 'appversion',
                 '<?= Amber\Framework\Container\Facades\Amber::version(); ?>'
             )
+            ->afterConstruct('dev')
         ;
     }
 }

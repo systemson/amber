@@ -34,8 +34,12 @@ class Response implements ResponseInterface, StatusCodeInterface
     protected $headers;
     protected $body;
 
-    public function __construct($code = self::STATUS_OK, $reasonPhrase = '', $headers = [], StreamInterface $body = null)
-    {
+    public function __construct(
+        $code = self::STATUS_OK,
+        $reasonPhrase = '',
+        $headers = [],
+        StreamInterface $body = null
+    ) {
         $this->code = $code;
         $this->reasonPhrase = $reasonPhrase == '' ? static::REASON_PHRASE[$code] : $reasonPhrase;
         $this->headers = new Collection($headers);
