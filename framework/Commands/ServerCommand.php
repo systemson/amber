@@ -18,6 +18,8 @@ class ServerCommand extends Command
     protected function configure()
     {
         $this->addOption('explorer', 'e', InputArgument::OPTIONAL, 'The explorer to open.');
+        $this->addOption('port', 'p', InputArgument::OPTIONAL, 'The server application port.');
+        $this->addOption('scheme', 's', InputArgument::OPTIONAL, 'The server application scheme.');
     }
 
 
@@ -28,9 +30,9 @@ class ServerCommand extends Command
     {
         $phpVersion = phpversion();
 
-        $scheme = 'http';
+        $scheme = $input->getOption('scheme') ?? 'http';
         $host = 'localhost';
-        $port = '3000';
+        $port = $input->getOption('port') ?? '3000';
         $url = "{$scheme}://{$host}:{$port}";
 
         $now = Carbon::now();
@@ -41,7 +43,7 @@ class ServerCommand extends Command
 
         $output->writeln("PHP {$phpVersion} Development Server started at {$now}");
         $output->writeln("Listening on {$url}:{$port}");
-        $output->writeln("Amber Framework v-beta.");
+        $output->writeln("Running Amber Framework v-beta.");
         $output->writeln("Never use this server on production.");
         $output->writeln("Press Ctrl-C to quit.");
         

@@ -41,7 +41,7 @@ class Open
                 break;
 
             default:
-                $command = null === $app ? __DIR__.'/Resources/bin/xdg-open' : $app;
+                $command = null === $app ? 'xdg-open' : $app;
                 break;
         }
 
