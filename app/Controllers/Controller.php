@@ -8,6 +8,9 @@ use Amber\Collection\Collection;
 
 abstract class Controller
 {
+    /**
+     * @var string $layout The default layout.
+     */
     protected $layout = 'app.php';
     protected $view;
     protected $vars = [];

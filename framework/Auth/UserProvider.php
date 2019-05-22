@@ -18,12 +18,12 @@ class UserProvider extends User implements UserProviderContract
         return $this->where($key, $value)->first();
     }
 
-    public function hasUserById(integer $value)
+    public function hasUserById(int $value)
     {
         return $this->hasUserBy('id', $value)->count() > 0;
     }
 
-    public function getUserById(integer $id)
+    public function getUserById(int $id)
     {
         return $this->getUserBy('id', $id);
     }
