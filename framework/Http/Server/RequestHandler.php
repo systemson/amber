@@ -3,6 +3,7 @@
 namespace Amber\Framework\Http\Server;
 
 use Amber\Container\Container;
+use Amber\Container\Application;
 use Amber\Framework\Middleware\MiddlewareCollection;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -10,12 +11,16 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Amber\Framework\Container\ContainerAwareClass;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Sunrise\Stream\StreamFactory;
 
 class RequestHandler extends ContainerAwareClass implements RequestHandlerInterface
 {
     protected $middlewares = [];
     protected $response;
     protected $responseFactory;
+
+    protected $locked = false;
 
     public function __construct(ResponseFactoryInterface $responseFactory)
     {
@@ -45,14 +50,33 @@ class RequestHandler extends ContainerAwareClass implements RequestHandlerInterf
      */
     public function handle(Request $request): Response
     {
-        $defaults = $this->match($request);
-        $middlewares = $defaults['_middlewares'] ?? [];
+        try {
+            $defaults = $this->match($request);
+        } catch (ResourceNotFoundException $e) {
+            $response = $this->responseFactory->notFound($e->getMessage());
 
-        if (!is_null($response = $this->middlewares($request, $middlewares))) {
+            if (strtolower($request->getHeader('Accept')) != 'application/json') {
+                $response->body = $e->getMessage();
+            }
+
             return $response;
         }
 
-        return $this->getResponse();
+        $middlewares = $defaults['_middlewares'] ?? [];
+
+        $response = $this->middlewares($request, $middlewares);
+
+        if ($this->isLocked()) {
+            return $response;
+        }
+
+        $return = $this->handleController($defaults);
+
+        if ($return instanceof Response) {
+            return $return;
+        }
+
+        return $response->withBody((new StreamFactory())->createStream($return));
     }
 
     protected function match(Request $request)
@@ -68,12 +92,30 @@ class RequestHandler extends ContainerAwareClass implements RequestHandlerInterf
         foreach ($middlewares as $class) {
             $middleware = static::getContainer()->make($class);
 
-            $response = $middleware->process($request, $this);
+            $this->setResponse($middleware->process($request, $this));
 
-            if ($response !== $this->getResponse()) {
-                return $response;
+            if ($this->locked) {
                 break;
             }
         }
+        
+        return $this->getResponse();
+    }
+
+    protected function handleController($default)
+    {
+        $callback = static::getContainer()->getClosureFor($default['_controller'], $default['_action']);
+
+        return $callback();
+    }
+
+    public function lockResponse()
+    {
+        $this->locked = true;
+    }
+
+    public function isLocked()
+    {
+        return $this->locked;
     }
 }

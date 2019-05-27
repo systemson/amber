@@ -13,6 +13,8 @@ class ResponseDispatcher
      */
     public function send(ResponseInterface $response): self
     {
+        http_response_code($response->getStatusCode());
+
         $this->sendHeaders($response);
         $this->sendContent($response);
 
@@ -26,13 +28,25 @@ class ResponseDispatcher
      */
     public function sendHeaders(ResponseInterface $response): self
     {
+        header($this->getStatusLine($response));
+
         foreach ($response->getHeaders() as $name => $values) {
-            foreach ($values as $value) {
-                header(sprintf('%s: %s', $name, $value), false);
-            }
+            header(sprintf('%s: %s', $name, $response->getHeaderLine($name)));
         }
 
         return $this;
+    }
+
+    protected function getStatusLine(ResponseInterface $response)
+    {
+        $status = sprintf(
+            'HTTP/%s %d %s',
+            $response->getProtocolVersion(),
+            $response->getStatusCode(),
+            $response->getReasonPhrase()
+        );
+
+        return trim($status);
     }
 
     /**
@@ -42,7 +56,7 @@ class ResponseDispatcher
      */
     public function sendContent(ResponseInterface $response): self
     {
-        echo $response->getBody();
+        echo (string) $response->getBody();
 
         return $this;
     }

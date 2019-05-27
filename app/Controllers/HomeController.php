@@ -18,6 +18,6 @@ class HomeController extends Controller
         ->setVar('description', 'This is a sample page.')
         ->setVar('version', 'v0.5-beta');
 
-        return Response::setContent(View::toHtml());
+        return View::toHtml();
     }
 }

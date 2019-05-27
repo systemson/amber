@@ -32,7 +32,7 @@ class Response implements ResponseInterface, StatusCodeInterface
     protected $code = 200;
     protected $reasonPhrase;
     protected $headers;
-    protected $body;
+    public $body;
 
     public function __construct(
         $code = self::STATUS_OK,
@@ -56,7 +56,7 @@ class Response implements ResponseInterface, StatusCodeInterface
      */
     public function getStatusCode()
     {
-        return $this->code = $code;
+        return $this->code;
     }
 
     /**

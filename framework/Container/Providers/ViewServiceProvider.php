@@ -42,6 +42,17 @@ class ViewServiceProvider extends ServiceProvider
                 'appversion',
                 '<?= Amber\Framework\Container\Facades\Amber::version(); ?>'
             )
+            ->afterConstruct(
+                'setTag',
+                'csfr',
+                '<input type="hidden" name="_csrf" value="<?= Amber\Framework\Container\Facades\Csrf::token(); ?>">'
+            )
+            ->afterConstruct(
+                'setTag',
+                'auth_check',
+                '<?php if (Amber\Framework\Container\Facades\Auth::check()) : ?>',
+                '<?php endif; ?>'
+            )
             ->afterConstruct('dev')
         ;
     }

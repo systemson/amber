@@ -19,28 +19,24 @@ $app = require APP_DIR . '/app/kernel.php';
  * Get the request handler.
  */
 $handlerPSR = $app->get(Psr\Http\Message\RequestHandlerInterface::class);
-$handler = $app->get(Amber\Framework\Dispatch\Dispatch::class);
 
 
 /**
  * Get the request.
  */
 $requestPSR = $app->get(Psr\Http\Message\ServerRequestInterface::class);
-$request = $app->get(Symfony\Component\HttpFoundation\Request::class);
 
 
 /**
  * Get the response.
  */
 $responsePSR = $handlerPSR->handle($requestPSR);
-$response = $handler->response();
 
 
 /**
  * Send the response.
  */
-//$app->get(Amber\Framework\Http\Server\ResponseDispatcher::class)->send($responsePSR);
-$response->send();
+$app->get(Amber\Framework\Http\Server\ResponseDispatcher::class)->send($responsePSR);
 
 
 /*$app->get(Psr\Log\LoggerInterface::class)->info('Sistem report', [

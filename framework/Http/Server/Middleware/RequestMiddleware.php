@@ -18,6 +18,8 @@ use Amber\Framework\Container\ContainerAwareClass;
  */
 abstract class RequestMiddleware extends ContainerAwareClass implements MiddlewareInterface
 {
+    protected $responseFactory;
+
     public function __construct(ResponseFactoryInterface $responseFactory)
     {
         $this->responseFactory = $responseFactory;

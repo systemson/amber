@@ -28,7 +28,7 @@ class AuthController extends Controller
         View::view($this->getView())
         ->setLayout('layouts/app.php');
 
-        return Response::setContent(View::toHtml());
+        return View::toHtml();
     }
 
     public function login(Request $request, Container $container)
@@ -57,12 +57,15 @@ class AuthController extends Controller
     {
         $token = Session::get('_token');
 
-        $user = $provider->getUserByToken($token);
-        $user->remember_token = null;
-        $user->save();
+        if (!is_null($token)) {
 
-        // Deletes the session cache
-        Cache::delete($token);
+            $user = $provider->getUserByToken($token);
+            $user->remember_token = null;
+            $user->save();
+
+            // Deletes the session cache
+            Cache::delete($token);
+        }
 
         Session::clear();
         Session::invalidate();

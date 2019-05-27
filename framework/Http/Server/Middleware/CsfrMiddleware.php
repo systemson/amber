@@ -26,10 +26,11 @@ class CsfrMiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        //if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH']) && !Csrf::validate()) {
-        if (true) {
-            return $this->responseFactory->forbidden();
+        if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH', 'DELETE']) && !Csrf::validate()) {
+            $handler->lockResponse();
+            return $this->responseFactory->forbidden('Invalid CSRF Token');
         }
+
         return $this->next($handler);
     }
 }

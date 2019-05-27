@@ -124,7 +124,7 @@ trait MessageTrait
     public function getHeaderLine($name)
     {
         if ($this->hasHeader($name)) {
-            return implode(',', $this->headers[$name]);
+            return implode(', ', $this->headers[$name]);
         }
         return '';
     }
@@ -228,7 +228,7 @@ trait MessageTrait
     {
         $new = $this->clone();
 
-        $this->body = $body;
+        $new->body = $body;
 
         return $new;
     }
