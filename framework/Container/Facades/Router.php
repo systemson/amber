@@ -32,6 +32,27 @@ class Router extends ContainerFacade
 
     public static function boot(): void
     {
-        include CONFIG_DIR . '/routes.php';
+        $routes = self::getInstance();
+
+        self::loadWebRoutes($routes);
+        self::loadApiRoutes($routes);
+    }
+
+    public static function loadWebRoutes($routes)
+    {
+        $routes->group(function ($routes) {
+            include CONFIG_DIR . '/routes.php';
+        },
+        [
+            'middlewares' => [
+                'Amber\Framework\Http\Server\Middleware\SessionMiddleware',
+                'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
+            ],
+        ]);
+
+    }
+
+    public static function loadApiRoutes($routes)
+    {
     }
 }

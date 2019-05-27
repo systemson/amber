@@ -13,6 +13,8 @@ class Router
 {
     protected $collection;
 
+    protected $middlewares = [];
+
     public function __construct(RouteCollection $collection)
     {
         $this->collection = $collection;
@@ -28,13 +30,16 @@ class Router
         return new RouteCollection();
     }
 
-    protected function middlewares()
+    public function middlewares($middlewares)
     {
-        return [
-            'Amber\Framework\Http\Server\Middleware\SessionMiddleware',
-            'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
-            //'Amber\Framework\Http\Server\Middleware\AuthenticatedMiddleware',
-        ];
+        $this->middlewares = $middlewares;
+
+        return $this;
+    }
+
+    public function merge($router)
+    {
+        $this->collection->addCollection($router->collection);
     }
 
     /**
@@ -62,7 +67,7 @@ class Router
             return [
                 '_controller'  => $defaultArray->first(),
                 '_action'      => $defaultArray->last(),
-                '_middlewares' => $this->middlewares(),
+                '_middlewares' => $this->middlewares,
             ];
         }
     }
@@ -144,14 +149,16 @@ class Router
         return $this->add('DELETE', $url, $defaults);
     }
 
-    public function group(\Closure $callback)
+    public function group(\Closure $callback, array $options = [])
     {
-        $collection = $this->newCollection();
+        $routes = new static($this->newCollection());
+        $middlewares = array_merge($this->middlewares, $options['middlewares'] ?? []);
+        $routes->middlewares($middlewares);
 
-        dump($this);
+        $callback($routes);
 
-        $callback($this);
+        $this->merge($routes);
 
-        dump($this);
+        return $this;
     }
 }

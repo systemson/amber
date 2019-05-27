@@ -17,6 +17,13 @@ if (!function_exists('config')) {
     }
 }
 
+if (!function_exists('d')) {
+    function d(... $value)
+    {
+        call_user_func_array('dump', $value);
+    }
+}
+
 if (!function_exists('dd')) {
     function dd(... $value)
     {
