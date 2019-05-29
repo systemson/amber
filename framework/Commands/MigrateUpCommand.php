@@ -17,7 +17,7 @@ class MigrateUpCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Running migrations up.');
+        $output->writeln('<comment>Running migrations up.</comment>');
 
         $migrations = Filesystem::listContents('database/migrations');
 
@@ -30,7 +30,7 @@ class MigrateUpCommand extends Command
 
             $output->writeln("{$message} in process.");
             Application::make($class)->up(Application::get(Schema::class));
-            $output->writeln("{$message} done.");
+            $output->writeln("<info>{$message} done.</info>");
         }
     }
 }

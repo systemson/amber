@@ -17,7 +17,7 @@ class MigrateDownCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Running migrations down.');
+        $output->writeln('<comment>Running migrations down.</comment>');
 
         $migrations = Filesystem::listContents('database/migrations');
 
@@ -30,7 +30,7 @@ class MigrateDownCommand extends Command
 
             $output->writeln("Reverse {$message} in process.");
             Application::make($class)->down(Application::get(Schema::class));
-            $output->writeln("Reverse {$message} done.");
+            $output->writeln("<info>Reverse {$message} done.</info>");
         }
     }
 }

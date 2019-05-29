@@ -40,6 +40,6 @@ class SessionMiddleware extends RequestMiddleware
             Auth::setUser($user);
         }
 
-        return $this->next($handler);
+        return $handler->next($request);
     }
 }

@@ -12,7 +12,7 @@ class UserTableSeeder
 
         $user->name = 'Administrator';
         $user->email = 'admin@admin.com';
-        $user->password = Hash::make('1234');
+        $user->password = Hash::make('secret');
 
         $user->save();
     }

@@ -14,14 +14,14 @@ class MigrateSeedsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Running seeds.');
+        $output->writeln('<comment>Running seeds.</comment>');
 
         $seeds = Application::make(\DatabaseSeeder::class)->seeds();
 
         foreach ($seeds as $seed) {
             $output->writeln("Seeding {$seed} in progress.");
             Application::make($seed)->run();
-            $output->writeln("Seeding {$seed} done.");
+            $output->writeln("<info>Seeding {$seed} done.</info>");
         }
     }
 }

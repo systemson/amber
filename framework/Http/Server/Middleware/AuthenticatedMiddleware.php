@@ -29,6 +29,7 @@ class AuthenticatedMiddleware extends RequestMiddleware
         if (Auth::check()) {
             return ResponseFacade::redirect('/');
         }
-        return $this->next($handler);
+
+        return $handler->next($request);
     }
 }

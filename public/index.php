@@ -18,7 +18,7 @@ $app = require APP_DIR . '/app/kernel.php';
 /**
  * Get the request handler.
  */
-$handlerPSR = $app->get(Psr\Http\Message\RequestHandlerInterface::class);
+$requestHandlerPSR = $app->get(Psr\Http\Message\RequestHandlerInterface::class);
 //$handler = $app->get(Amber\Framework\Dispatch\Dispatch::class);
 
 
@@ -32,7 +32,7 @@ $requestPSR = $app->get(Psr\Http\Message\ServerRequestInterface::class);
 /**
  * Get the response.
  */
-$responsePSR = $handlerPSR->handle($requestPSR);
+$responsePSR = $requestHandlerPSR->handle($requestPSR);
 //$response = $handler->response();
 
 

@@ -24,5 +24,11 @@ return [
         Amber\Framework\Container\Providers\ViewServiceProvider::class,
         Amber\Framework\Container\Providers\DataMapperServiceProvider::class,
         Amber\Framework\Container\Providers\AmberSuiteServiceProvider::class,
-    ]
+    ],
+
+    'middlewares' => [
+        'Amber\Framework\Http\Server\Middleware\RouteHandlerMiddleware',
+        //'Amber\Framework\Http\Server\Middleware\SessionMiddleware',
+        //'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
+    ],
 ];
