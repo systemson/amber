@@ -13,8 +13,6 @@ use Amber\Framework\Container\Facades\Cache;
 use Amber\Framework\Container\Facades\Session as SessionFacade;
 use Psr\Http\Message\RequestHandlerInterface;
 use Amber\Framework\Http\Server\RequestHandler;
-use Amber\Framework\Http\Server\RouteHandler;
-use Amber\Framework\Http\Server\AbstractRequestHandler;
 use Psr\Http\Message\ServerRequestInterface;
 use Amber\Framework\Http\Message\PsrSymfonyBridge\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
@@ -62,13 +60,12 @@ class HttpServiceProvider extends ServiceProvider
 
         $container->register(ServerRequest::class, ServerRequestInterface::class);
         $container->register(Response::class, ResponseInterface::class);
-        $container->register(AbstractRequestHandler::class, RequestHandlerInterface::class)
+        $container->register(RequestHandler::class, RequestHandlerInterface::class)
             ->setArgument('middlewares', config('app')->middlewares)
         ;
         $container->register(Uri::class, UriInterface::class);
         $container->register(ResponseFactory::class, ResponseFactoryInterface::class);
         $container->bind(ResponseDispatcher::class);
-        $container->bind(RouteHandler::class);
         $container->bind(StreamFactoryInterface::class, StreamFactory::class);
         $container->singleton(Csrf::class);
     }

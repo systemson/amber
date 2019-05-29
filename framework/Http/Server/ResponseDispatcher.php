@@ -13,8 +13,6 @@ class ResponseDispatcher
      */
     public function send(ResponseInterface $response): self
     {
-        http_response_code($response->getStatusCode());
-
         $this->sendHeaders($response);
         $this->sendContent($response);
 

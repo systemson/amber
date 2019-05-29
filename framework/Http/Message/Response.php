@@ -28,10 +28,10 @@ class Response implements ResponseInterface, StatusCodeInterface
 {
     use MessageTrait, ClonableTrait;
 
-    protected $protocol = '1.1';
-    protected $code = 200;
-    protected $reasonPhrase;
-    protected $headers;
+    public $protocol = '1.1';
+    public $code = 200;
+    public $reasonPhrase;
+    public $headers;
     public $body;
 
     public function __construct(

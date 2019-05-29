@@ -22,7 +22,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
     {
         $response = static::getContainer()->get(ResponseInterface::class);
 
-        return $response->withHeader('Content-Type', 'text/html')
+        return $response->withHeader('Content-Type', ['text/html', 'charset=UTF-8'])
             ->withHeader('Cache-Control', ['no-cache', 'private'])
             ->withHeader('Date', gmdate('D, d M Y H:i:s T'))
             ->withStatus($code, $reasonPhrase)
@@ -30,7 +30,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
     }
 
     /**
-     * 
+     *
      */
     public function redirect($to = '/'): ResponseInterface
     {
@@ -46,7 +46,8 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
     }
 
     /**
-     * The 401 status code, or an Unauthorized error, means that the user trying to access the resource has not been authenticated or has not been authenticated correctly.
+     * The 401 status code, or an Unauthorized error, means that the user trying to access the resource has not been
+     * authenticated or has not been authenticated correctly.
      */
     public function unauthorized(string $reasonPhrase = ''): ResponseInterface
     {
@@ -54,7 +55,8 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
     }
 
     /**
-     * The 403 status code, or a Forbidden error, means that the user made a valid request but the server is refusing to serve the request, due to a lack of permission to access the requested resource.
+     * The 403 status code, or a Forbidden error, means that the user made a valid request but the server is refusing to
+     * serve the request, due to a lack of permission to access the requested resource.
      */
     public function forbidden(string $reasonPhrase = ''): ResponseInterface
     {
@@ -62,7 +64,8 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
     }
 
     /**
-     * The 404 status code, or a Not Found error, means that the user is able to communicate with the server but it is unable to locate the requested file or resource.
+     * The 404 status code, or a Not Found error, means that the user is able to communicate with the server but it is
+     * unable to locate the requested file or resource.
      */
     public function notFound(string $reasonPhrase = ''): ResponseInterface
     {
@@ -70,15 +73,17 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
     }
 
     /**
-     * The 500 status code, or Internal Server Error, means that server cannot process the request for an unknown reason. Sometimes this code will appear when more specific 5xx errors are more appropriate.
+     * The 500 status code, or Internal Server Error, means that server cannot process the request for an unknown
+     * reason. Sometimes this code will appear when more specific 5xx errors are more appropriate.
      */
-    public function  internalServerError(string $reasonPhrase = ''): ResponseInterface
+    public function internalServerError(string $reasonPhrase = ''): ResponseInterface
     {
         return $this->createResponse(500, $reasonPhrase);
     }
 
     /**
-     * The 502 status code, or Bad Gateway error, means that the server is a gateway or proxy server, and it is not receiving a valid response from the backend servers that should actually fulfill the request.
+     * The 502 status code, or Bad Gateway error, means that the server is a gateway or proxy server, and it is not
+     * receiving a valid response from the backend servers that should actually fulfill the request.
      */
     public function badGateway(string $reasonPhrase = ''): ResponseInterface
     {
@@ -86,7 +91,8 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
     }
 
     /**
-     * The 503 status code, or Service Unavailable error, means that the server is overloaded or under maintenance. This error implies that the service should become available at some point.
+     * The 503 status code, or Service Unavailable error, means that the server is overloaded or under maintenance.
+     * This error implies that the service should become available at some point.
      */
     public function serviceUnavailable(string $reasonPhrase = ''): ResponseInterface
     {
@@ -94,7 +100,8 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
     }
 
     /**
-     * The 504 status code, or Gateway Timeout error, means that the server is a gateway or proxy server, and it is not receiving a response from the backend servers within the allowed time period.
+     * The 504 status code, or Gateway Timeout error, means that the server is a gateway or proxy server, and it is not
+     * receiving a response from the backend servers within the allowed time period.
      */
     public function gatewayTimeout(string $reasonPhrase = ''): ResponseInterface
     {

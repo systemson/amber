@@ -27,8 +27,6 @@ return [
     ],
 
     'middlewares' => [
-        'Amber\Framework\Http\Server\Middleware\RouteHandlerMiddleware',
-        //'Amber\Framework\Http\Server\Middleware\SessionMiddleware',
-        //'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
+        Amber\Framework\Http\Server\Middleware\RouteHandlerMiddleware::class,
     ],
 ];

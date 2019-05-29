@@ -173,8 +173,8 @@ trait MessageTrait
     {
         $new = $this->clone();
 
-        foreach ((array )$value as $value) {
-            $new->headers[] = $value;
+        foreach ((array) $value as $value) {
+            $new->headers[$name][] = $value;
         }
 
         return $new;

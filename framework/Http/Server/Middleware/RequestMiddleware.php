@@ -34,7 +34,15 @@ abstract class RequestMiddleware extends ContainerAwareClass implements Middlewa
      */
     abstract public function process(Request $request, Handler $handler): Response;
 
-    protected function newResponse(int $code = 200, string $reasonPhrase = ''): Response
+    /**
+     * Create a new response.
+     *
+     * @param int $code HTTP status code; defaults to 200.
+     * @param string $reasonPhrase Reason phrase to associate with status code.
+     *
+     * @return ResponseInterface
+     */
+    protected function createResponse(int $code = 200, string $reasonPhrase = ''): Response
     {
         return $this->responseFactory->createResponse($code, $reasonPhrase);
     }

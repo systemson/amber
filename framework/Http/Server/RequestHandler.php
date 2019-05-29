@@ -3,39 +3,28 @@
 namespace Amber\Framework\Http\Server;
 
 use Amber\Container\Container;
-use Amber\Framework\Container\Application;
-use Amber\Framework\Middleware\MiddlewareCollection;
+use Amber\Collection\Collection;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Amber\Framework\Container\ContainerAwareClass;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Psr\Http\Message\StreamFactoryInterface;
 
-class RequestHandler extends ContainerAwareClass implements RequestHandlerInterface
+class RequestHandler implements RequestHandlerInterface
 {
-    protected $middlewares = [];
-    protected $response;
     protected $responseFactory;
+    protected $middlewares = [];
+    protected $container;
+    protected $index = 0;
 
-    protected $locked = false;
-
-    public function __construct(ResponseFactoryInterface $responseFactory)
-    {
+    public function __construct(
+        ResponseFactoryInterface $responseFactory,
+        array $middlewares = [],
+        Container $container = null
+    ) {
         $this->responseFactory = $responseFactory;
-        $this->setResponse($this->newResponse());
-    }
-
-    public function setResponse(Response $response): void
-    {
-        $this->response = $response;
-    }
-
-    public function getResponse(): Response
-    {
-        return $this->response;
+        $this->middlewares = new Collection($middlewares);
+        $this->container = $container;
     }
 
     public function newResponse(int $code = 200, string $reasonPhrase = ''): Response
@@ -50,74 +39,62 @@ class RequestHandler extends ContainerAwareClass implements RequestHandlerInterf
      */
     public function handle(Request $request): Response
     {
-        try {
-            $defaults = $this->match($request);
-        } catch (ResourceNotFoundException $e) {
-            $response = $this->responseFactory->notFound($e->getMessage());
+        if (isset($this->middlewares[$this->index])) {
+            return $this->getMiddleware($this->index)->process($request, $this);
+        } else {
+            return $this->default();
+        }
+    }
 
-            if (strtolower($request->getHeader('Accept')) != 'application/json') {
-                $response->body = $e->getMessage();
-            }
+    public function next($request)
+    {
+        $this->index++;
+        return $this->handle($request);
+    }
 
-            return $response;
+    public function default()
+    {
+        return $this->newResponse();
+    }
+
+    public function addMiddleware(string $middleware)
+    {
+        $this->middlewares->append($middleware);
+    }
+
+    public function hasMiddleware(string $middleware)
+    {
+        $this->middlewares->contains($middleware);
+    }
+
+    protected function getMiddleware($index)
+    {
+        $middleware = $this->middlewares->get($index);
+
+        if ($middleware instanceof MiddlewareInterface) {
+            return $middleware;
+        } elseif ($this->container instanceof Container) {
+            return $this->container->make($middleware);
+        } else {
+            throw new \Exception('Middleware is invalid');
+        }
+    }
+
+    public function addMiddlewares(array $middlewares)
+    {
+        foreach ($middlewares as $middleware) {
+            $this->addMiddleware($middleware);
+        }
+    }
+
+    public function getMiddlewares()
+    {
+        $middlewares = [];
+
+        foreach ($this->middlewares as $index => $value) {
+            $middlewares[] = $this->getMiddleware($index);
         }
 
-        $middlewares = $defaults['_middlewares'] ?? [];
-
-        $response = $this->middlewares($request, $middlewares);
-
-        if ($this->isLocked()) {
-            return $response;
-        }
-
-        $return = $this->handleController($defaults);
-
-        if ($return instanceof Response) {
-            return $return;
-        }
-
-        $streamFactory = Application::get(StreamFactoryInterface::class);
-
-        return $response->withBody($streamFactory->createStream($return));
-    }
-
-    protected function match(Request $request)
-    {
-        $matcher = static::getContainer()->get(UrlMatcher::class);
-        $uri = $request->getUri();
-
-        return $matcher->match($uri->getpath());
-    }
-
-    protected function middlewares(Request $request, $middlewares = [])
-    {
-        foreach ($middlewares as $class) {
-            $middleware = static::getContainer()->make($class);
-
-            $this->setResponse($middleware->process($request, $this));
-
-            if ($this->locked) {
-                break;
-            }
-        }
-        
-        return $this->getResponse();
-    }
-
-    protected function handleController($default)
-    {
-        $callback = static::getContainer()->getClosureFor($default['_controller'], $default['_action']);
-
-        return $callback();
-    }
-
-    public function lockResponse()
-    {
-        $this->locked = true;
-    }
-
-    public function isLocked()
-    {
-        return $this->locked;
+        return $middlewares;
     }
 }

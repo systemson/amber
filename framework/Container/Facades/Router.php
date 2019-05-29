@@ -49,7 +49,6 @@ class Router extends ContainerFacade
                 'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
             ],
         ]);
-
     }
 
     public static function loadApiRoutes($routes)

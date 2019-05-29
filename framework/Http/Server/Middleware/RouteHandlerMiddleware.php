@@ -9,6 +9,8 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\Exception\NoConfigurationException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Amber\Framework\Http\Server\Middleware\ActionHandlerController;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * Participant in processing a server request and response.
@@ -29,38 +31,23 @@ class RouteHandlerMiddleware extends RequestMiddleware
     public function process(Request $request, Handler $handler): Response
     {
         try {
-
             $defaults = $this->match($request);
-
         } catch (ResourceNotFoundException $e) {
-
-            $reason = $e->getMessage();
-
-            $response = $this->responseFactory->notFound($reason);
-
-            if (strtolower($request->getHeader('Accept')) != 'application/json') {
-                $response->body = $reason;
-            }
-
-            return $response;
-
+            return $this->sendNotFoundResponse($request, $e->getMessage());
         } catch (MethodNotAllowedException $e) {
-
-            $reason = 'Method not allowed.';
-
-            $response = $this->responseFactory->forbidden($reason);
-
-            if (strtolower($request->getHeader('Accept')) != 'application/json') {
-                $response->body = $reason;
-            }
-
-            return $response;
-
+            return $this->sendMethodNotAllowedResponse($request, $e->getMessage());
         } catch (NoConfigurationException $e) {
-
+            return $this->sendNoConfigurationResponse($request, $e->getMessage());
         }
 
-        $handler->pushMiddlewares($defaults['_middlewares']);
+        /* Add the matched route's middlewares */
+        $handler->addMiddlewares($defaults['_middlewares']);
+
+        /* Set the route defaults */
+        $request = $request->withAttribute('defaults', $defaults);
+
+        /* Set the default middleware handler */
+        $handler->addMiddleware(ActionHandlerController::class);
 
         return $handler->next($request);
     }
@@ -70,5 +57,42 @@ class RouteHandlerMiddleware extends RequestMiddleware
         $matcher = static::getContainer()->get(UrlMatcher::class);
 
         return $matcher->match($request->getUri()->getpath());
+    }
+
+    protected function sendNotFoundResponse(Request $request, string $reason = '')
+    {
+        $response = $this->responseFactory->notFound($reason);
+
+        return $this->setBody($request, $response);
+    }
+
+    protected function sendMethodNotAllowedResponse(Request $request, string $reason = '')
+    {
+        $response = $this->responseFactory->forbidden($reason);
+
+        return $this->setBody($request, $response);
+    }
+
+    protected function sendNoConfigurationResponse(Request $request, string $reason = '')
+    {
+        $response = $this->responseFactory->internalServerError($reason);
+
+        return $this->setBody($request, $response);
+    }
+
+    protected function setBody(Request $request, Response $response): Response
+    {
+        $reason = $response->reasonPhrase;
+
+        /* Check if the request wants a json response */
+        if (strtolower($request->getHeader('Accept')) == 'application/json') {
+            $body = ['message' => $reason];
+        } else {
+            $body = $reason;
+        }
+
+        $streamFactory = static::getContainer()->get(StreamFactoryInterface::class);
+
+        return $response->withBody($streamFactory->createStream($body));
     }
 }

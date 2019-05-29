@@ -58,7 +58,6 @@ class AuthController extends Controller
         $token = Session::get('_token');
 
         if (!is_null($token)) {
-
             $user = $provider->getUserByToken($token);
             $user->remember_token = null;
             $user->save();

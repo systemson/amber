@@ -18,28 +18,28 @@ $app = require APP_DIR . '/app/kernel.php';
 /**
  * Get the request handler.
  */
-$requestHandlerPSR = $app->get(Psr\Http\Message\RequestHandlerInterface::class);
+$handler = $app->get(Psr\Http\Message\RequestHandlerInterface::class);
 //$handler = $app->get(Amber\Framework\Dispatch\Dispatch::class);
 
 
 /**
  * Get the request.
  */
-$requestPSR = $app->get(Psr\Http\Message\ServerRequestInterface::class);
+$request = $app->get(Psr\Http\Message\ServerRequestInterface::class);
 //$request = $app->get(Symfony\Component\HttpFoundation\Request::class);
 
 
 /**
  * Get the response.
  */
-$responsePSR = $requestHandlerPSR->handle($requestPSR);
+$response = $handler->handle($request);
 //$response = $handler->response();
 
 
 /**
  * Send the response.
  */
-$app->get(Amber\Framework\Http\Server\ResponseDispatcher::class)->send($responsePSR);
+$app->get(Amber\Framework\Http\Server\ResponseDispatcher::class)->send($response);
 //$response->send();
 
 

@@ -16,9 +16,11 @@ class ServerRequest implements ServerRequestInterface
         }
     }
 
-    public function setRequest(Request $request): void
+    public function setRequest(Request $request): self
     {
         $this->symfonyRequest = $request;
+
+        return $this;
     }
 
     public function getRequest(): Request
@@ -120,6 +122,11 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withQueryParams(array $query)
     {
+        $new = clone $this->getRequest();
+
+        $new->request->set($name, $value);
+
+        return $this->setRequest($new);
     }
 
     /**
@@ -204,7 +211,11 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withParsedBody($data)
     {
-        return $this->getRequest()->request->add($name, $value);
+        $new = clone $this->getRequest();
+
+        $new->request->set($name, $value);
+
+        return $this->setRequest($new);
     }
 
     /**
@@ -260,7 +271,11 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withAttribute($name, $value)
     {
-        return $this->getRequest()->attributes->add($name, $value);
+        $new = clone $this->getRequest();
+
+        $new->attributes->set($name, $value);
+
+        return $this->setRequest($new);
     }
 
     /**
@@ -279,6 +294,10 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withoutAttribute($name)
     {
-        return $this->getRequest()->attributes->remove($name, $value);
+        $new = clone $this->getRequest();
+
+        $new->attributes->remove($name);
+
+        return $this->setRequest($new);
     }
 }
