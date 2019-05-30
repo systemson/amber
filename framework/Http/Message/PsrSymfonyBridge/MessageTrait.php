@@ -4,6 +4,18 @@ namespace Amber\Framework\Http\Message\PsrSymfonyBridge;
 
 use Psr\Http\Message\StreamInterface;
 
+/**
+ * HTTP messages consist of requests from a client to a server and responses
+ * from a server to a client. This interface defines the methods common to
+ * each.
+ *
+ * Messages are considered immutable; all methods that might change state MUST
+ * be implemented such that they retain the internal state of the current
+ * message and return an instance that contains the changed state.
+ *
+ * @link http://www.ietf.org/rfc/rfc7230.txt
+ * @link http://www.ietf.org/rfc/rfc7231.txt
+ */
 trait MessageTrait
 {
     /**
@@ -15,6 +27,7 @@ trait MessageTrait
      */
     public function getProtocolVersion()
     {
+        return $this->protocol;
     }
 
     /**
@@ -32,6 +45,11 @@ trait MessageTrait
      */
     public function withProtocolVersion($version)
     {
+        $new = $this->clone();
+
+        $new->protocol = $version;
+
+        return $new;
     }
 
     /**
@@ -61,6 +79,7 @@ trait MessageTrait
      */
     public function getHeaders()
     {
+        return $this->getRequest()->headers->all();
     }
 
     /**
@@ -73,6 +92,7 @@ trait MessageTrait
      */
     public function hasHeader($name)
     {
+        return $this->getRequest()->headers->has($name);
     }
 
     /**
@@ -91,6 +111,7 @@ trait MessageTrait
      */
     public function getHeader($name)
     {
+        return $this->getRequest()->headers->get($name);
     }
 
     /**

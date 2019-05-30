@@ -26,11 +26,7 @@ use Psr\Http\Message\UriInterface;
  */
 trait RequestTrait
 {
-    protected $version;
-    protected $method;
-    protected $uri;
-    protected $headers;
-    protected $body;
+    use MessageTrait;
 
     /**
      * Retrieves the message's request target.
@@ -51,7 +47,7 @@ trait RequestTrait
     public function getRequestTarget()
     {
         if (!is_null($this->uri)) {
-            return $this->uri;
+            return (string) $this->uri;
         }
 
         return '/';
@@ -78,7 +74,7 @@ trait RequestTrait
     {
         $new = $this->copy();
 
-        $new->version = $version;
+        //$new->version = $version;
 
         return $new;
     }

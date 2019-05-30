@@ -14,11 +14,11 @@ use Amber\Framework\Container\Facades\Session as SessionFacade;
 use Psr\Http\Message\RequestHandlerInterface;
 use Amber\Framework\Http\Server\RequestHandler;
 use Psr\Http\Message\ServerRequestInterface;
-use Amber\Framework\Http\Message\PsrSymfonyBridge\ServerRequest;
+use Amber\Framework\Http\Message\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 use Amber\Framework\Http\Message\Response;
 use Psr\Http\Message\UriInterface;
-use Amber\Framework\Http\Message\PsrSymfonyBridge\Uri;
+use Amber\Framework\Http\Message\Uri;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Amber\Framework\Http\Message\ResponseFactory;
 use Amber\Framework\Http\Server\ResponseDispatcher;
@@ -44,6 +44,9 @@ class HttpServiceProvider extends ServiceProvider
 
         $container
             ->register(Request::class)
+            /*->setInstance(function () {
+                Request::createFromGlobals();
+            })*/
             ->setInstance(Request::createFromGlobals())
         ;
 

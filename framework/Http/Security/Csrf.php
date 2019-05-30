@@ -17,16 +17,11 @@ class Csrf
         if (Session::has('_csrf')) {
             $token = Session::get('_csrf');
         } else {
-            $token = Hash::make($request->getServerParams()['REMOTE_ADDR'] . Carbon::now());
+            $token = Hash::make($request->getServerParams()->get('REMOTE_ADDR') . Carbon::now());
             Session::set('_csrf', $token, 15);
         }
 
         $this->token = $token;
-    }
-
-    protected function new()
-    {
-        return 'token';
     }
 
     public function token(): string
@@ -34,12 +29,12 @@ class Csrf
         return $this->token;
     }
 
-    public function validate(): bool
+    public function validate(ServerRequestInterface $request): bool
     {
         $sessionToken = Session::get('_csrf');
         Session::remove('_csrf');
 
-        $postToken = InputParameters::get('_csrf');
+        $postToken = $request->getParsedBody()->get('_csrf');
 
         if (is_null($sessionToken) || $sessionToken !== $postToken) {
             return false;

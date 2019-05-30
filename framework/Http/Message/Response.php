@@ -5,7 +5,6 @@ namespace Amber\Framework\Http\Message;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Amber\Framework\Http\Message\Traits\MessageTrait;
-use Amber\Framework\Http\Message\Traits\ClonableTrait;
 use Amber\Framework\Http\Message\Utils\StatusCodeInterface;
 use Amber\Collection\Collection;
 
@@ -26,7 +25,7 @@ use Amber\Collection\Collection;
  */
 class Response implements ResponseInterface, StatusCodeInterface
 {
-    use MessageTrait, ClonableTrait;
+    use MessageTrait;
 
     public $protocol = '1.1';
     public $code = 200;
@@ -81,7 +80,7 @@ class Response implements ResponseInterface, StatusCodeInterface
      */
     public function withStatus($code, $reasonPhrase = '')
     {
-        $new = clone $this;
+        $new = $this->clone();
 
         $new->code = $code;
         $new->reasonPhrase = $reasonPhrase == '' ? static::REASON_PHRASE[$code] : $reasonPhrase;

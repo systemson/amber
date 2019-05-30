@@ -4,24 +4,98 @@ namespace Amber\Framework\Http\Message;
 
 use Psr\Http\Message\UriInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Amber\Framework\Http\Message\Traits\ClonableTrait;
+use Amber\Collection\Collection;
 
+/**
+ * Value object representing a URI.
+ *
+ * This interface is meant to represent URIs according to RFC 3986 and to
+ * provide methods for most common operations. Additional functionality for
+ * working with URIs can be provided on top of the interface or externally.
+ * Its primary use is for HTTP requests, but may also be used in other
+ * contexts.
+ *
+ * Instances of this interface are considered immutable; all methods that
+ * might change state MUST be implemented such that they retain the internal
+ * state of the current instance and return an instance that contains the
+ * changed state.
+ *
+ * Typically the Host header will be also be present in the request message.
+ * For server-side requests, the scheme will typically be discoverable in the
+ * server parameters.
+ *
+ * @link http://tools.ietf.org/html/rfc3986 (the URI specification)
+ */
 class Uri implements UriInterface
 {
-    public function __construct(string $uri)
+    use ClonableTrait;
+
+    protected $scheme;
+    protected $host;
+    protected $port;
+    protected $user;
+    protected $pass;
+    protected $path;
+    protected $query = [];
+    protected $fragment;
+
+    public function __construct(string $uri = '')
     {
-        if (!is_null($request)) {
-            $this->setRequest($request);
-        }
+        $array = parse_url($uri);
+
+        \extract(parse_url($uri));
+
+        $this->scheme = $scheme ?? '';
+        $this->host = $host ?? '';
+        $this->port = $port ?? '';
+        $this->user = $user ?? '';
+        $this->pass = $pass ?? '';
+        $this->path = $path ?? '';
+        parse_str($query = '', $this->query);
+        $this->fragment = $fragment ?? '';
+
     }
 
-    public function setRequest(Request $request): void
+    public static function fromGlobals()
     {
-        $this->symfonyRequest = $request;
+        $server = new Collection($_SERVER);
+
+        $components = [
+            'scheme' => strtolower(explode('/', $server->get('SERVER_PROTOCOL'))[0]),
+            'host' => $server->get('HTTP_HOST'),
+            'port' => $server->get('SERVER_PORT'),
+            'path' => explode('?', $server->get('REQUEST_URI'))[0],
+            'query' => $server->get('QUERY_STRING'),
+        ];
+
+        return self::fromComponents($components);
+        ;
     }
 
-    public function getRequest(): Request
+    public static function fromString(string $uri = '')
     {
-        return $this->symfonyRequest;
+        $components = parse_url($uri);
+
+        return self::fromComponents($components);
+    }
+
+    public static function fromComponents(array $components = [])
+    {
+        \extract($components);
+
+        $uri = new static();
+
+        $uri->scheme = $scheme ?? '';
+        $uri->host = $host ?? '';
+        $uri->port = $port ?? '';
+        $uri->user = $user ?? '';
+        $uri->pass = $pass ?? '';
+        $uri->path = $path ?? '';
+        parse_str($query ?? '', $uri->query);
+        $uri->fragment = $fragment ?? '';
+
+        return $uri;
     }
 
     /**
@@ -40,10 +114,7 @@ class Uri implements UriInterface
      */
     public function getScheme()
     {
-        if ($this->getRequest()->isSecure()) {
-            return 'https';
-        }
-        return 'http';
+        return $this->scheme;
     }
 
     /**
@@ -66,6 +137,10 @@ class Uri implements UriInterface
      */
     public function getAuthority()
     {
+        $authority = $this->getUserInfo() ?  $this->getUserInfo() . '@' : '';
+        $authority .= $this->getHost();
+        $authority .= $this->getPort() ?  ':' . $this->getPort() : '';
+        return $authority;
     }
 
     /**
@@ -85,6 +160,10 @@ class Uri implements UriInterface
      */
     public function getUserInfo()
     {
+        $userInfo = $this->user;
+        $userInfo .= $this->pass ? ":{$this->pass}" : '';
+
+        return $userInfo;
     }
 
     /**
@@ -100,7 +179,7 @@ class Uri implements UriInterface
      */
     public function getHost()
     {
-        $this->getRequest()->server->get('HTTP_HOST');
+        return $this->host;
     }
 
     /**
@@ -120,6 +199,13 @@ class Uri implements UriInterface
      */
     public function getPort()
     {
+        if ($this->port == '' || ($this->scheme == 'http' && $this->port == 80) || ($this->scheme == 'https' && $this->port == 443)){
+            return;
+        }
+
+        dd($this->scheme);
+
+        return $this->port;
     }
 
     /**
@@ -149,7 +235,7 @@ class Uri implements UriInterface
      */
     public function getPath()
     {
-        return $this->getRequest()->getPathInfo();
+        return $this->path;
     }
 
     /**
@@ -174,6 +260,11 @@ class Uri implements UriInterface
      */
     public function getQuery()
     {
+        if (empty($this->query)) {
+            return '';
+        }
+
+        return http_build_query($this->query);
     }
 
     /**
@@ -194,6 +285,7 @@ class Uri implements UriInterface
      */
     public function getFragment()
     {
+        return $this->fragment;
     }
 
     /**
@@ -213,6 +305,11 @@ class Uri implements UriInterface
      */
     public function withScheme($scheme)
     {
+        $new = $this->clone();
+
+        $new->scheme = strtolower($scheme);
+
+        return $new;
     }
 
     /**
@@ -231,6 +328,12 @@ class Uri implements UriInterface
      */
     public function withUserInfo($user, $password = null)
     {
+        $new = $this->clone();
+
+        $new->user = $user;
+        $new->password = $password;
+
+        return $new;
     }
 
     /**
@@ -247,6 +350,11 @@ class Uri implements UriInterface
      */
     public function withHost($host)
     {
+        $new = $this->clone();
+
+        $new->host = $host;
+
+        return $new;
     }
 
     /**
@@ -268,6 +376,11 @@ class Uri implements UriInterface
      */
     public function withPort($port)
     {
+        $new = $this->clone();
+
+        $new->port = (int) $port;
+
+        return $new;
     }
 
     /**
@@ -294,6 +407,11 @@ class Uri implements UriInterface
      */
     public function withPath($path)
     {
+        $new = $this->clone();
+
+        $new->path = $path;
+
+        return $new;
     }
 
     /**
@@ -313,6 +431,11 @@ class Uri implements UriInterface
      */
     public function withQuery($query)
     {
+        $new = $this->clone();
+
+        parse_str($query, $new->query);
+
+        return $new;
     }
 
     /**
@@ -331,6 +454,11 @@ class Uri implements UriInterface
      */
     public function withFragment($fragment)
     {
+        $new = $this->clone();
+
+        $new->fragment = $fragment;
+
+        return $new;
     }
 
     /**
@@ -358,5 +486,11 @@ class Uri implements UriInterface
      */
     public function __toString()
     {
+        $uri = $this->getScheme() ? $this->getScheme() . '://' : '';
+        $uri .= $this->getAuthority() .  $this->getPath();
+        $uri .= $this->getQuery() ? '?' . $this->getQuery() : '';
+        $uri .= $this->getFragment() ? '#' . $this->getFragment() : '';
+
+        return $uri;
     }
 }

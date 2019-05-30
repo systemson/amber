@@ -44,7 +44,7 @@ class ViewServiceProvider extends ServiceProvider
             )
             ->afterConstruct(
                 'setTag',
-                'csfr',
+                'csrf',
                 '<input type="hidden" name="_csrf" value="<?= Amber\Framework\Container\Facades\Csrf::token(); ?>">'
             )
             ->afterConstruct(

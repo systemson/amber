@@ -6,6 +6,8 @@ use Psr\Http\Message\StreamInterface;
 
 trait MessageTrait
 {
+    use ClonableTrait;
+
     /**
      * Retrieves the HTTP protocol version as a string.
      *
@@ -67,7 +69,7 @@ trait MessageTrait
      */
     public function getHeaders()
     {
-        return $this->headers->all();
+        return $this->headers;
     }
 
     /**
@@ -124,7 +126,7 @@ trait MessageTrait
     public function getHeaderLine($name)
     {
         if ($this->hasHeader($name)) {
-            return implode(', ', $this->headers[$name]);
+            return implode(', ', $this->headers->get($name));
         }
         return '';
     }
@@ -174,7 +176,7 @@ trait MessageTrait
         $new = $this->clone();
 
         foreach ((array) $value as $value) {
-            $new->headers[$name][] = $value;
+            $new->headers->append($name, $value);
         }
 
         return $new;

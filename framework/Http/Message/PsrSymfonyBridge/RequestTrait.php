@@ -4,6 +4,7 @@ namespace Amber\Framework\Http\Message\PsrSymfonyBridge;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
+use Amber\Framework\Http\Message\Uri;
 
 trait RequestTrait
 {
@@ -87,7 +88,7 @@ trait RequestTrait
      */
     public function getUri()
     {
-        return new Uri($this->getRequest());
+        return Uri::fromGlobals();
     }
 
     /**
