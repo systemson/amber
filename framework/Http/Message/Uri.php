@@ -42,19 +42,20 @@ class Uri implements UriInterface
 
     public function __construct(string $uri = '')
     {
-        $array = parse_url($uri);
+        if ($uri != '') {
+            $array = parse_url($uri);
 
-        \extract(parse_url($uri));
+            \extract(parse_url($uri));
 
-        $this->scheme = $scheme ?? '';
-        $this->host = $host ?? '';
-        $this->port = $port ?? '';
-        $this->user = $user ?? '';
-        $this->pass = $pass ?? '';
-        $this->path = $path ?? '';
-        parse_str($query = '', $this->query);
-        $this->fragment = $fragment ?? '';
-
+            $this->scheme = $scheme ?? '';
+            $this->host = $host ?? '';
+            $this->port = $port ?? '';
+            $this->user = $user ?? '';
+            $this->pass = $pass ?? '';
+            $this->path = $path ?? '';
+            parse_str($query = '', $this->query);
+            $this->fragment = $fragment ?? '';
+        }
     }
 
     public static function fromGlobals(): UriInterface

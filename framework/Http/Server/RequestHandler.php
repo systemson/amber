@@ -19,8 +19,8 @@ class RequestHandler implements RequestHandlerInterface
     protected $index = 0;
 
     public function __construct(
-        ResponseFactoryInterface $responseFactory,
         array $middlewares = [],
+        ResponseFactoryInterface $responseFactory,
         Container $container = null
     ) {
         $this->responseFactory = $responseFactory;
@@ -49,7 +49,7 @@ class RequestHandler implements RequestHandlerInterface
         return $this->setResponseBody($request, $response);
     }
 
-    public function next($request)
+    public function next(Request $request)
     {
         $this->index++;
         return $this->handle($request);

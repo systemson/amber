@@ -29,7 +29,7 @@ class Response implements ResponseInterface
     use MessageTrait;
 
     public $protocol = '1.1';
-    public $code = 200;
+    public $code;
     public $reasonPhrase;
     public $headers;
     public $body;
