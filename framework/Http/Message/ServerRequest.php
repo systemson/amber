@@ -63,41 +63,31 @@ class ServerRequest implements ServerRequestInterface
 
     protected $attributes;
 
-    public function __construct()
-    {
-        $this->server = new Collection($_SERVER);
-        $this->cookies = new Collection($_COOKIE);
-        $this->query = new Collection($_GET);
-        $this->files = new Collection($_FILES);
-        $this->post = new Collection($_POST);
+    public function __construct(
+        string $version = null,
+        string $method = null,
+        string $uri = null,
+        array $headers = null,
+        string $body = null,
+        $params = []
+    ) {
+        $this->server = new Collection($params['server'] ?? $_SERVER);
+        $this->cookies = new Collection($params['cookies'] ?? $_COOKIE);
+        $this->query = new Collection($params['query'] ?? $_GET);
+        $this->files = new Collection($params['files'] ?? $_FILES);
+        $this->post = new Collection($params['post'] ?? $_POST);
+        $this->attributes = new Collection($params['attributes'] = []);
+        $this->headers = new Collection($headers ?? getallheaders());
 
-        $this->version = explode('/', $this->server->get('SERVER_PROTOCOL'))[1];
-        $this->method = $this->server->get('REQUEST_METHOD');
-        $this->uri = Uri::fromGlobals();
-        $this->headers = getallheaders();
-        $this->body = null;
-
-        $this->attributes = new Collection();
+        $this->version = $version ?? explode('/', $this->server->get('SERVER_PROTOCOL'))[1];
+        $this->method = $method ?? $this->server->get('REQUEST_METHOD');
+        $this->uri = $uri ?? Uri::fromGlobals();
+        $this->body = $body;
     }
-
 
     public static function fromGlobals()
     {
         $new = new static();
-
-        $new->server = new Collection($_SERVER);
-        $new->cookies = new Collection($_COOKIE);
-        $new->query = new Collection($_GET);
-        $new->files = new Collection($_FILES);
-        $new->post = new Collection($_POST);
-
-        $new->version = explode('/', $new->server->get('SERVER_PROTOCOL'))[1];
-        $new->method = $new->server->get('REQUEST_METHOD');
-        $new->uri = Uri::fromGlobals();
-        $new->headers = getallheaders();
-        $new->body = null;
-
-        $new->attributes = new Collection();
 
         return $new;
     }

@@ -9,6 +9,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class RequestHandler implements RequestHandlerInterface
 {
@@ -40,10 +41,12 @@ class RequestHandler implements RequestHandlerInterface
     public function handle(Request $request): Response
     {
         if (isset($this->middlewares[$this->index])) {
-            return $this->getMiddleware($this->index)->process($request, $this);
+            $response =  $this->getMiddleware($this->index)->process($request, $this);
         } else {
-            return $this->default();
+            $response = $this->default();
         }
+
+        return $this->setResponseBody($request, $response);
     }
 
     public function next($request)
@@ -96,5 +99,26 @@ class RequestHandler implements RequestHandlerInterface
         }
 
         return $middlewares;
+    }
+
+    protected function setResponseBody(Request $request, Response $response): Response
+    {
+        if ($response->getStatusCode() <= 400) {
+            return $response;
+        }
+
+        $reason = $response->reasonPhrase;
+
+        /* Check if the request wants a json response */
+        if (strpos($request->getHeader('Accept'), 'application/json') !== false) {
+            $body = json_encode(['message' => $reason]);
+        } else {
+            $body = $reason;
+        }
+
+
+        $streamFactory = $this->container->get(StreamFactoryInterface::class);
+
+        return $response->withBody($streamFactory->createStream($body));
     }
 }

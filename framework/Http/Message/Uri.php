@@ -3,7 +3,7 @@
 namespace Amber\Framework\Http\Message;
 
 use Psr\Http\Message\UriInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Amber\Framework\Http\Message\Traits\ClonableTrait;
 use Amber\Collection\Collection;
 
@@ -57,11 +57,34 @@ class Uri implements UriInterface
 
     }
 
-    public static function fromGlobals()
+    public static function fromGlobals(): UriInterface
     {
         $server = new Collection($_SERVER);
 
-        $components = [
+        $components = self::getComponentsFromServerParams($server);
+
+        return self::fromComponents($components);
+    }
+
+    public static function fromString(string $uri = ''): UriInterface
+    {
+        $components = parse_url($uri);
+
+        return self::fromComponents($components);
+    }
+
+    public static function fromRequest(Request $request): UriInterface
+    {
+        $server = $request->getServerParams();
+
+        $components = self::getComponentsFromServerParams($server);
+
+        return self::fromComponents($components);
+    }
+
+    protected static function getComponentsFromServerParams($server): array
+    {
+        return [
             'scheme' => strtolower(explode('/', $server->get('SERVER_PROTOCOL'))[0]),
             'host' => $server->get('HTTP_HOST'),
             'port' => $server->get('SERVER_PORT'),
@@ -69,18 +92,9 @@ class Uri implements UriInterface
             'query' => $server->get('QUERY_STRING'),
         ];
 
-        return self::fromComponents($components);
-        ;
     }
 
-    public static function fromString(string $uri = '')
-    {
-        $components = parse_url($uri);
-
-        return self::fromComponents($components);
-    }
-
-    public static function fromComponents(array $components = [])
+    public static function fromComponents(array $components = []): UriInterface
     {
         \extract($components);
 

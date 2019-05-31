@@ -9,7 +9,7 @@ use Amber\Framework\Container\ContainerAwareClass;
 use Carbon\Carbon;
 use Psr\Http\Message\StreamFactoryInterface;
 
-class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInterface, StatusCodeInterface
+class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInterface
 {
     /**
      * Create a new response.
@@ -19,7 +19,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      *
      * @return ResponseInterface
      */
-    public function createResponse(int $code = self::STATUS_OK, string $reasonPhrase = ''): ResponseInterface
+    public function createResponse(int $code = StatusCodeInterface::STATUS_OK, string $reasonPhrase = ''): ResponseInterface
     {
         $response = static::getContainer()->get(ResponseInterface::class);
 
@@ -38,7 +38,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      *
      * @return ResponseInterface
      */
-    public function json($content = [], int $code = self::STATUS_OK, string $reasonPhrase = ''): ResponseInterface
+    public function json($content = [], int $code = StatusCodeInterface::STATUS_OK, string $reasonPhrase = ''): ResponseInterface
     {
         $factory = static::getContainer()->get(StreamFactoryInterface::class);
 

@@ -36,11 +36,11 @@ class RouteHandlerMiddleware extends RequestMiddleware
         try {
             $defaults = $this->match($request);
         } catch (ResourceNotFoundException $e) {
-            return $this->sendNotFoundResponse($request, $e->getMessage());
+            return $this->responseFactory->notFound($e->getMessage());
         } catch (MethodNotAllowedException $e) {
-            return $this->sendMethodNotAllowedResponse($request, $e->getMessage());
+            return $this->responseFactory->forbidden($e->getMessage());
         } catch (NoConfigurationException $e) {
-            return $this->sendNoConfigurationResponse($request, $e->getMessage());
+            return $this->responseFactory->internalServerError($e->getMessage());
         }
 
         /* Add the matched route's middlewares */
@@ -60,42 +60,5 @@ class RouteHandlerMiddleware extends RequestMiddleware
         $matcher = static::getContainer()->get(UrlMatcher::class);
 
         return $matcher->match($request->getUri()->getpath());
-    }
-
-    protected function sendNotFoundResponse(Request $request, string $reason = '')
-    {
-        $response = $this->responseFactory->notFound($reason);
-
-        return $this->setBody($request, $response);
-    }
-
-    protected function sendMethodNotAllowedResponse(Request $request, string $reason = '')
-    {
-        $response = $this->responseFactory->forbidden($reason);
-
-        return $this->setBody($request, $response);
-    }
-
-    protected function sendNoConfigurationResponse(Request $request, string $reason = '')
-    {
-        $response = $this->responseFactory->internalServerError($reason);
-
-        return $this->setBody($request, $response);
-    }
-
-    protected function setBody(Request $request, Response $response): Response
-    {
-        $reason = $response->reasonPhrase;
-
-        /* Check if the request wants a json response */
-        if (strtolower($request->getHeader('Accept')) == 'application/json') {
-            $body = ['message' => $reason];
-        } else {
-            $body = $reason;
-        }
-
-        $streamFactory = static::getContainer()->get(StreamFactoryInterface::class);
-
-        return $response->withBody($streamFactory->createStream($body));
     }
 }

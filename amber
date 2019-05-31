@@ -10,6 +10,7 @@ use Amber\Framework\Container\Facades\CommandsCollection;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\ConsoleEvents;
 
+
 /**
  * Load the application.
  */
