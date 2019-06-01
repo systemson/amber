@@ -19,8 +19,10 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      *
      * @return ResponseInterface
      */
-    public function createResponse(int $code = StatusCodeInterface::STATUS_OK, string $reasonPhrase = ''): ResponseInterface
-    {
+    public function createResponse(
+        int $code = StatusCodeInterface::STATUS_OK,
+        string $reasonPhrase = ''
+    ): ResponseInterface {
         $response = static::getContainer()->get(ResponseInterface::class);
 
         return $response
@@ -30,7 +32,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
     }
 
     /**
-     *
+     * Create a new json response.
      *
      * @param mixed  $content      The content that must be parsed to json and returned.
      * @param int    $code         HTTP status code; defaults to 200.
@@ -38,8 +40,11 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      *
      * @return ResponseInterface
      */
-    public function json($content = [], int $code = StatusCodeInterface::STATUS_OK, string $reasonPhrase = ''): ResponseInterface
-    {
+    public function json(
+        $content = null,
+        int $code = StatusCodeInterface::STATUS_OK,
+        string $reasonPhrase = ''
+    ): ResponseInterface {
         $factory = static::getContainer()->get(StreamFactoryInterface::class);
 
         $body = $factory->createStream(json_encode($content));

@@ -51,8 +51,8 @@
         "symfony/var-dumper": "^4.2"
     },
     "scripts": {
-        "sniff": "phpcs --standard=PSR2 ./app ./assets/views ./config ./framework",
-        "fix-cs": "phpcbf --standard=PSR2 ./app ./assets/views ./config ./framework"
+        "sniff": "phpcs --standard=PSR2 ./app ./config ./framework",
+        "fix-cs": "phpcbf --standard=PSR2 ./app ./config ./framework"
     },
     "config": {
         "preferred-install": "dist",

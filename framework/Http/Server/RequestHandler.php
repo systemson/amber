@@ -19,8 +19,8 @@ class RequestHandler implements RequestHandlerInterface
     protected $index = 0;
 
     public function __construct(
-        array $middlewares = [],
         ResponseFactoryInterface $responseFactory,
+        array $middlewares = [],
         Container $container = null
     ) {
         $this->responseFactory = $responseFactory;

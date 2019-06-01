@@ -6,7 +6,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Amber\Framework\Http\Message\Traits\RequestTrait;
 use Amber\Collection\Collection;
 
-
 /**
  * Representation of an incoming, server-side HTTP request.
  *
@@ -81,7 +80,7 @@ class ServerRequest implements ServerRequestInterface
 
         $this->version = $version ?? explode('/', $this->server->get('SERVER_PROTOCOL'))[1];
         $this->method = $method ?? $this->server->get('REQUEST_METHOD');
-        $this->uri = $uri ?? Uri::fromGlobals();
+        $this->uri = $uri ? Uri::fromString($uri) : Uri::fromGlobals();
         $this->body = $body;
     }
 

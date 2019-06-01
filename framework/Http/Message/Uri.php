@@ -33,12 +33,17 @@ class Uri implements UriInterface
 
     protected $scheme;
     protected $host;
-    protected $port;
     protected $user;
     protected $pass;
+    protected $port;
     protected $path;
     protected $query = [];
     protected $fragment;
+
+    const DEFAULT_PORT = [
+        'http' => 80,
+        'https' => 443,
+    ];
 
     public function __construct(string $uri = '')
     {
@@ -92,7 +97,6 @@ class Uri implements UriInterface
             'path' => explode('?', $server->get('REQUEST_URI'))[0],
             'query' => $server->get('QUERY_STRING'),
         ];
-
     }
 
     public static function fromComponents(array $components = []): UriInterface
@@ -103,9 +107,9 @@ class Uri implements UriInterface
 
         $uri->scheme = $scheme ?? '';
         $uri->host = $host ?? '';
-        $uri->port = $port ?? '';
         $uri->user = $user ?? '';
         $uri->pass = $pass ?? '';
+        $uri->port = $port ?? '';
         $uri->path = $path ?? '';
         parse_str($query ?? '', $uri->query);
         $uri->fragment = $fragment ?? '';
@@ -214,13 +218,11 @@ class Uri implements UriInterface
      */
     public function getPort()
     {
-        if ($this->port == '' || ($this->scheme == 'http' && $this->port == 80) || ($this->scheme == 'https' && $this->port == 443)){
+        if ($this->port == '' || $this->port == static::DEFAULT_PORT[$this->getScheme()]) {
             return;
         }
 
-        dd($this->scheme);
-
-        return $this->port;
+        return (int) $this->port;
     }
 
     /**
