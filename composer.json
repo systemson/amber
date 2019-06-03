@@ -31,7 +31,7 @@
         "php": "^7.2.0",
         "amber/cache": "^1.0@beta",
         "amber/common": "dev-master",
-        "amber/container": "^1.0.2",
+        "amber/container": "^1.1@beta",
         "amber/sketch": "dev-master",
         "illuminate/database": "^5.8",
         "monolog/monolog": "^1.24",

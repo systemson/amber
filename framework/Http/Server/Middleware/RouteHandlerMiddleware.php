@@ -20,7 +20,6 @@ use Psr\Http\Server\MiddlewareInterface;
 use Amber\Framework\Http\Message\ServerRequest;
 use Amber\Framework\Container\Facades\Filesystem;
 
-
 /**
  * Participant in processing a server request and response.
  *
@@ -39,61 +38,6 @@ class RouteHandlerMiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        function getMethod($method)
-        {
-            if ($method->isPublic()) {
-
-                $params = $method->getParameters();
-
-                $paramString = [];
-
-                foreach ($params as $param) {
-                    $paramString[] = getParam($param);
-                }
-
-                $parameters = implode(', ', $paramString);
-
-                $docs = $method->getDocComment();
-
-                return "    {$docs}\n    public function {$method->getName()}({$parameters}): {$method->getReturnType()}\n    {\n        //\n    }";
-            }
-        }
-
-        function getParam($param) {
-            return "{$param->getType()} \${$param->getName()}";
-        }
-
-        d($reflection = new \ReflectionClass(Request::class));
-        //d(get_class_methods($reflection));
-        $output = TMP_DIR . '/name.php';
-
-        $uses[] = "use {$reflection->getName()};";
-
-        foreach ($reflection->getMethods() as $method) {
-            $methods[] = getMethod($method);
-        }
-
-$content = sprintf('<?php
-
-namespace %s;
-
-%s
-
-%s
-class %s implements %s
-{
-%s
-}
-
-',
-'Test\Namespace', // New class namespace
-implode(PHP_EOL, $uses), // Class use statements
-$reflection->getDocComment(),
-'ClassName', // new class name
-$reflection->getShortName(), // Interface name
-implode(PHP_EOL.PHP_EOL, $methods));
-dd($content);
-
         try {
             $defaults = $this->match($request);
         } catch (ResourceNotFoundException $e) {

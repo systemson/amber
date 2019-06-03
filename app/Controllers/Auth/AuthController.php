@@ -14,6 +14,7 @@ use Amber\Container\Container;
 use Amber\Framework\Container\Facades\Cache;
 use Amber\Framework\Container\Facades\Session;
 use Amber\Framework\Helpers\Hash;
+use Psr\Http\Message\ServerRequestInterface;
 
 class AuthController extends Controller
 {
@@ -23,7 +24,7 @@ class AuthController extends Controller
         'password' => 'password',
     ];
 
-    public function loginForm(Request $request)
+    public function loginForm(ServerRequestInterface $request)
     {
         View::view($this->getView())
         ->setLayout('layouts/app.php');
@@ -31,7 +32,7 @@ class AuthController extends Controller
         return View::toHtml();
     }
 
-    public function login(Request $request, Container $container)
+    public function login(ServerRequestInterface $request, Container $container)
     {
         $credentials = $this->getCredentialsFromRequest($request);
 
@@ -77,7 +78,7 @@ class AuthController extends Controller
         return Hash::make($user->email . Carbon::now());
     }
 
-    protected function getCredentialsFromRequest(Request $request): array
+    protected function getCredentialsFromRequest(ServerRequestInterface $request): array
     {
         if (POST::hasMultiple($this->required)) {
             return POST::getMultiple($this->required);

@@ -6,6 +6,7 @@ use Amber\Utils\Implementations\AbstractWrapper;
 use Amber\Collection\Collection;
 use Amber\Framework\Container\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 class POST extends AbstractWrapper
 {
@@ -40,8 +41,8 @@ class POST extends AbstractWrapper
      */
     public static function afterConstruct(): void
     {
-        $request = Application::get(Request::class);
+        $request = Application::get(ServerRequestInterface::class);
 
-        static::exchangeArray($request->request->all());
+        static::exchangeArray($request->getParsedBody()->toArray());
     }
 }

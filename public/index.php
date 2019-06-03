@@ -18,7 +18,7 @@ $app = require APP_DIR . '/app/kernel.php';
 /**
  * Get the request handler.
  */
-$handler = $app->get(Psr\Http\Message\RequestHandlerInterface::class);
+$handler = $app->get(Psr\Http\Server\RequestHandlerInterface::class);
 //$handler = $app->get(Amber\Framework\Dispatch\Dispatch::class);
 
 

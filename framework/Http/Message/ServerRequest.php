@@ -5,6 +5,7 @@ namespace Amber\Framework\Http\Message;
 use Psr\Http\Message\ServerRequestInterface;
 use Amber\Framework\Http\Message\Traits\RequestTrait;
 use Amber\Collection\Collection;
+use Amber\Collection\ImmutableCollection;
 
 /**
  * Representation of an incoming, server-side HTTP request.
@@ -70,7 +71,7 @@ class ServerRequest implements ServerRequestInterface
         string $body = null,
         $params = []
     ) {
-        $this->server = new Collection($params['server'] ?? $_SERVER);
+        $this->server = new ImmutableCollection($params['server'] ?? $_SERVER);
         $this->cookies = new Collection($params['cookies'] ?? $_COOKIE);
         $this->query = new Collection($params['query'] ?? $_GET);
         $this->files = new Collection($params['files'] ?? $_FILES);

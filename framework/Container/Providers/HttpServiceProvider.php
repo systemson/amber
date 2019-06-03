@@ -2,45 +2,37 @@
 
 namespace Amber\Framework\Container\Providers;
 
-use Symfony\Component\Routing\RouteCollection;
-use Amber\Framework\Http\Routing\Router;
-
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RequestContext;
-
-use Symfony\Component\HttpFoundation\Session\Session;
-
+use Symfony\Component\{
+    Routing\RequestContext,
+    HttpFoundation\Session\Session
+};
+use Psr\Http\{
+    Server\RequestHandlerInterface,
+    Message\ServerRequestInterface,
+    Message\ResponseInterface,
+    Message\UriInterface,
+    Message\ResponseFactoryInterface,
+    Message\StreamFactoryInterface
+};
+use Amber\Framework\Http\{
+    Message\ServerRequest,
+    Message\Response,
+    Message\Uri,
+    Message\ResponseFactory,
+    Routing\Matcher,
+    Routing\Router,
+    Security\Csrf,
+    Server\RequestHandler,
+    Server\ResponseDispatcher,
+    Routing\Context
+};
 use Amber\Framework\Auth\UserProvider;
 use Amber\Framework\Auth\AuthClass;
-
 use Amber\Framework\Container\Facades\Cache;
 use Amber\Framework\Container\Facades\Session as SessionFacade;
-
-use Psr\Http\Message\RequestHandlerInterface;
-use Amber\Framework\Http\Server\RequestHandler;
-
-use Psr\Http\Message\ServerRequestInterface;
-use Amber\Framework\Http\Message\ServerRequest;
-
-use Psr\Http\Message\ResponseInterface;
-use Amber\Framework\Http\Message\Response;
-
-use Psr\Http\Message\UriInterface;
-use Amber\Framework\Http\Message\Uri;
-
-use Psr\Http\Message\ResponseFactoryInterface;
-use Amber\Framework\Http\Message\ResponseFactory;
-
-use Amber\Framework\Http\Server\ResponseDispatcher;
-
-use Amber\Framework\Http\Routing\Matcher;
-
 use Amber\Framework\Helpers\Hash;
-
 use Carbon\Carbon;
-use Amber\Framework\Http\Security\Csrf;
 use Sunrise\Stream\StreamFactory;
-use Psr\Http\Message\StreamFactoryInterface;
 
 class HttpServiceProvider extends ServiceProvider
 {
@@ -52,26 +44,14 @@ class HttpServiceProvider extends ServiceProvider
         $container->singleton(Router::class);
 
 
-        $container->register(Matcher::class)
-            ->setArgument(RouteCollection::class, function () use ($container) {
-                return $container->get(Router::class)->toSymfonyCollection();
-            })
-        ;
-
+        $container->bind(Matcher::class);
 
         $container
-            ->register(Request::class)
-            ->setInstance(function () {
-                return Request::createFromGlobals();
-            })
-        ;
-
-        $container
-            ->singleton(RequestContext::class)
+            ->singleton(Context::class, RequestContext::class)
             ->afterConstruct(
-                'fromRequest',
+                'fromPrsRequest',
                 function () use ($container) {
-                    return $container->get(Request::class);
+                    return $container->get(ServerRequestInterface::class);
                 }
             );
 
