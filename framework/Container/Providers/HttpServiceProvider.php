@@ -4,25 +4,39 @@ namespace Amber\Framework\Container\Providers;
 
 use Symfony\Component\Routing\RouteCollection;
 use Amber\Framework\Http\Routing\Router;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
+
 use Symfony\Component\HttpFoundation\Session\Session;
+
 use Amber\Framework\Auth\UserProvider;
 use Amber\Framework\Auth\AuthClass;
+
 use Amber\Framework\Container\Facades\Cache;
 use Amber\Framework\Container\Facades\Session as SessionFacade;
+
 use Psr\Http\Message\RequestHandlerInterface;
 use Amber\Framework\Http\Server\RequestHandler;
+
 use Psr\Http\Message\ServerRequestInterface;
 use Amber\Framework\Http\Message\ServerRequest;
+
 use Psr\Http\Message\ResponseInterface;
 use Amber\Framework\Http\Message\Response;
+
 use Psr\Http\Message\UriInterface;
 use Amber\Framework\Http\Message\Uri;
+
 use Psr\Http\Message\ResponseFactoryInterface;
 use Amber\Framework\Http\Message\ResponseFactory;
+
 use Amber\Framework\Http\Server\ResponseDispatcher;
+
+use Amber\Framework\Http\Routing\Matcher;
+
 use Amber\Framework\Helpers\Hash;
+
 use Carbon\Carbon;
 use Amber\Framework\Http\Security\Csrf;
 use Sunrise\Stream\StreamFactory;
@@ -37,17 +51,19 @@ class HttpServiceProvider extends ServiceProvider
 
         $container->singleton(Router::class);
 
-        $container
-            ->register(RouteCollection::class)
-            ->setInstance($container->get(Router::class)->all())
+
+        $container->register(Matcher::class)
+            ->setArgument(RouteCollection::class, function () use ($container) {
+                return $container->get(Router::class)->toSymfonyCollection();
+            })
         ;
+
 
         $container
             ->register(Request::class)
-            /*->setInstance(function () {
-                Request::createFromGlobals();
-            })*/
-            ->setInstance(Request::createFromGlobals())
+            ->setInstance(function () {
+                return Request::createFromGlobals();
+            })
         ;
 
         $container

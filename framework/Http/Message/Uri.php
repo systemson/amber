@@ -361,9 +361,9 @@ class Uri implements UriInterface
      *
      * An empty host value is equivalent to removing the host.
      *
-     * @param  string $host The hostname to use with the new instance.
+     * @param  string $host The host-name to use with the new instance.
      * @return static A new instance with the specified host.
-     * @throws \InvalidArgumentException for invalid hostnames.
+     * @throws \InvalidArgumentException for invalid host-names.
      */
     public function withHost($host)
     {

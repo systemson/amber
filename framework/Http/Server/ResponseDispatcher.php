@@ -13,8 +13,15 @@ class ResponseDispatcher
      */
     public function send(ResponseInterface $response): self
     {
-        $this->sendHeaders($response);
-        $this->sendContent($response);
+        if (headers_sent()) {
+            throw new \RuntimeException('Headers are already sent.');
+        }
+
+        $this
+            ->sendHeaders($response)
+            ->sendStatusLine($response)
+            ->sendContent($response)
+        ;
 
         return $this;
     }
@@ -26,8 +33,6 @@ class ResponseDispatcher
      */
     public function sendHeaders(ResponseInterface $response): self
     {
-        header($this->getStatusLine($response));
-
         foreach ($response->getHeaders() as $name => $values) {
             header(sprintf('%s: %s', $name, $response->getHeaderLine($name)));
         }
@@ -35,7 +40,7 @@ class ResponseDispatcher
         return $this;
     }
 
-    protected function getStatusLine(ResponseInterface $response)
+    protected function sendStatusLine(ResponseInterface $response)
     {
         $status = sprintf(
             'HTTP/%s %d %s',
@@ -44,7 +49,9 @@ class ResponseDispatcher
             $response->getReasonPhrase()
         );
 
-        return trim($status);
+        header(trim($status));
+
+        return $this;
     }
 
     /**

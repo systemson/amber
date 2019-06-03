@@ -3,6 +3,7 @@
 define('CONFIG_DIR', __DIR__);
 define('APP_DIR', CONFIG_DIR . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
 define('PUBLIC_DIR', APP_DIR . DIRECTORY_SEPARATOR . 'public');
+define('TMP_DIR', APP_DIR . DIRECTORY_SEPARATOR . 'tmp');
 
 
 if (!function_exists('config')) {
@@ -20,7 +21,7 @@ if (!function_exists('config')) {
 if (!function_exists('d')) {
     function d(... $value)
     {
-        call_user_func_array('dump', $value);
+        return call_user_func_array('dump', $value);
     }
 }
 

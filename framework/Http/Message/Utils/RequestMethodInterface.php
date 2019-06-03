@@ -1,6 +1,6 @@
 <?php
 
-namespace Fig\Http\Message;
+namespace Amber\Framework\Http\Message\Utils;
 
 /**
  * Defines constants for common HTTP request methods.

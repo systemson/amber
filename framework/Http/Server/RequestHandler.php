@@ -83,7 +83,7 @@ class RequestHandler implements RequestHandlerInterface
         }
     }
 
-    public function addMiddlewares(array $middlewares)
+    public function addMiddlewares(iterable $middlewares)
     {
         foreach ($middlewares as $middleware) {
             $this->addMiddleware($middleware);
