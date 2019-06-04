@@ -13,4 +13,9 @@ class Hash
     {
         return password_verify($value, $hash);
     }
+
+    public static function token($limit)
+    {
+    	return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
+    }
 }

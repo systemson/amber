@@ -30,19 +30,19 @@ class Maker
         $useStatements = $this->getUseStatements();
 
         return Phraser::make('<?php')
-            ->appendEol(2)
-            ->append("namespace {$namespace};")
-            ->appendEol(2)
+            ->eol(2)
+            ->append("namespace {$namespace};", $namespace)
+            ->eol(2)
             ->append($useStatements.PHP_EOL.PHP_EOL, $useStatements)
             ->append($docs.PHP_EOL, $docs)
             ->append("class {$shortName} implements {$interface}")
-            ->appendEol()
+            ->eol()
             ->append("{")
-            ->appendEol()
+            ->eol()
             ->append(implode(PHP_EOL.PHP_EOL, $methods), !empty($methods))
-            ->appendEol()
+            ->eol()
             ->append("}")
-            ->appendEol(2)
+            ->eol(2)
         ;
     }
 
@@ -68,21 +68,21 @@ class Maker
         $useStatements = $this->getUseStatements();
 
         return Phraser::make('<?php')
-            ->appendEol(2)
+            ->eol(2)
             ->append("namespace {$namespace};")
-            ->appendEol(2)
+            ->eol(2)
             ->append($useStatements.PHP_EOL.PHP_EOL, $useStatements)
             ->append($docs.PHP_EOL, $docs)
             ->append("class {$shortName}")
             ->append(" extends {$parentclass}", $parentclass)
             ->append(" implements {$interface}", $interface)
-            ->appendEol()
+            ->eol()
             ->append("{")
-            ->appendEol()
+            ->eol()
             ->append(implode(PHP_EOL.PHP_EOL, $methods), !empty($methods))
-            ->appendEol()
+            ->eol()
             ->append("}")
-            ->appendEol(2)
+            ->eol(2)
         ;
     }
 

@@ -30,6 +30,6 @@ class CsfrMiddleware extends RequestMiddleware
             return $this->responseFactory->forbidden('Invalid CSRF Token');
         }
 
-        return $handler->next($request);
+        return $handler->handle($request);
     }
 }

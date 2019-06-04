@@ -16,7 +16,7 @@ class RequestHandler implements RequestHandlerInterface
     protected $responseFactory;
     protected $middlewares = [];
     protected $container;
-    protected $index = 0;
+    protected $index;
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
@@ -40,8 +40,10 @@ class RequestHandler implements RequestHandlerInterface
      */
     public function handle(Request $request): Response
     {
-        if (isset($this->middlewares[$this->index])) {
-            $response =  $this->getMiddleware($this->index)->process($request, $this);
+        $id = $this->next();
+
+        if (isset($this->middlewares[$id])) {
+            $response =  $this->getMiddleware($id)->process($request, $this);
         } else {
             $response = $this->default();
         }
@@ -49,10 +51,13 @@ class RequestHandler implements RequestHandlerInterface
         return $this->setResponseBody($request, $response);
     }
 
-    public function next(Request $request)
+    public function next(): int
     {
-        $this->index++;
-        return $this->handle($request);
+        if (is_null($this->index)) {
+            return $this->index = 0;
+        }
+
+        return $this->index++;
     }
 
     public function default()

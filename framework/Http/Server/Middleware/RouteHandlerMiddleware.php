@@ -10,7 +10,7 @@ use Amber\Framework\Http\Routing\Matcher;
 use Symfony\Component\Routing\Exception\NoConfigurationException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Amber\Framework\Http\Server\Middleware\ActionHandlerController;
+use Amber\Framework\Http\Server\Middleware\ActionHandlerMiddleware;
 use Psr\Http\Message\StreamFactoryInterface;
 
 
@@ -55,9 +55,9 @@ class RouteHandlerMiddleware extends RequestMiddleware
         $request = $request->withAttribute('defaults', $defaults);
 
         /* Set the default middleware handler */
-        $handler->addMiddleware(ActionHandlerController::class);
+        $handler->addMiddleware(ActionHandlerMiddleware::class);
 
-        return $handler->next($request);
+        return $handler->handle($request);
     }
 
     protected function match(Request $request)

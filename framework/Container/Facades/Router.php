@@ -45,7 +45,7 @@ class Router extends ContainerFacade
         },
         [
             'middlewares' => [
-                'Amber\Framework\Http\Server\Middleware\SessionMiddleware',
+                'Amber\Framework\Http\Server\Middleware\AuthMiddleware',
                 'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
             ],
         ]);

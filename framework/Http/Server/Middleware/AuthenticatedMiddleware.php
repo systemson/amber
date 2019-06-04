@@ -30,6 +30,6 @@ class AuthenticatedMiddleware extends RequestMiddleware
             return ResponseFacade::redirect('/');
         }
 
-        return $handler->next($request);
+        return $handler->handle($request);
     }
 }

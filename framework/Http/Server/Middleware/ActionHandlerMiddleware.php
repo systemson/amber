@@ -14,7 +14,7 @@ use Psr\Http\Message\StreamFactoryInterface;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class ActionHandlerController extends RequestMiddleware
+class ActionHandlerMiddleware extends RequestMiddleware
 {
     /**
      * Process an incoming server request.

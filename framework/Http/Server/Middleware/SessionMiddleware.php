@@ -2,13 +2,12 @@
 
 namespace Amber\Framework\Http\Server\Middleware;
 
-use Amber\Framework\Container\Facades\Session;
-use Amber\Framework\Container\Facades\Auth;
-use Amber\Framework\Container\Facades\Cache;
-use Amber\Framework\Auth\UserProvider;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
+use Psr\Http\Server\MiddlewareInterface as Middleware;
+use Amber\Framework\Container\Facades\Session;
+use Amber\Collection\ImmutableCollection;
 
 /**
  * Participant in processing a server request and response.
@@ -28,18 +27,8 @@ class SessionMiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        if (Session::has('_token')) {
-            $token = Session::get('_token');
+        $request = $request->withAttribute('session', new ImmutableCollection(Session::all()));
 
-            if (Cache::has($token)) {
-                $user = Cache::get($token);
-            } else {
-                $userProvider = $this->getContainer()->get(UserProvider::class);
-                $user = $userProvider->getUserByToken($token);
-            }
-            Auth::setUser($user);
-        }
-
-        return $handler->next($request);
+        return $handler->handle($request);
     }
 }

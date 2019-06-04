@@ -17,7 +17,7 @@ class Csrf
         if (Session::has('_csrf')) {
             $token = Session::get('_csrf');
         } else {
-            $token = Hash::make($request->getServerParams()->get('REMOTE_ADDR') . Carbon::now());
+            $token = Hash::token(256);
             Session::set('_csrf', $token, 15);
         }
 
@@ -31,7 +31,7 @@ class Csrf
 
     public function validate(ServerRequestInterface $request): bool
     {
-        $sessionToken = Session::get('_csrf');
+        $sessionToken = $request->getParsedBody()->get('_csrf');
         Session::remove('_csrf');
 
         $postToken = $request->getParsedBody()->get('_csrf');

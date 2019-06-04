@@ -2,14 +2,13 @@
 
 namespace Amber\Framework\Http\Server\Middleware;
 
+use Amber\Framework\Container\Facades\Session;
+use Amber\Framework\Container\Facades\Auth;
+use Amber\Framework\Container\Facades\Cache;
+use Amber\Framework\Auth\UserProvider;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
-use Psr\Http\Server\MiddlewareInterface as Middleware;
-use Amber\Framework\Container\Facades\Filesystem;
-use Amber\Framework\Helpers\ClassMaker\Maker;
-use Amber\Framework\Http\Session\Session;
-
 
 /**
  * Participant in processing a server request and response.
@@ -18,7 +17,7 @@ use Amber\Framework\Http\Session\Session;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class InitTestsiddleware extends RequestMiddleware
+class AuthMiddleware extends RequestMiddleware
 {
     /**
      * Process an incoming server request.
@@ -29,30 +28,18 @@ class InitTestsiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        /*$session = new Session();
+        if (Session::has('_token')) {
+            $token = Session::get('_token');
 
-        //$session->flash('lol', 'lal');
-
-        dd(
-            $session,
-            $session->flash()->all(),
-            $_SESSION
-        );*/
-        
+            if (Cache::has($token)) {
+                $user = Cache::get($token);
+            } else {
+                $userProvider = $this->getContainer()->get(UserProvider::class);
+                $user = $userProvider->getUserByToken($token);
+            }
+            Auth::setUser($user);
+        }
 
         return $handler->handle($request);
-    }
-
-    protected function testClassMaker()
-    {
-        $maker = new Maker();
-
-        d($maker->getImplementingClass('App\Controllers\UsersController', Handler::class));
-        d($maker->getExtendingClass('App\Http\Middleware\TestMiddleware', RequestMiddleware::class));
-        dd($maker->getExtendingClass(
-            'App\Http\Middleware\TestMiddleware',
-            RequestMiddleware::class,
-            Middleware::class
-        ));
     }
 }
