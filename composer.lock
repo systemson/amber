@@ -109,17 +109,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/common.git",
-                "reference": "e4e3eccabdc25edbca1e55634d8f0a48510ff5df"
+                "reference": "3a1e7c6c10988dc16c3f47aadeda302311833568"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/common/zipball/e4e3eccabdc25edbca1e55634d8f0a48510ff5df",
-                "reference": "e4e3eccabdc25edbca1e55634d8f0a48510ff5df",
+                "url": "https://api.github.com/repos/systemson/common/zipball/3a1e7c6c10988dc16c3f47aadeda302311833568",
+                "reference": "3a1e7c6c10988dc16c3f47aadeda302311833568",
                 "shasum": ""
             },
             "require": {
                 "amber/collection": "0.6.*",
-                "amber/phraser": "^0.0.3",
+                "amber/phraser": "0.1.*",
                 "league/flysystem": "^1.0",
                 "nesbot/carbon": "^2.17",
                 "php": "^7.2.0"
@@ -1662,7 +1662,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
