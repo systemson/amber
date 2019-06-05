@@ -10,7 +10,6 @@ use Amber\Framework\Container\Facades\Filesystem;
 use Amber\Framework\Helpers\ClassMaker\Maker;
 use Amber\Framework\Http\Session\Session;
 
-
 /**
  * Participant in processing a server request and response.
  *
@@ -29,16 +28,8 @@ class InitTestsiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        /*$session = new Session();
-
-        //$session->flash('lol', 'lal');
-
-        dd(
-            $session,
-            $session->flash()->all(),
-            $_SESSION
-        );*/
-        
+        //$this->testClassMaker();
+        //$this->testSession();
 
         return $handler->handle($request);
     }
@@ -54,5 +45,19 @@ class InitTestsiddleware extends RequestMiddleware
             RequestMiddleware::class,
             Middleware::class
         ));
+    }
+
+    protected function testSession()
+    {
+        $session = new Session();
+
+        dd(
+            $session,
+            $session->metadata()->all(),
+            $session->metadata()->created_at,
+            $session->metadata()->updated_at,
+            $session->metadata()->clear(),
+            $_SESSION
+        );
     }
 }

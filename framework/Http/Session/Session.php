@@ -4,15 +4,19 @@ namespace Amber\Framework\Http\Session;
 
 use Amber\Collection\Collection;
 use Amber\Collection\ImmutableCollection;
+use Amber\Framework\Http\Session\FlashCollection;
+use Amber\Framework\Http\Session\MetadataCollection;
 
 class Session extends Collection
 {
     protected $flash = [];
-    protected $active;
-    protected $name;
-    protected $id;
+    protected $metadata = [];
+    protected $cookie_params = [];
 
-    public function __construct()
+    const STORAGE_NAME = '_params';
+    const FLASH_NAME = '_flash';
+
+    public function __construct(array $options = [])
     {
         /*var_dump('Session start');
         //var_dump(session_start());
@@ -33,28 +37,35 @@ class Session extends Collection
         //var_dump(session_destroy());
         dd('die');*/
 
+        self::setCookieParams([
+            $options['lifetime'] ?? 15,
+            $options['path'] ?? '/',
+            $options['domain'] ?? null,
+            $options['secure'] ?? null,
+            $options['httponly'] ?? null,
+        ]);
+
         $this->start();
-        $this->loadParams();
-        $this->loadFlash();
+
+        $this->load();
     }
 
     public function start()
     {
         if (!$this->isActive()) {
-
             if (!session_start()) {
                 throw new \RuntimeException('Failed to start the session');
             }
-        }
 
-        $this->active = true;
+            $this->load();
+        }
 
         return true;
     }
 
     public function isActive(): bool
     {
-        return $this->active && session_status() === PHP_SESSION_ACTIVE;
+        return session_status() === PHP_SESSION_ACTIVE;
     }
 
     public function close()
@@ -65,8 +76,6 @@ class Session extends Collection
             session_destroy();
 
             $this->clear();
-    
-            $this->active = false;
 
             return true;
         }
@@ -74,51 +83,70 @@ class Session extends Collection
         return false;
     }
 
+    protected function load()
+    {
+        $this->cookie_params = session_get_cookie_params();
+        $this->loadParams();
+        $this->loadFlash();
+        $this->loadMetadata();
+    }
+
     protected function loadParams()
     {
-        $session = $_SESSION['_params'] ?? [];
+        $session = $_SESSION[static::STORAGE_NAME] ?? [];
         $this->exchangeArray($session);
     }
 
     protected function loadFlash()
     {
-        $flash = $_SESSION['_flash'] ?? [];
-        unset($_SESSION['_flash']);
+        $this->flash = new FlashCollection();
+    }
 
-        $this->flash = new ImmutableCollection($flash);
+    protected function loadMetadata()
+    {
+        $this->metadata = new MetadataCollection();
     }
 
     public function clear(): void
     {
         parent::clear();
         $this->flash->clear();
+        $this->metadata->clear();
+        $this->close();
     }
 
-    public function set(string $key, $value = null): void
+    public function offsetSet($offset, $value = null)
     {
-        $_SESSION['_params'][$key] = $value;
-        parent::set($key, $value);
+        $_SESSION['_params'][$offset] = $value;
+        $this->metadata()->touch();
+        parent::offsetSet($offset, $value);
     }
 
-    public function flash(... $args)
+    public function offsetUnset($offset)
     {
-        $count = count($args);
+        unset($_SESSION['_params'][$offset]);
+        $this->metadata()->touch();
+        parent::offsetUnset($offset);
+    }
 
-        switch ($count) {
-            case 1:
-                return $this->flash->get($args[0]);
-                break;
-
-            case 2:
-                $flash = $this->flash;
-
-                $_SESSION['_flash'][$args[0]] = $args[1];
-                break;
-            
-            default:
-                return $this->flash;
-                break;
-        }
+    public function flash()
+    {
         return $this->flash;
+    }
+
+    public function metadata()
+    {
+        return $this->metadata;
+    }
+
+    public static function setCookieParams(array $options = [])
+    {
+        session_set_cookie_params(
+            $options['lifetime'] ?? null,
+            $options['path'] ?? null,
+            $options['domain'] ?? null,
+            $options['secure'] ?? null,
+            $options['httponly'] ?? null,
+        );
     }
 }

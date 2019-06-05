@@ -2,8 +2,8 @@
 
 define('CONFIG_DIR', __DIR__);
 define('APP_DIR', CONFIG_DIR . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
-define('PUBLIC_DIR', APP_DIR . DIRECTORY_SEPARATOR . 'public');
-define('TMP_DIR', APP_DIR . DIRECTORY_SEPARATOR . 'tmp');
+define('PUBLIC_DIR', APP_DIR . 'public' . DIRECTORY_SEPARATOR);
+define('TMP_DIR', APP_DIR . 'tmp' . DIRECTORY_SEPARATOR);
 
 
 if (!function_exists('config')) {

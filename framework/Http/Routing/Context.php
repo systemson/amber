@@ -21,7 +21,7 @@ class Context extends RequestContext
      */
     public function fromPrsRequest(ServerRequestInterface $request)
     {
-    	$uri = $request->getUri();
+        $uri = $request->getUri();
 
         $this->setBaseUrl($uri->getAuthority());
         $this->setPathInfo($uri->getPath());

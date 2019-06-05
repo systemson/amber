@@ -42,5 +42,5 @@ class GET extends AbstractWrapper
         $request = Application::get(ServerRequestInterface::class);
 
         static::exchangeArray($request->getQueryParams()->toArray());
-    }
+}
 }
