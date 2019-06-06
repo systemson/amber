@@ -44,10 +44,12 @@ class CsfrMiddleware extends RequestMiddleware
 
         if (!$session->has(static::TOKEN_NAME)) {
             $session->set(static::TOKEN_NAME, $token);
+            $request->withAttribute(static::TOKEN_NAME, $token);
         }
         
-        $request->withAttribute(static::TOKEN_NAME, $token);
-        $this->getContainer()->bind(static::TOKEN_NAME, $token);
+        $this->getContainer()->bind(static::TOKEN_NAME, function () use ($session) {
+            return $session->get(static::TOKEN_NAME);
+        });
 
         return $request;
     }
@@ -60,7 +62,7 @@ class CsfrMiddleware extends RequestMiddleware
 
         $postToken = $request->getParsedBody()->get(static::TOKEN_NAME);
 
-        if (is_null($sessionToken) || $sessionToken !== $postToken) {
+        if (is_null($sessionToken) || is_null($postToken) || $sessionToken !== $postToken) {
             return false;
         }
 
