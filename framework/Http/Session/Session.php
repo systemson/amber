@@ -43,7 +43,7 @@ class Session extends Collection
     public function init()
     {
         self::setCookieParams([
-            'lifetime' => $options['lifetime'] ?? 15,
+            'lifetime' => $options['lifetime'] ?? 60,
             'path' => $options['path'] ?? '/',
             'domain' => $options['domain'] ?? null,
             'secure' => $options['secure'] ?? null,
@@ -152,7 +152,7 @@ class Session extends Collection
             $options['path'] ?? null,
             $options['domain'] ?? null,
             $options['secure'] ?? null,
-            $options['httponly'] ?? null,
+            $options['httponly'] ?? null
         );
     }
 }

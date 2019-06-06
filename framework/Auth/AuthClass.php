@@ -2,9 +2,12 @@
 
 namespace Amber\Framework\Auth;
 
+use Psr\Http\Message\ServerRequestInterface as Request;
+
 class AuthClass
 {
     private $user;
+    private $request;
 
     public function __construct($user = null)
     {
@@ -13,19 +16,26 @@ class AuthClass
         }
     }
 
-    public function setUser($user): void
+    public function setRequest(Request $request): void
     {
-        $this->user = $user;
+        $this->request = $request;
+    }
+
+    public function getRequest(): ?Request
+    {
+        return $this->request;
     }
 
     public function getUser()
     {
-        return $this->user;
+        if ($request = $this->getRequest()) {
+            return $this->getRequest()->getAttribute('user');
+        }
     }
 
     public function check()
     {
-        return !is_null($this->user);
+        return !is_null($this->getUser());
     }
 
     public function __call(string $method, $args)

@@ -43,7 +43,8 @@ class HttpServiceProvider extends ServiceProvider
                 function () use ($container) {
                     return $container->get(ServerRequestInterface::class);
                 }
-            );
+            )
+        ;
 
         $container->singleton(Session::class);
 

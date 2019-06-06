@@ -6,11 +6,8 @@ return [
     'binds' => [
         Amber\Framework\Auth\AuthClass::class,
         Amber\Framework\Auth\UserProvider::class,
-        Symfony\Component\HttpFoundation\Response::class,
-        //ymfony\Component\Routing\Matcher\UrlMatcher::class,
         Amber\Framework\Dispatch\Dispatch::class,
         Amber\Sketch\Template\Template::class,
-        //Symfony\Component\Cache\Simple\FilesystemCache::class,
     ],
 
     'providers' => [
