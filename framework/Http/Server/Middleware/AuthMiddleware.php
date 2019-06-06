@@ -38,6 +38,7 @@ class AuthMiddleware extends RequestMiddleware
                 $user = $userProvider->getUserByToken($token);
             }
             Auth::setUser($user);
+            $request = $request->withAttribute('user', $user);
         }
 
         return $handler->handle($request);

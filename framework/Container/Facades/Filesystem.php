@@ -18,9 +18,9 @@ class Filesystem extends ContainerFacade
     protected static $instance;
 
     /**
-     * To expose publicy a method it should be declared protected.
+     * To publicly expose a method it must be public or protected.
      *
-     * @var array The method(s) that should be publicly exposed.
+     * @var array The method(s) that should be publicly exposed. An empty array means all.
      */
     protected static $passthru = [];
 }

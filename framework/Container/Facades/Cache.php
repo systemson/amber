@@ -3,14 +3,14 @@
 namespace Amber\Framework\Container\Facades;
 
 use Amber\Framework\Container\ContainerFacade;
-use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\CacheInterface as Accessor;
 
 class Cache extends ContainerFacade
 {
     /**
      * @var string The class accessor.
      */
-    protected static $accessor = CacheInterface::class;
+    protected static $accessor = Accessor::class;
 
     /**
      * @var mixed The instance of the accessor.
@@ -18,9 +18,9 @@ class Cache extends ContainerFacade
     protected static $instance;
 
     /**
-     * To expose publicy a method it should be declared protected.
+     * To publicly expose a method it must be public or protected.
      *
-     * @var array The method(s) that should be publicly exposed.
+     * @var array The method(s) that should be publicly exposed. An empty array means all.
      */
     protected static $passthru = [];
 }

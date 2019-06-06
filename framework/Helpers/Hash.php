@@ -16,6 +16,8 @@ class Hash
 
     public static function token($limit)
     {
-        return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
+        $size = ceil($limit / 2);
+
+        return substr(bin2hex(random_bytes($size)), 0, $limit);
     }
 }

@@ -39,8 +39,9 @@ class GET extends AbstractWrapper
      * @return void
      */
     public static function afterConstruct(): void
+    {
         $request = Application::get(ServerRequestInterface::class);
 
         static::exchangeArray($request->getQueryParams()->toArray());
-}
+    }
 }

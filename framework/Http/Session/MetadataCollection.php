@@ -24,16 +24,14 @@ class MetadataCollection extends ImmutableCollection
 
     public function __construct()
     {
-        $array = $this->init($_SESSION[MetadataCollection::METADATA_NAME] ?? []);
-        parent::__construct($array);
+        parent::__construct($this->init());
     }
 
-    protected function init(array $array)
+    protected function init()
     {
-        if (!isset($array[static::CREATED_AT])) {
-            $array[static::CREATED_AT] = $_SESSION[static::METADATA_NAME][static::CREATED_AT] = $this->now();
-            $array[static::UPDATED_AT] = $_SESSION[static::METADATA_NAME][static::UPDATED_AT] = $this->now();
-        }
+        $array[static::CREATED_AT] = $this->fromRawSession(static::CREATED_AT, $this->now());
+        $array[static::UPDATED_AT] = $this->fromRawSession(static::UPDATED_AT, $this->now());
+
         return $array;
     }
 
@@ -41,6 +39,11 @@ class MetadataCollection extends ImmutableCollection
     {
         //date('Y-m-d H:i:s');
         return (string) Carbon::now();
+    }
+
+    protected function fromRawSession(string $key, $default = null)
+    {
+        return $_SESSION[MetadataCollection::METADATA_NAME][$key] ?? $default;
     }
 
     public function touch()

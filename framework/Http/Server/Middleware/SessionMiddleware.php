@@ -6,8 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
-use Amber\Framework\Container\Facades\Session;
-use Amber\Collection\ImmutableCollection;
+use Amber\Framework\Http\Session\Session;
 
 /**
  * Participant in processing a server request and response.
@@ -27,7 +26,9 @@ class SessionMiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        $request = $request->withAttribute('session', new ImmutableCollection(Session::all()));
+        $session = $this->getContainer()->get(Session::class);
+
+        $request = $request->withAttribute('session', $session);
 
         return $handler->handle($request);
     }

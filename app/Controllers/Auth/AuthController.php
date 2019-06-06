@@ -67,8 +67,7 @@ class AuthController extends Controller
             Cache::delete($token);
         }
 
-        Session::clear();
-        Session::invalidate();
+        Session::close();
 
         return Response::redirect('/login');
     }

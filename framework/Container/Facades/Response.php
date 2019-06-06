@@ -2,18 +2,15 @@
 
 namespace Amber\Framework\Container\Facades;
 
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Amber\Framework\Container\ContainerFacade;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface as Accessor;
 
 class Response extends ContainerFacade
 {
     /**
      * @var string The class accessor.
      */
-    protected static $accessor = ResponseFactoryInterface::class;
+    protected static $accessor = Accessor::class;
 
     /**
      * @var mixed The instance of the accessor.
@@ -21,9 +18,9 @@ class Response extends ContainerFacade
     protected static $instance;
 
     /**
-     * To expose publicy a method it should be declared protected.
+     * To publicly expose a method it must be public or protected.
      *
-     * @var array The method(s) that should be publicly exposed.
+     * @var array The method(s) that should be publicly exposed. An empty array means all.
      */
     protected static $passthru = [];
 }

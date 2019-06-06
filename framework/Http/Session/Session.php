@@ -37,12 +37,17 @@ class Session extends Collection
         //var_dump(session_destroy());
         dd('die');*/
 
+        $this->init();
+    }
+
+    public function init()
+    {
         self::setCookieParams([
-            $options['lifetime'] ?? 15,
-            $options['path'] ?? '/',
-            $options['domain'] ?? null,
-            $options['secure'] ?? null,
-            $options['httponly'] ?? null,
+            'lifetime' => $options['lifetime'] ?? 15,
+            'path' => $options['path'] ?? '/',
+            'domain' => $options['domain'] ?? null,
+            'secure' => $options['secure'] ?? null,
+            'httponly' => $options['httponly'] ?? null,
         ]);
 
         $this->start();
@@ -76,6 +81,7 @@ class Session extends Collection
             session_destroy();
 
             $this->clear();
+            $this->init();
 
             return true;
         }

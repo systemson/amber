@@ -3,6 +3,9 @@
 namespace Amber\Framework\Helpers;
 
 use Carbon\Carbon;
+use Amber\Framework\Container\Application;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Amber\Framework\Http\Server\Middleware\CsfrMiddleware;
 
 class Amber
 {
@@ -27,5 +30,10 @@ class Amber
     public function date(): Carbon
     {
         return Carbon::now();
+    }
+
+    public function csrf()
+    {
+        return Application::get(CsfrMiddleware::TOKEN_NAME);
     }
 }

@@ -2,21 +2,15 @@
 
 namespace Amber\Framework\Container\Facades;
 
-use Symfony\Component\Routing\Route as SymfonyRoute;
-use Amber\Framework\Http\Routing\Route as AmberRoute;
-use Amber\Framework\Http\Routing\Router as AmberRouter;
 use Amber\Framework\Container\ContainerFacade;
-use Amber\Framework\Application;
-use Symfony\Component\Routing\RouteCollection;
-use Amber\Phraser\Phraser;
-use Amber\Phraser\Str;
+use Amber\Framework\Http\Routing\Router as Accessor;
 
 class Router extends ContainerFacade
 {
     /**
      * @var string The class accessor.
      */
-    protected static $accessor = AmberRouter::class;
+    protected static $accessor = Accessor::class;
 
     /**
      * @var mixed The instance of the accessor.
@@ -24,9 +18,9 @@ class Router extends ContainerFacade
     protected static $instance;
 
     /**
-     * To expose publicy a method it should be declared public or protected.
+     * To publicly expose a method it must be public or protected.
      *
-     * @var array The method(s) that should be publicly exposed.
+     * @var array The method(s) that should be publicly exposed. An empty array means all.
      */
     protected static $passthru = [];
 

@@ -4,7 +4,6 @@ namespace Amber\Framework\Container;
 
 use Amber\Framework\Container\ContainerFacade;
 use Amber\Container\Container;
-use Symfony\Component\HttpFoundation\Request;
 
 class Application extends ContainerFacade
 {
