@@ -9,7 +9,7 @@ use Psr\Http\Server\MiddlewareInterface as Middleware;
 use Amber\Framework\Container\Facades\Filesystem;
 use Amber\Framework\Helpers\ClassMaker\Maker;
 use Amber\Framework\Http\Session\Session;
-
+use Amber\Framework\Helpers\Assets\Loader;
 /**
  * Participant in processing a server request and response.
  *
@@ -30,8 +30,18 @@ class InitTestsiddleware extends RequestMiddleware
     {
         //$this->testClassMaker();
         //$this->testSession();
+        //$this->loader();
 
         return $handler->handle($request);
+    }
+
+    public function loader()
+    {
+        $loader = new Loader([
+            'Amber' => 'Assets',
+        ]);
+
+        $loader->js('Amber\Assets\jQuery');
     }
 
     protected function testClassMaker()

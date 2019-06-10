@@ -32,4 +32,8 @@ Router::boot();
 $array['Routes boot'] = microtime(true) - INIT_TIME;
 
 //dd($array);
+spl_autoload_register(function () {
+
+    include getcwd() . '/../vendor/amber/assets/src/Provider.php';
+});
 return $app;
