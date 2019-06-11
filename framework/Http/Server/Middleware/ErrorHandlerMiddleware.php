@@ -28,8 +28,10 @@ class ErrorHandlerMiddleware extends RequestMiddleware
 
             $whoops = new \Whoops\Run();
 
-            if ($request->getHeader('Accepts') == 'application/json') {
+            if ($request->acceptJson()) {
                 $whoops->pushHandler(new \Whoops\Handler\JsonResponseHandler());
+            /*} elseif ($request->acceptXml()) {
+                $whoops->pushHandler(new \Whoops\Handler\XmlResponseHandler());*/
             } else {
                 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
             }

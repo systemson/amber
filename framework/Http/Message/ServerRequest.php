@@ -4,6 +4,7 @@ namespace Amber\Framework\Http\Message;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Amber\Framework\Http\Message\Traits\RequestTrait;
+use Amber\Framework\Http\Message\Traits\RequestUtilsTrait;
 use Amber\Collection\Collection;
 use Amber\Collection\ImmutableCollection;
 
@@ -47,7 +48,7 @@ use Amber\Collection\ImmutableCollection;
  */
 class ServerRequest implements ServerRequestInterface
 {
-    use RequestTrait;
+    use RequestTrait, RequestUtilsTrait;
 
     protected $version;
     protected $method;
