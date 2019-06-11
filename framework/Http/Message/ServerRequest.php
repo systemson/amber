@@ -85,6 +85,11 @@ class ServerRequest implements ServerRequestInterface
         $this->body = $body;
     }
 
+    /**
+     * Creates a new instance from super global vars.
+     *
+     * @return UriInterface
+     */
     public static function fromGlobals()
     {
         $new = new static();

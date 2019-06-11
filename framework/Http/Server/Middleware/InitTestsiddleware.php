@@ -10,6 +10,7 @@ use Amber\Framework\Container\Facades\Filesystem;
 use Amber\Framework\Helpers\ClassMaker\Maker;
 use Amber\Framework\Http\Session\Session;
 use Amber\Framework\Helpers\Assets\Loader;
+use Amber\Framework\Http\Message\Uri;
 /**
  * Participant in processing a server request and response.
  *
@@ -31,6 +32,7 @@ class InitTestsiddleware extends RequestMiddleware
         //$this->testClassMaker();
         //$this->testSession();
         //$this->loader();
+        //$this->testUri();
 
         return $handler->handle($request);
     }
@@ -68,6 +70,19 @@ class InitTestsiddleware extends RequestMiddleware
             $session->metadata()->updated_at,
             $session->metadata()->clear(),
             $_SESSION
+        );
+    }
+
+    protected function testUri()
+    {
+        $uri1 = Uri::fromString('http://username:password@www.example.com:3000/api/users?foo=bar#fragment');
+        $uri2 = Uri::fromString('https://www.example.com/api/users?foo=bar#fragment');
+        $uri3 = Uri::fromString('example.com');
+
+        dd(
+            (string) $uri1,
+            (string) $uri2,
+            (string) $uri3,
         );
     }
 }
