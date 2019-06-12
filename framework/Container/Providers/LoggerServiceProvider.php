@@ -18,15 +18,15 @@ class LoggerServiceProvider extends ServiceProvider
         ->afterConstruct('pushHandler', function () {
             switch (config('logger')->driver) {
                 case 'simple':
-                    return new StreamHandler(config('logger')->path);
+                    return new StreamHandler(config('logger.path'));
                     break;
 
                 case 'daily':
-                    return new RotatingFileHandler(config('logger')->path, config('logger')->maxFiles);
+                    return new RotatingFileHandler(config('logger.path'), config('logger.max_files'));
                     break;
                 
                 default:
-                    return new StreamHandler(config('logger')->path);
+                    return new StreamHandler(config('logger.path'));
                     break;
             }
         });
