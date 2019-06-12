@@ -6,6 +6,7 @@ use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Amber\Framework\Http\Message\Traits\ClonableTrait;
 use Amber\Collection\Collection;
+use Amber\Phraser\Phraser;
 
 /**
  * Value object representing a URI.
@@ -45,6 +46,11 @@ class Uri implements UriInterface
         'https' => 443,
     ];
 
+    /**
+     * Creates a new instance.
+     *
+     * @param string $uri The uri string.
+     */
     public function __construct(string $uri = '')
     {
         if ($uri != '') {
@@ -63,6 +69,11 @@ class Uri implements UriInterface
         }
     }
 
+    /**
+     * Creates a new instance from $_SERVER vars.
+     *
+     * @return UriInterface
+     */
     public static function fromGlobals(): UriInterface
     {
         $server = new Collection($_SERVER);
@@ -72,6 +83,13 @@ class Uri implements UriInterface
         return self::fromComponents($components);
     }
 
+    /**
+     * Creates a new instance from a uri string.
+     *
+     * @param string $uri The uri string.
+     *
+     * @return UriInterface
+     */
     public static function fromString(string $uri = ''): UriInterface
     {
         $components = parse_url($uri);
@@ -79,6 +97,13 @@ class Uri implements UriInterface
         return self::fromComponents($components);
     }
 
+    /**
+     * Creates a new instance from a PSR RequestInterface.
+     *
+     * @param Request $request
+     *
+     * @return UriInterface
+     */
     public static function fromRequest(Request $request): UriInterface
     {
         $server = $request->getServerParams();
@@ -88,6 +113,13 @@ class Uri implements UriInterface
         return self::fromComponents($components);
     }
 
+    /**
+     * Get the uri components from Server params.
+     *
+     * @param CollectionInterface $server
+     *
+     * @return array
+     */
     protected static function getComponentsFromServerParams($server): array
     {
         return [
@@ -99,6 +131,13 @@ class Uri implements UriInterface
         ];
     }
 
+    /**
+     * Creates a new instance from a components array.
+     *
+     * @param array $components
+     *
+     * @return UriInterface
+     */
     public static function fromComponents(array $components = []): UriInterface
     {
         \extract($components);
@@ -137,6 +176,30 @@ class Uri implements UriInterface
     }
 
     /**
+     * Return an instance with the specified scheme.
+     *
+     * This method MUST retain the state of the current instance, and return
+     * an instance that contains the specified scheme.
+     *
+     * Implementations MUST support the schemes "http" and "https" case
+     * insensitively, and MAY accommodate other schemes if required.
+     *
+     * An empty scheme is equivalent to removing the scheme.
+     *
+     * @param  string $scheme The scheme to use with the new instance.
+     * @return static A new instance with the specified scheme.
+     * @throws \InvalidArgumentException for invalid or unsupported schemes.
+     */
+    public function withScheme($scheme)
+    {
+        $new = $this->clone();
+
+        $new->scheme = strtolower($scheme);
+
+        return $new;
+    }
+
+    /**
      * Retrieve the authority component of the URI.
      *
      * If no authority information is present, this method MUST return an empty
@@ -156,10 +219,10 @@ class Uri implements UriInterface
      */
     public function getAuthority()
     {
-        $authority = $this->getUserInfo() ?  $this->getUserInfo() . '@' : '';
-        $authority .= $this->getHost();
-        $authority .= $this->getPort() ?  ':' . $this->getPort() : '';
-        return $authority;
+        return (string) Phraser::make($this->getHost())
+            ->prepend($this->getUserInfo() . '@', $this->getUserInfo() != '')
+            ->append(':' . $this->getPort(), $this->getPort())
+        ;
     }
 
     /**
@@ -179,10 +242,34 @@ class Uri implements UriInterface
      */
     public function getUserInfo()
     {
-        $userInfo = $this->user;
-        $userInfo .= $this->pass ? ":{$this->pass}" : '';
+        return (string) Phraser::make()
+            ->append($this->user, $this->user)
+            ->append(":{$this->pass}", $this->pass)
+        ;
+    }
 
-        return $userInfo;
+    /**
+     * Return an instance with the specified user information.
+     *
+     * This method MUST retain the state of the current instance, and return
+     * an instance that contains the specified user information.
+     *
+     * Password is optional, but the user information MUST include the
+     * user; an empty string for the user is equivalent to removing user
+     * information.
+     *
+     * @param  string      $user     The user name to use for authority.
+     * @param  null|string $password The password associated with $user.
+     * @return static A new instance with the specified user information.
+     */
+    public function withUserInfo($user, $password = null)
+    {
+        $new = $this->clone();
+
+        $new->user = $user;
+        $new->password = $password;
+
+        return $new;
     }
 
     /**
@@ -199,6 +286,27 @@ class Uri implements UriInterface
     public function getHost()
     {
         return $this->host;
+    }
+
+    /**
+     * Return an instance with the specified host.
+     *
+     * This method MUST retain the state of the current instance, and return
+     * an instance that contains the specified host.
+     *
+     * An empty host value is equivalent to removing the host.
+     *
+     * @param  string $host The host-name to use with the new instance.
+     * @return static A new instance with the specified host.
+     * @throws \InvalidArgumentException for invalid host-names.
+     */
+    public function withHost($host)
+    {
+        $new = $this->clone();
+
+        $new->host = $host;
+
+        return $new;
     }
 
     /**
@@ -223,6 +331,32 @@ class Uri implements UriInterface
         }
 
         return (int) $this->port;
+    }
+
+    /**
+     * Return an instance with the specified port.
+     *
+     * This method MUST retain the state of the current instance, and return
+     * an instance that contains the specified port.
+     *
+     * Implementations MUST raise an exception for ports outside the
+     * established TCP and UDP port ranges.
+     *
+     * A null value provided for the port is equivalent to removing the port
+     * information.
+     *
+     * @param  null|int $port The port to use with the new instance; a null value
+     *                        removes the port information.
+     * @return static A new instance with the specified port.
+     * @throws \InvalidArgumentException for invalid ports.
+     */
+    public function withPort($port)
+    {
+        $new = $this->clone();
+
+        $new->port = (int) $port;
+
+        return $new;
     }
 
     /**
@@ -253,151 +387,6 @@ class Uri implements UriInterface
     public function getPath()
     {
         return $this->path;
-    }
-
-    /**
-     * Retrieve the query string of the URI.
-     *
-     * If no query string is present, this method MUST return an empty string.
-     *
-     * The leading "?" character is not part of the query and MUST NOT be
-     * added.
-     *
-     * The value returned MUST be percent-encoded, but MUST NOT double-encode
-     * any characters. To determine what characters to encode, please refer to
-     * RFC 3986, Sections 2 and 3.4.
-     *
-     * As an example, if a value in a key/value pair of the query string should
-     * include an ampersand ("&") not intended as a delimiter between values,
-     * that value MUST be passed in encoded form (e.g., "%26") to the instance.
-     *
-     * @see    https://tools.ietf.org/html/rfc3986#section-2
-     * @see    https://tools.ietf.org/html/rfc3986#section-3.4
-     * @return string The URI query string.
-     */
-    public function getQuery()
-    {
-        if (empty($this->query)) {
-            return '';
-        }
-
-        return http_build_query($this->query);
-    }
-
-    /**
-     * Retrieve the fragment component of the URI.
-     *
-     * If no fragment is present, this method MUST return an empty string.
-     *
-     * The leading "#" character is not part of the fragment and MUST NOT be
-     * added.
-     *
-     * The value returned MUST be percent-encoded, but MUST NOT double-encode
-     * any characters. To determine what characters to encode, please refer to
-     * RFC 3986, Sections 2 and 3.5.
-     *
-     * @see    https://tools.ietf.org/html/rfc3986#section-2
-     * @see    https://tools.ietf.org/html/rfc3986#section-3.5
-     * @return string The URI fragment.
-     */
-    public function getFragment()
-    {
-        return $this->fragment;
-    }
-
-    /**
-     * Return an instance with the specified scheme.
-     *
-     * This method MUST retain the state of the current instance, and return
-     * an instance that contains the specified scheme.
-     *
-     * Implementations MUST support the schemes "http" and "https" case
-     * insensitively, and MAY accommodate other schemes if required.
-     *
-     * An empty scheme is equivalent to removing the scheme.
-     *
-     * @param  string $scheme The scheme to use with the new instance.
-     * @return static A new instance with the specified scheme.
-     * @throws \InvalidArgumentException for invalid or unsupported schemes.
-     */
-    public function withScheme($scheme)
-    {
-        $new = $this->clone();
-
-        $new->scheme = strtolower($scheme);
-
-        return $new;
-    }
-
-    /**
-     * Return an instance with the specified user information.
-     *
-     * This method MUST retain the state of the current instance, and return
-     * an instance that contains the specified user information.
-     *
-     * Password is optional, but the user information MUST include the
-     * user; an empty string for the user is equivalent to removing user
-     * information.
-     *
-     * @param  string      $user     The user name to use for authority.
-     * @param  null|string $password The password associated with $user.
-     * @return static A new instance with the specified user information.
-     */
-    public function withUserInfo($user, $password = null)
-    {
-        $new = $this->clone();
-
-        $new->user = $user;
-        $new->password = $password;
-
-        return $new;
-    }
-
-    /**
-     * Return an instance with the specified host.
-     *
-     * This method MUST retain the state of the current instance, and return
-     * an instance that contains the specified host.
-     *
-     * An empty host value is equivalent to removing the host.
-     *
-     * @param  string $host The host-name to use with the new instance.
-     * @return static A new instance with the specified host.
-     * @throws \InvalidArgumentException for invalid host-names.
-     */
-    public function withHost($host)
-    {
-        $new = $this->clone();
-
-        $new->host = $host;
-
-        return $new;
-    }
-
-    /**
-     * Return an instance with the specified port.
-     *
-     * This method MUST retain the state of the current instance, and return
-     * an instance that contains the specified port.
-     *
-     * Implementations MUST raise an exception for ports outside the
-     * established TCP and UDP port ranges.
-     *
-     * A null value provided for the port is equivalent to removing the port
-     * information.
-     *
-     * @param  null|int $port The port to use with the new instance; a null value
-     *                        removes the port information.
-     * @return static A new instance with the specified port.
-     * @throws \InvalidArgumentException for invalid ports.
-     */
-    public function withPort($port)
-    {
-        $new = $this->clone();
-
-        $new->port = (int) $port;
-
-        return $new;
     }
 
     /**
@@ -432,6 +421,35 @@ class Uri implements UriInterface
     }
 
     /**
+     * Retrieve the query string of the URI.
+     *
+     * If no query string is present, this method MUST return an empty string.
+     *
+     * The leading "?" character is not part of the query and MUST NOT be
+     * added.
+     *
+     * The value returned MUST be percent-encoded, but MUST NOT double-encode
+     * any characters. To determine what characters to encode, please refer to
+     * RFC 3986, Sections 2 and 3.4.
+     *
+     * As an example, if a value in a key/value pair of the query string should
+     * include an ampersand ("&") not intended as a delimiter between values,
+     * that value MUST be passed in encoded form (e.g., "%26") to the instance.
+     *
+     * @see    https://tools.ietf.org/html/rfc3986#section-2
+     * @see    https://tools.ietf.org/html/rfc3986#section-3.4
+     * @return string The URI query string.
+     */
+    public function getQuery()
+    {
+        if (empty($this->query)) {
+            return '';
+        }
+
+        return http_build_query($this->query);
+    }
+
+    /**
      * Return an instance with the specified query string.
      *
      * This method MUST retain the state of the current instance, and return
@@ -453,6 +471,27 @@ class Uri implements UriInterface
         parse_str($query, $new->query);
 
         return $new;
+    }
+
+    /**
+     * Retrieve the fragment component of the URI.
+     *
+     * If no fragment is present, this method MUST return an empty string.
+     *
+     * The leading "#" character is not part of the fragment and MUST NOT be
+     * added.
+     *
+     * The value returned MUST be percent-encoded, but MUST NOT double-encode
+     * any characters. To determine what characters to encode, please refer to
+     * RFC 3986, Sections 2 and 3.5.
+     *
+     * @see    https://tools.ietf.org/html/rfc3986#section-2
+     * @see    https://tools.ietf.org/html/rfc3986#section-3.5
+     * @return string The URI fragment.
+     */
+    public function getFragment()
+    {
+        return $this->fragment;
     }
 
     /**
@@ -503,11 +542,11 @@ class Uri implements UriInterface
      */
     public function __toString()
     {
-        $uri = $this->getScheme() ? $this->getScheme() . '://' : '';
-        $uri .= $this->getAuthority() .  $this->getPath();
-        $uri .= $this->getQuery() ? '?' . $this->getQuery() : '';
-        $uri .= $this->getFragment() ? '#' . $this->getFragment() : '';
-
-        return $uri;
+        return (string) Phraser::make('')
+            ->append($this->getScheme() . '://', $this->getScheme())
+            ->append($this->getAuthority() .  $this->getPath())
+            ->append('?' . $this->getQuery(), $this->getQuery())
+            ->append('#' . $this->getFragment(), $this->getFragment())
+        ;
     }
 }

@@ -9,41 +9,21 @@ use Amber\Framework\Http\Session\MetadataCollection;
 
 class Session extends Collection
 {
-    protected $flash = [];
-    protected $metadata = [];
-    protected $cookie_params = [];
+    private $flash = [];
+    private $metadata = [];
+    private $cookie_params = [];
 
     const STORAGE_NAME = '_params';
-    const FLASH_NAME = '_flash';
 
     public function __construct(array $options = [])
     {
-        /*var_dump('Session start');
-        //var_dump(session_start());
-        var_dump('Session name');
-        var_dump(session_name());
-        var_dump('Session id');
-        var_dump(session_id());
-        var_dump('Session active');
-        var_dump(PHP_SESSION_ACTIVE);
-        var_dump('Session status');
-        var_dump(session_status());
-        var_dump('Session param');
-        //var_dump($_SESSION);
-        var_dump('Cookie param');
-        var_dump($_COOKIE);
-        //var_dump(session_regenerate_id());
-        var_dump(session_unset());
-        //var_dump(session_destroy());
-        dd('die');*/
-
         $this->init();
     }
 
     public function init()
     {
         self::setCookieParams([
-            'lifetime' => $options['lifetime'] ?? 60,
+            'lifetime' => $options['lifetime'] ?? 15 * 60,
             'path' => $options['path'] ?? '/',
             'domain' => $options['domain'] ?? null,
             'secure' => $options['secure'] ?? null,
@@ -51,8 +31,6 @@ class Session extends Collection
         ]);
 
         $this->start();
-
-        $this->load();
     }
 
     public function start()

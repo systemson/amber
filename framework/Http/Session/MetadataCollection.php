@@ -18,7 +18,7 @@ use Carbon\Carbon;
  */
 class MetadataCollection extends ImmutableCollection
 {
-    const METADATA_NAME = '_metadata';
+    const METADATA_NAME = '_amber_metadata';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
@@ -27,7 +27,7 @@ class MetadataCollection extends ImmutableCollection
         parent::__construct($this->init());
     }
 
-    protected function init()
+    protected function init(): array
     {
         $array[static::CREATED_AT] = $this->fromRawSession(static::CREATED_AT, $this->now());
         $array[static::UPDATED_AT] = $this->fromRawSession(static::UPDATED_AT, $this->now());
@@ -37,16 +37,19 @@ class MetadataCollection extends ImmutableCollection
 
     protected function now(): string
     {
-        //date('Y-m-d H:i:s');
-        return (string) Carbon::now();
+        return (string) Carbon::now()->timestamp;
     }
 
     protected function fromRawSession(string $key, $default = null)
     {
-        return $_SESSION[MetadataCollection::METADATA_NAME][$key] ?? $default;
+        if (isset($_SESSION[static::METADATA_NAME][$key])) {
+            return $_SESSION[static::METADATA_NAME][$key];
+        }
+
+        return $_SESSION[static::METADATA_NAME][$key] = $default;
     }
 
-    public function touch()
+    public function touch(): void
     {
         $_SESSION[static::METADATA_NAME][static::UPDATED_AT] = $this->now();
     }

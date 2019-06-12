@@ -18,7 +18,7 @@ use Carbon\Carbon;
  */
 class FlashCollection extends ImmutableCollection
 {
-    const FLASH_NAME = '_flash';
+    const FLASH_NAME = '_amber_flash';
 
     public function __construct()
     {

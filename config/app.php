@@ -19,7 +19,6 @@ return [
 
     'providers' => [
         Amber\Framework\Container\Providers\DotenvServiceProvider::class,
-        Amber\Framework\Container\Providers\DebugServiceProvider::class,
         Amber\Framework\Container\Providers\ModelServiceProvider::class,
         Amber\Framework\Container\Providers\CacheServiceProvider::class,
         Amber\Framework\Container\Providers\HttpServiceProvider::class,
@@ -34,5 +33,6 @@ return [
         Amber\Framework\Http\Server\Middleware\InitTestsiddleware::class,
         Amber\Framework\Http\Server\Middleware\SessionMiddleware::class,
         Amber\Framework\Http\Server\Middleware\RouteHandlerMiddleware::class,
+        Amber\Framework\Http\Server\Middleware\ErrorHandlerMiddleware::class,
     ],
 ];
