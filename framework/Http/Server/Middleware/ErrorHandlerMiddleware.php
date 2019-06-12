@@ -26,7 +26,6 @@ class ErrorHandlerMiddleware extends RequestMiddleware
     public function process(Request $request, Handler $handler): Response
     {
         if (getenv('APP_ENV') == 'dev') {
-
             $whoops = new \Whoops\Run();
 
             if ($request->acceptJson()) {
@@ -38,9 +37,7 @@ class ErrorHandlerMiddleware extends RequestMiddleware
             }
 
             $whoops->register();
-
         } else {
-
             set_exception_handler(function ($e) use ($request) {
                 $this->getContainer()->get(LoggerInterface::class)->error($e->getMessage(), $e->getTrace());
             });

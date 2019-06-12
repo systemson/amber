@@ -55,7 +55,6 @@ class Application extends ContainerFacade
         static::getInstance();
 
         Router::boot();
-
     }
 
     /**
@@ -76,7 +75,7 @@ class Application extends ContainerFacade
     public static function afterConstruct(): void
     {
         // Bind from config file
-        foreach (config('app')->binds as $service) {
+        foreach (config('app.binds') as $service) {
             static::bind($service);
         }
 
@@ -85,7 +84,7 @@ class Application extends ContainerFacade
 
     private static function bootProviders(): void
     {
-        self::$providers = config('app')->providers;
+        self::$providers = config('app.providers');
         array_map(
             function ($service) {
                 $service::boot();

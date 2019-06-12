@@ -31,19 +31,14 @@ class ActionHandlerMiddleware extends RequestMiddleware
         $return = $this->handleController($defaults['_controller'], $defaults['_action']);
 
         if ($return instanceof Response) {
-
             return $return;
-
         } elseif (is_string($return)) {
-
             $streamFactory = static::getContainer()->get(StreamFactoryInterface::class);
 
             $body = $streamFactory->createStream($return);
 
             return $this->createResponse()->withBody($body);
-
         } elseif ($return instanceof StreamInterface) {
-
             return $this->createResponse()->withBody($return);
         }
 

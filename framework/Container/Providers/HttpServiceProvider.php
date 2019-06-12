@@ -51,7 +51,7 @@ class HttpServiceProvider extends ServiceProvider
         $container->register(ServerRequest::class, ServerRequestInterface::class);
         $container->register(Response::class, ResponseInterface::class);
         $container->register(RequestHandler::class, RequestHandlerInterface::class)
-            ->setArgument('middlewares', config('app')->middlewares)
+            ->setArgument('middlewares', config('app.middlewares'))
         ;
         $container->register(Uri::class, UriInterface::class);
         $container->register(ResponseFactory::class, ResponseFactoryInterface::class);

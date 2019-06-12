@@ -22,7 +22,6 @@ class ServerCommand extends Command
         $this->addOption('scheme', 's', InputArgument::OPTIONAL, 'The server application scheme.');
     }
 
-
     /**
      * Executes the current command.
      */

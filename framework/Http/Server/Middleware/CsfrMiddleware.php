@@ -17,7 +17,7 @@ use Amber\Framework\Helpers\Hash;
  */
 class CsfrMiddleware extends RequestMiddleware
 {
-    const TOKEN_NAME = '_csrf';
+    const TOKEN_NAME = '_CSRF_TOKEN_';
 
     /**
      * Process an incoming server request.
@@ -46,7 +46,7 @@ class CsfrMiddleware extends RequestMiddleware
             $session->set(static::TOKEN_NAME, $token);
             $request->withAttribute(static::TOKEN_NAME, $token);
         }
-        
+
         $this->getContainer()->bind(static::TOKEN_NAME, function () use ($session) {
             return $session->get(static::TOKEN_NAME);
         });
@@ -59,6 +59,7 @@ class CsfrMiddleware extends RequestMiddleware
         $session = $request->getAttribute('session');
 
         $sessionToken = $session->remove(static::TOKEN_NAME);
+
 
         $postToken = $request->getParsedBody()->get(static::TOKEN_NAME);
 

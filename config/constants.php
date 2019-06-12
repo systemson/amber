@@ -7,14 +7,27 @@ define('TMP_DIR', APP_DIR . 'tmp' . DIRECTORY_SEPARATOR);
 
 
 if (!function_exists('config')) {
-    function config(string $name)
+    function config(string $slug)
     {
-        $path = CONFIG_DIR . DIRECTORY_SEPARATOR . $name . '.php';
+        static $collection;
 
-        if (file_exists($path)) {
-            return (object) include $path;
+        if (is_null($collection)) {
+            $collection = new Amber\Collection\MultilevelCollection();
         }
-        return null;
+
+        $name = explode('.', $slug)[0];
+
+        if ($collection->hasNot($slug)) {
+            $path = CONFIG_DIR . DIRECTORY_SEPARATOR . $name . '.php';
+
+            if (file_exists($path)) {
+                $configs = include $path;
+            }
+
+            $collection[$name] = $configs;
+        }
+
+        return $collection->get($slug);
     }
 }
 

@@ -16,7 +16,7 @@ class CacheServiceProvider extends ServiceProvider
             ->afterConstruct(
                 'pushHandler',
                 function () {
-                    return new SimpleCache(config('cache')->path);
+                    return new SimpleCache(config('cache.path'));
                 }
             )
         ->singleton();

@@ -35,17 +35,20 @@ class Router extends ContainerFacade
     public static function loadWebRoutes($routes)
     {
         $routes->group(function ($routes) {
-            include CONFIG_DIR . '/routes.php';
+            include config('routes.routes.web.path');
         },
         [
-            'middlewares' => [
-                'Amber\Framework\Http\Server\Middleware\AuthMiddleware',
-                'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
-            ],
+            'middlewares' => config('routes.routes.web.middlewares'),
         ]);
     }
 
     public static function loadApiRoutes($routes)
     {
+        $routes->group(function ($routes) {
+            include config('routes.routes.api.path');
+        },
+        [
+            'middlewares' => config('routes.routes.api.middlewares'),
+        ]);
     }
 }

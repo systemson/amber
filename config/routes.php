@@ -1,14 +1,24 @@
 <?php
 
-$routes->get('/', 'App\Controllers\HomeController::index');
+return [
 
-$routes->group(function ($routes) {
-    $routes->get('/login', 'App\Controllers\Auth\AuthController::loginForm');
-    $routes->post('/login', 'App\Controllers\Auth\AuthController::login');
-}, [
-    'middlewares' => [
-        'Amber\Framework\Http\Server\Middleware\AuthenticatedMiddleware',
-    ]
-]);
+	'default' => 'web',
 
-$routes->post('/logout', 'App\Controllers\Auth\AuthController::logout');
+	'routes' => [
+
+		'web' => [
+			'path' => CONFIG_DIR . '/routes/web.php',
+			'middlewares' => [
+				'Amber\Framework\Http\Server\Middleware\AuthMiddleware',
+                'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
+			],
+		],
+
+		'api' => [
+			'path' => CONFIG_DIR . '/routes/api.php',
+			'middlewares' => [
+			],
+		],
+
+	],
+];

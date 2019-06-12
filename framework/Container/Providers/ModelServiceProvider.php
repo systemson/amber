@@ -10,7 +10,7 @@ class ModelServiceProvider extends ServiceProvider
     {
         $eloquent = new Eloquent();
 
-        $eloquent->addConnection(config('database')->pgsql);
+        $eloquent->addConnection(config('database.pgsql'));
         $eloquent->setAsGlobal();
         $eloquent->bootEloquent();
     }

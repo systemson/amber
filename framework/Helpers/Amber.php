@@ -34,6 +34,9 @@ class Amber
 
     public function csrf()
     {
-        return Application::get(CsfrMiddleware::TOKEN_NAME);
+        $token = Application::get(CsfrMiddleware::TOKEN_NAME);
+        $name = CsfrMiddleware::TOKEN_NAME;
+
+        return "<input type=\"hidden\" name=\"{$name}\" value=\"{$token}\">";
     }
 }

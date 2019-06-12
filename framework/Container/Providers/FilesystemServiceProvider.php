@@ -17,7 +17,7 @@ class FilesystemServiceProvider extends ServiceProvider
             ->setArgument(
                 AdapterInterface::class,
                 function () {
-                    return new Local(config('filesystem')->main['path']);
+                    return new Local(config('filesystem.main.path'));
                 }
             );
     }
