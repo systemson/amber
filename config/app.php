@@ -8,6 +8,13 @@ return [
         Amber\Framework\Auth\UserProvider::class,
         Amber\Framework\Dispatch\Dispatch::class,
         Amber\Sketch\Template\Template::class,
+        Amber\Framework\Http\Server\Middleware\InitTestsiddleware::class,
+        Amber\Framework\Http\Server\Middleware\SessionMiddleware::class,
+        Amber\Framework\Http\Server\Middleware\RouteHandlerMiddleware::class,
+        Amber\Framework\Http\Server\Middleware\AuthMiddleware::class,
+        Amber\Framework\Http\Server\Middleware\CsfrMiddleware::class,
+        Amber\Framework\Http\Server\Middleware\ActionHandlerMiddleware::class,
+        Amber\Framework\Http\Server\Middleware\AuthenticatedMiddleware::class,
     ],
 
     'providers' => [

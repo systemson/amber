@@ -82,7 +82,7 @@ class RequestHandler implements RequestHandlerInterface
         if ($middleware instanceof MiddlewareInterface) {
             return $middleware;
         } elseif ($this->container instanceof Container) {
-            return $this->container->make($middleware);
+            return $this->container->get($middleware);
         } else {
             throw new \Exception('Middleware is invalid');
         }
