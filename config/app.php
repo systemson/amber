@@ -15,6 +15,7 @@ return [
         Amber\Framework\Http\Server\Middleware\ActionHandlerMiddleware::class,
         Amber\Framework\Http\Server\Middleware\AuthenticatedMiddleware::class,
         Amber\Framework\Http\Server\Middleware\ErrorHandlerMiddleware::class,
+        Amber\Framework\Http\Server\Middleware\ApiTokenMiddleware::class,
     ],
 
     'providers' => [
