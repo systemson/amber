@@ -7,5 +7,5 @@ return [
 
     'path' => APP_DIR . 'tmp/amber.log',
 
-    'maxFiles' => 7,
+    'max_files' => 7,
 ];
