@@ -4,6 +4,9 @@ namespace Amber\Framework\Container;
 
 use Amber\Framework\Container\ContainerFacade;
 use Amber\Container\Container;
+use Amber\Framework\Container\Application;
+use Amber\Framework\Container\ContainerAwareClass;
+use Amber\Framework\Container\Facades\Router;
 
 class Application extends ContainerFacade
 {
@@ -37,6 +40,23 @@ class Application extends ContainerFacade
     ];
 
     private static $providers = [];
+
+    public static function boot(): void
+    {
+        $app = new Container();
+
+        $app->register(Container::class)
+            ->setInstance($app)
+        ;
+
+        ContainerAwareClass::setContainer($app);
+
+        ContainerFacade::setContainer($app);
+        static::getInstance();
+
+        Router::boot();
+
+    }
 
     /**
      * Runs after the class constructor.

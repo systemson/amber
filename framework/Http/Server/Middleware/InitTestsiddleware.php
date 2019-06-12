@@ -11,6 +11,7 @@ use Amber\Framework\Helpers\ClassMaker\Maker;
 use Amber\Framework\Http\Session\Session;
 use Amber\Framework\Helpers\Assets\Loader;
 use Amber\Framework\Http\Message\Uri;
+
 /**
  * Participant in processing a server request and response.
  *
@@ -82,7 +83,7 @@ class InitTestsiddleware extends RequestMiddleware
         dd(
             (string) $uri1,
             (string) $uri2,
-            (string) $uri3,
+            (string) $uri3
         );
     }
 }

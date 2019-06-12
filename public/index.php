@@ -8,39 +8,22 @@ define('INIT_TIME', microtime(true));
  */
 require __DIR__.'/../vendor/autoload.php';
 
+use Amber\Framework\Container\Application as App;
 
 /**
  * Load the application.
  */
-$app = require APP_DIR . '/app/kernel.php';
-
-
-/**
- * Get the request handler.
- */
-$handler = $app->get(Psr\Http\Server\RequestHandlerInterface::class);
-//$handler = $app->get(Amber\Framework\Dispatch\Dispatch::class);
-
-
-/**
- * Get the request.
- */
-$request = $app->get(Psr\Http\Message\ServerRequestInterface::class);
-//$request = $app->get(Symfony\Component\HttpFoundation\Request::class);
-
-
-/**
- * Get the response.
- */
-$response = $handler->handle($request);
-//$response = $handler->response();
+App::boot();
 
 
 /**
  * Send the response.
  */
-$app->get(Amber\Framework\Http\Server\ResponseDispatcher::class)->send($response);
-//$response->send();
+App::get(Amber\Framework\Http\Server\ResponseDispatcher::class)->send(
+    App::get(Psr\Http\Server\RequestHandlerInterface::class)->handle(
+        App::get(Psr\Http\Message\ServerRequestInterface::class
+    )
+));
 
 
 /*$app->get(Psr\Log\LoggerInterface::class)->info('Sistem report', [

@@ -5,6 +5,7 @@ namespace Amber\Framework\Http\Server\Middleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
+use Psr\Log\LoggerInterface;
 
 /**
  * Participant in processing a server request and response.
@@ -41,7 +42,7 @@ class ErrorHandlerMiddleware extends RequestMiddleware
         } else {
 
             set_exception_handler(function ($e) use ($request) {
-                dd($e, $request);
+                $this->getContainer()->get(LoggerInterface::class)->error($e->getMessage(), $e->getTrace());
             });
         }
 

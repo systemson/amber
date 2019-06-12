@@ -13,4 +13,9 @@ class AmberSuiteServiceProvider extends ServiceProvider
 
         $container->bind(Collection::class);
     }
+
+    public function setDown(): void
+    {
+        dd('lol');
+    }
 }
