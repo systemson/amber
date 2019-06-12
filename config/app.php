@@ -31,7 +31,6 @@ return [
 
     'middlewares' => [
         Amber\Framework\Http\Server\Middleware\InitTestsiddleware::class,
-        Amber\Framework\Http\Server\Middleware\SessionMiddleware::class,
         Amber\Framework\Http\Server\Middleware\RouteHandlerMiddleware::class,
         Amber\Framework\Http\Server\Middleware\ErrorHandlerMiddleware::class,
     ],
