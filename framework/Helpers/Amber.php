@@ -9,12 +9,12 @@ use Amber\Framework\Http\Server\Middleware\CsfrMiddleware;
 
 class Amber
 {
-    const VERSION = 'v-dev';
+    const VERSION = 'v0.1.x-dev';
     const NAME = 'Amber Framework';
 
     public function version(): string
     {
-        return self::VERSION;
+        return self::NAME . ' ' . self::VERSION;
     }
 
     public function name(): string

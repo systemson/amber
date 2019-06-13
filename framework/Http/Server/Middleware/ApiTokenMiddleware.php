@@ -17,7 +17,7 @@ use Amber\Framework\Auth\UserProvider;
  */
 class ApiTokenMiddleware extends RequestMiddleware
 {
-    const API_TOKEN_NAME = 'token';
+    const API_TOKEN_NAME = 'api_token';
 
     /**
      * Process an incoming server request.
@@ -49,6 +49,10 @@ class ApiTokenMiddleware extends RequestMiddleware
 
         if ($request->getParsedBody()->has(static::API_TOKEN_NAME)) {
             return $request->getParsedBody()->get(static::API_TOKEN_NAME);
+        }
+
+        if ($request->getHeaders()->has(static::API_TOKEN_NAME)) {
+            return $request->getHeaders()->get(static::API_TOKEN_NAME);
         }
 
         return;

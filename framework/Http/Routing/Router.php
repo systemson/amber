@@ -6,6 +6,8 @@ use Symfony\Component\Routing\RouteCollection;
 use Amber\Phraser\Phraser;
 use Amber\Phraser\Str;
 use Amber\collection\collection;
+use Amber\Framework\Http\Server\Middleware\ControllerHandlerMiddleware;
+use Amber\Framework\Http\Server\Middleware\ClosureHandlerMiddleware;
 
 /**
  *
@@ -66,13 +68,12 @@ class Router
 
         $route = $this->routeFactory($method, $url, $defaults);
 
-        $name = $this->getName(array_values($defaults));
+        $name = $this->getName($defaults);
 
         $this->collection->add($name, $route);
 
         return $route;
     }
-
 
     private function handleDefaults($defaults)
     {
@@ -82,7 +83,13 @@ class Router
             return [
                 '_controller'  => $defaultArray->first(),
                 '_action'      => $defaultArray->last(),
-                '_middlewares' => $this->middlewares,
+                '_middlewares' => $this->middlewares->append(ControllerHandlerMiddleware::class),
+            ];
+        } elseif ($defaults instanceof \Closure) {
+
+            return [
+                '_callback' => $defaults,
+                '_middlewares' => $this->middlewares->append(ClosureHandlerMiddleware::class),
             ];
         }
     }
@@ -112,8 +119,8 @@ class Router
      */
     protected function getName(array $defaults)
     {
-        $resource = $this->getResource($defaults[0]);
-        $action = $this->getAction($defaults[1]);
+        $resource = $this->getResource($defaults['_controller'] ?? Phraser::make());
+        $action = $this->getAction($defaults['_action'] ?? Phraser::make());
 
         return "{$resource}_{$action}";
     }

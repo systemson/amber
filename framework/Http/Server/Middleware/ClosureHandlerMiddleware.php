@@ -15,7 +15,7 @@ use Psr\Http\Message\StreamInterface;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class ActionHandlerMiddleware extends RequestMiddleware
+class ClosureHandlerMiddleware extends RequestMiddleware
 {
     /**
      * Process an incoming server request.
@@ -28,7 +28,7 @@ class ActionHandlerMiddleware extends RequestMiddleware
     {
         $defaults = $request->getAttribute('defaults');
 
-        $return = $this->handleController($defaults['_controller'], $defaults['_action']);
+        $return = $defaults['_callback']->__invoke();
 
         if ($return instanceof Response) {
             return $return;
@@ -43,12 +43,5 @@ class ActionHandlerMiddleware extends RequestMiddleware
         }
 
         return $handler->next($request);
-    }
-
-    protected function handleController(string $contoller, string $action = '__invoke')
-    {
-        $callback = static::getContainer()->getClosureFor($contoller, $action);
-
-        return $callback();
     }
 }
