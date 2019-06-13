@@ -86,7 +86,6 @@ class Router
                 '_middlewares' => $this->middlewares->append(ControllerHandlerMiddleware::class),
             ];
         } elseif ($defaults instanceof \Closure) {
-
             return [
                 '_callback' => $defaults,
                 '_middlewares' => $this->middlewares->append(ClosureHandlerMiddleware::class),

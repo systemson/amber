@@ -2,24 +2,24 @@
 
 return [
 
-	'default' => 'web',
+    'default' => 'web',
 
-	'routes' => [
+    'routes' => [
 
-		'web' => [
-			'path' => CONFIG_DIR . '/routes/web.php',
-			'middlewares' => [
-				'Amber\Framework\Http\Server\Middleware\SessionMiddleware',
-				'Amber\Framework\Http\Server\Middleware\AuthMiddleware',
+        'web' => [
+            'path' => CONFIG_DIR . '/routes/web.php',
+            'middlewares' => [
+                'Amber\Framework\Http\Server\Middleware\SessionMiddleware',
+                'Amber\Framework\Http\Server\Middleware\AuthMiddleware',
                 'Amber\Framework\Http\Server\Middleware\CsfrMiddleware',
-			],
-		],
+            ],
+        ],
 
-		'api' => [
-			'path' => CONFIG_DIR . '/routes/api.php',
-			'middlewares' => [
-			],
-		],
+        'api' => [
+            'path' => CONFIG_DIR . '/routes/api.php',
+            'middlewares' => [
+            ],
+        ],
 
-	],
+    ],
 ];

@@ -67,7 +67,7 @@ class RequestHandler implements RequestHandlerInterface
 
     public function addMiddleware(string $middleware)
     {
-        $this->middlewares->append($middleware);
+        $this->middlewares = $this->middlewares->append($middleware);
     }
 
     public function hasMiddleware(string $middleware)

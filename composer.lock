@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "amber/cache",
-            "version": "v1.0.2-beta",
+            "version": "v1.0.3-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/cache.git",
-                "reference": "53682d3591dd2757c17b378a01bf07d126f3a267"
+                "reference": "205b36e7ee845fe9083b36e095b1825e11b61789"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/cache/zipball/53682d3591dd2757c17b378a01bf07d126f3a267",
-                "reference": "53682d3591dd2757c17b378a01bf07d126f3a267",
+                "url": "https://api.github.com/repos/systemson/cache/zipball/205b36e7ee845fe9083b36e095b1825e11b61789",
+                "reference": "205b36e7ee845fe9083b36e095b1825e11b61789",
                 "shasum": ""
             },
             "require": {
@@ -51,20 +51,20 @@
                 }
             ],
             "description": "Simple Cache.",
-            "time": "2019-05-28T18:57:07+00:00"
+            "time": "2019-06-13T18:55:24+00:00"
         },
         {
             "name": "amber/collection",
-            "version": "v0.6.4-beta",
+            "version": "v0.6.5-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/collection.git",
-                "reference": "58e5ddf65a5be91920056ab5fb3a9fedcf4fce33"
+                "reference": "b4351f446465265881bc31673d0b3979169476b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/collection/zipball/58e5ddf65a5be91920056ab5fb3a9fedcf4fce33",
-                "reference": "58e5ddf65a5be91920056ab5fb3a9fedcf4fce33",
+                "url": "https://api.github.com/repos/systemson/collection/zipball/b4351f446465265881bc31673d0b3979169476b5",
+                "reference": "b4351f446465265881bc31673d0b3979169476b5",
                 "shasum": ""
             },
             "require": {
@@ -98,7 +98,7 @@
                 }
             ],
             "description": "Wrapper class for working with arrays.",
-            "time": "2019-06-13T15:23:34+00:00"
+            "time": "2019-06-13T18:34:11+00:00"
         },
         {
             "name": "amber/common",

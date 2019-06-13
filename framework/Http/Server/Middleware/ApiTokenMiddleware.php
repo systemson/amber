@@ -41,7 +41,14 @@ class ApiTokenMiddleware extends RequestMiddleware
         return $handler->handle($request);
     }
 
-    public function getToken(Request $request)
+    /**
+     * Returns the api token.
+     *
+     * @param Request $request
+     *
+     * @return string|null
+     */
+    public function getToken(Request $request): ?string
     {
         if ($request->getQueryParams()->has(static::API_TOKEN_NAME)) {
             return $request->getQueryParams()->get(static::API_TOKEN_NAME);
@@ -55,6 +62,6 @@ class ApiTokenMiddleware extends RequestMiddleware
             return $request->getHeaders()->get(static::API_TOKEN_NAME);
         }
 
-        return;
+        return null;
     }
 }

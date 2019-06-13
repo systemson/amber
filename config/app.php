@@ -17,6 +17,7 @@ return [
         Amber\Framework\Http\Server\Middleware\AuthenticatedMiddleware::class,
         Amber\Framework\Http\Server\Middleware\ErrorHandlerMiddleware::class,
         Amber\Framework\Http\Server\Middleware\ApiTokenMiddleware::class,
+        Amber\Framework\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
     ],
 
     'providers' => [
@@ -32,8 +33,9 @@ return [
     ],
 
     'middlewares' => [
+        Amber\Framework\Http\Server\Middleware\ErrorHandlerMiddleware::class,
         Amber\Framework\Http\Server\Middleware\InitTestsiddleware::class,
         Amber\Framework\Http\Server\Middleware\RouteHandlerMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\ErrorHandlerMiddleware::class,
+        Amber\Framework\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
     ],
 ];

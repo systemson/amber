@@ -308,7 +308,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getAttributes()
     {
-        $this->attributes;
+        return $this->attributes;
     }
 
     /**

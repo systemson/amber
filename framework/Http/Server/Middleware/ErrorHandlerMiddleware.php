@@ -42,7 +42,6 @@ class ErrorHandlerMiddleware extends RequestMiddleware
                 $this->getContainer()->get(LoggerInterface::class)->error($e->getMessage(), $e->getTrace());
             });
         }
-
         return $handler->handle($request);
     }
 }
