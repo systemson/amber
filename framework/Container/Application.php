@@ -40,17 +40,18 @@ class Application extends ContainerFacade
 
     private static function lap(string $name): void
     {
+        if (env('APP_ENV') != 'dev') {
+            return;
+        }
         if (empty(self::$laps)) {
             self::$laps['Start'] = microtime(true);
         }
 
-        if (env('APP_ENV') == 'dev') {
-            self::$laps[] = [
-                'name' => $name,
-                'total' => (float) number_format($time = microtime(true) - self::$laps['Start'], 6),
-                'time' => (float) number_format($time - end(self::$laps)['time'], 6),
-            ];
-        }
+        self::$laps[] = [
+            'name' => $name,
+            'total' => (float) number_format($time = microtime(true) - self::$laps['Start'], 6),
+            'time' => (float) number_format($time - end(self::$laps)['time'], 6),
+        ];
     }
 
     /**
@@ -100,7 +101,7 @@ class Application extends ContainerFacade
     public static function afterConstruct(): void
     {
         // Bind from config file
-        foreach (config('app.binds') as $service) {
+        foreach ((array) config('app.binds') as $service) {
             static::bind($service);
         }
         self::lap('Providers binding');
@@ -133,7 +134,7 @@ class Application extends ContainerFacade
      */
     private static function bootProviders(): void
     {
-        self::$providers = config('app.providers');
+        self::$providers = (array) config('app.providers');
 
         array_map(
             function ($service) {
@@ -167,5 +168,22 @@ class Application extends ContainerFacade
             },
             self::$providers
         );
+    }
+
+    private static function setUpCliCommands(): void
+    {
+        $console = new \Symfony\Component\Console\Application();
+
+        foreach ((array) config('app.cli_commands') as $command) {
+            $console->add(new $command);
+        }
+
+        $console->run();
+    }
+
+    public static function bootCli(): void
+    {
+        self::boot();
+        self::setUpCliCommands();
     }
 }

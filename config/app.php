@@ -38,4 +38,13 @@ return [
         Amber\Framework\Http\Server\Middleware\RouteHandlerMiddleware::class,
         Amber\Framework\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
     ],
+
+    'cli_commands' => [
+        Amber\Framework\Commands\MigrateUpCommand::class,
+        Amber\Framework\Commands\MigrateDownCommand::class,
+        Amber\Framework\Commands\MigrateSeedsCommand::class,
+        Amber\Framework\Commands\MigrateRestartCommand::class,
+        Amber\Framework\Commands\AppCacheCommand::class,
+        Amber\Framework\Commands\ServerCommand::class,
+    ],
 ];
