@@ -14,25 +14,20 @@ require __DIR__.'/../vendor/autoload.php';
 
 use Amber\Framework\Container\Application as App;
 
+
 /**
- * Load the application.
+ * Loads the application.
  */
 App::boot();
 
 
 /**
- * Send the response.
+ * Sends the response.
  */
-App::get(Amber\Framework\Http\Server\ResponseDispatcher::class)->send(
-    App::get(Psr\Http\Server\RequestHandlerInterface::class)->handle(
-        App::get(Psr\Http\Message\ServerRequestInterface::class
-    )
-));
+App::respond();
 
 
-/*$app->get(Psr\Log\LoggerInterface::class)->info('Sistem report', [
-    'Memory - ' . memory_get_peak_usage(true)/1000/1000,
-    'Execution - ' . number_format(microtime(true) - INIT_TIME, 6),
-    '_GET - ' . json_encode($request->query->all()),
-    '_POST - ' . json_encode($request->request->all()),
-]);*/
+/**
+ * Shuts down the application.
+ */
+App::shutDown();

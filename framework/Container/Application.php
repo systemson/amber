@@ -2,11 +2,13 @@
 
 namespace Amber\Framework\Container;
 
-use Amber\Framework\Container\ContainerFacade;
 use Amber\Container\Container;
-use Amber\Framework\Container\Application;
+use Amber\Framework\Container\ContainerFacade;
 use Amber\Framework\Container\ContainerAwareClass;
 use Amber\Framework\Container\Facades\Router;
+use Amber\Framework\Http\Server\ResponseDispatcher;
+use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Application extends ContainerFacade
 {
@@ -26,35 +28,57 @@ class Application extends ContainerFacade
      * @var array The method(s) that should be publicly exposed.
      */
     protected static $passthru = [
-        'bind',
-        'get',
-        'has',
-        'unbind',
-        'bindMultiple',
-        'getMultiple',
-        'hasMultiple',
-        'unbindMultiple',
-        'register',
-        'make',
-        'getClosureFor',
+        //
     ];
 
+    /**
+     * @var array The service providers.
+     */
     private static $providers = [];
 
+    private static $laps = [];
+
+    private static function lap(string $name): void
+    {
+        if (empty(self::$laps)) {
+            self::$laps['Start'] = microtime(true);
+        }
+
+        if (env('APP_ENV') == 'dev') {
+            self::$laps[] = [
+                'name' => $name,
+                'total' => (float) number_format($time = microtime(true) - self::$laps['Start'], 6),
+                'time' => (float) number_format($time - end(self::$laps)['time'], 6),
+            ];
+        }
+    }
+
+    /**
+     * Prepares the aplication for running.
+     */
     public static function boot(): void
     {
         $app = new Container();
+        self::lap('Container instantiation');
 
+        // Binds the container to itself
         $app->register(Container::class)
             ->setInstance($app)
         ;
+        self::lap('Container self registration');
 
+        // Pass the container to the container aware class
         ContainerAwareClass::setContainer($app);
+        self::lap('Container passed to ContainerAwareClass');
 
         ContainerFacade::setContainer($app);
+        self::lap('Container passed to ContainerFacade');
+
         static::getInstance();
+        self::lap('Application instantiation');
 
         Router::boot();
+        self::lap('Router booting');
     }
 
     /**
@@ -65,6 +89,7 @@ class Application extends ContainerFacade
     public static function beforeConstruct(): void
     {
         self::bootProviders();
+        self::lap('Providers booting');
     }
 
     /**
@@ -78,13 +103,38 @@ class Application extends ContainerFacade
         foreach (config('app.binds') as $service) {
             static::bind($service);
         }
+        self::lap('Providers binding');
 
         self::setUpProviders();
+        self::lap('Providers setup');
     }
 
+    public static function respond()
+    {
+        static::get(ResponseDispatcher::class)->send(
+            static::get(RequestHandlerInterface::class)->handle(
+                static::get(ServerRequestInterface::class)
+            )
+        );
+        static::lap('Request handled');
+    }
+
+    /**
+     * Shut downs the aplication after.
+     */
+    public static function shutDown(): void
+    {
+        self::setDownProviders();
+        self::lap('Providers setdown');
+    }
+
+    /**
+     * Boots the service providers.
+     */
     private static function bootProviders(): void
     {
         self::$providers = config('app.providers');
+
         array_map(
             function ($service) {
                 $service::boot();
@@ -93,6 +143,9 @@ class Application extends ContainerFacade
         );
     }
 
+    /**
+     * Set up the service providers.
+     */
     private static function setUpProviders(): void
     {
         array_map(
@@ -103,6 +156,9 @@ class Application extends ContainerFacade
         );
     }
 
+    /**
+     * Set down the service providers.
+     */
     private static function setDownProviders(): void
     {
         array_map(

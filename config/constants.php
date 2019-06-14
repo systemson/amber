@@ -17,7 +17,7 @@ if (!function_exists('config')) {
 
         $name = explode('.', $slug)[0];
 
-        if ($collection->hasNot($slug)) {
+        if ($collection->hasNot($name)) {
             $path = CONFIG_DIR . DIRECTORY_SEPARATOR . $name . '.php';
 
             if (file_exists($path)) {

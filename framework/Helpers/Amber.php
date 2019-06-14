@@ -14,12 +14,17 @@ class Amber
 
     public function version(): string
     {
-        return self::NAME . ' ' . self::VERSION;
+        return self::VERSION;
     }
 
     public function name(): string
     {
         return self::NAME;
+    }
+
+    public function fullname()
+    {
+        return $this->name() . ' ' . $this->version();
     }
 
     public function lap(): float
