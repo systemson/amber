@@ -7,17 +7,12 @@ use Amber\Framework\Http\Message\ServerRequest;
 use Psr\Http\Message\ServerRequestInterface;
 use Amber\Framework\Http\Message\Uri;
 
-/**
- * UrlMatcher matches URL based on a set of routes.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
 class Context extends RequestContext
 {
     /**
-     * Updates the RequestContext information based on a PRS ServerRequestInterface.
+     * Updates the RequestContext information based on a PSR ServerRequestInterface.
      *
-     * @return $this
+     * @return self
      */
     public function fromPrsRequest(ServerRequestInterface $request)
     {

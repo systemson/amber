@@ -17,10 +17,11 @@ return [
             'namespace' => 'App\Http\Controllers',
         ],
 
+
         'api' => [
             'path' => CONFIG_DIR . '/routes/api.php',
             'middlewares' => [
-                'Amber\Framework\Http\Server\Middleware\ApiTokenMiddleware',
+                //'Amber\Framework\Http\Server\Middleware\ApiTokenMiddleware',
             ],
             'prefix' => 'api',
             'namespace' => 'App\Http\Controllers\Api',
