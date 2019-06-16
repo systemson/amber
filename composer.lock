@@ -143,7 +143,7 @@
                 }
             ],
             "description": "Common Amber Project files.",
-            "time": "2019-06-04T00:41:30+00:00"
+            "time": "2019-06-03T15:53:52+00:00"
         },
         {
             "name": "amber/container",
@@ -202,12 +202,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/phraser.git",
-                "reference": "31a34a10edfa657191f9272891c73a28663aa986"
+                "reference": "bf27feff55e85a0d02a0707a9af5c4a9adcd2c2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/phraser/zipball/31a34a10edfa657191f9272891c73a28663aa986",
-                "reference": "31a34a10edfa657191f9272891c73a28663aa986",
+                "url": "https://api.github.com/repos/systemson/phraser/zipball/bf27feff55e85a0d02a0707a9af5c4a9adcd2c2f",
+                "reference": "bf27feff55e85a0d02a0707a9af5c4a9adcd2c2f",
                 "shasum": ""
             },
             "require": {
@@ -240,7 +240,7 @@
                 }
             ],
             "description": "Wrapper class for working with strings.",
-            "time": "2019-06-04T15:08:40+00:00"
+            "time": "2019-06-14T16:30:55+00:00"
         },
         {
             "name": "amber/sketch",
@@ -1596,7 +1596,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",

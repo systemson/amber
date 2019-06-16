@@ -7,7 +7,7 @@ define('TMP_DIR', APP_DIR . 'tmp' . DIRECTORY_SEPARATOR);
 
 
 if (!function_exists('config')) {
-    function config(string $slug)
+    function config(string $slug, $default = null)
     {
         static $collection;
 
@@ -27,7 +27,7 @@ if (!function_exists('config')) {
             $collection[$name] = $configs;
         }
 
-        return $collection->get($slug);
+        return $collection->get($slug) ?? $default;
     }
 }
 
@@ -43,5 +43,16 @@ if (!function_exists('dd')) {
     {
         call_user_func_array('dump', $value);
         die();
+    }
+}
+
+
+if (!function_exists('carbon')) {
+    function carbon()
+    {
+        return new Carbon\Factory([
+            'locale' => config('app.date_locale', 'es_ES'),
+            'timezone' => config('app.timezone', 'America/Caracas'),
+        ]);
     }
 }

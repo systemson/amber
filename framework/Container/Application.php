@@ -55,7 +55,7 @@ class Application extends ContainerFacade
     }
 
     /**
-     * Prepares the aplication for running.
+     * Prepares the application for running.
      */
     public static function boot(): void
     {
@@ -121,12 +121,12 @@ class Application extends ContainerFacade
     }
 
     /**
-     * Shut downs the aplication after.
+     * Shut downs the application after.
      */
     public static function shutDown(): void
     {
         self::setDownProviders();
-        self::lap('Providers setdown');
+        self::lap('Providers set-down');
     }
 
     /**

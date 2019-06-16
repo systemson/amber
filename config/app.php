@@ -18,6 +18,7 @@ return [
         Amber\Framework\Http\Server\Middleware\ErrorHandlerMiddleware::class,
         Amber\Framework\Http\Server\Middleware\ApiTokenMiddleware::class,
         Amber\Framework\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
+        Amber\Framework\Http\Server\Middleware\ThrottleRequestMiddleware::class,
     ],
 
     'providers' => [
