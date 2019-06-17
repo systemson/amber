@@ -38,7 +38,7 @@ class ErrorHandlerMiddleware extends RequestMiddleware
 
             $whoops->register();
         } else {
-            set_exception_handler(function ($e) use ($request) {
+            return set_exception_handler(function ($e) use ($request) {
                 $this->getContainer()->get(LoggerInterface::class)->error($e->getMessage(), $e->getTrace());
             });
         }

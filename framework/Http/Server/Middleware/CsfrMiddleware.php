@@ -17,7 +17,7 @@ use Amber\Framework\Helpers\Hash;
  */
 class CsfrMiddleware extends RequestMiddleware
 {
-    const TOKEN_NAME = '_CSRF_TOKEN_';
+    const TOKEN_NAME = '_csrf_token_';
 
     /**
      * Process an incoming server request.
@@ -31,18 +31,19 @@ class CsfrMiddleware extends RequestMiddleware
         $request = $this->setToken($request);
 
         if (!in_array($request->getMethod(), ['GET', 'HEAD']) && !$this->validate($request)) {
-            return $this->responseFactory->forbidden('Invalid CSRF Token');
+            return $this->factory()->forbidden('Invalid CSRF Token');
         }
 
         return $handler->handle($request);
     }
 
-    protected function setToken($request)
+    protected function setToken(Request $request)
     {
         $session = $request->getAttribute('session');
-        $token = Hash::token(64);
 
         if (!$session->has(static::TOKEN_NAME)) {
+            $token = Hash::token(64);
+
             $session->set(static::TOKEN_NAME, $token);
             $request->withAttribute(static::TOKEN_NAME, $token);
         }
@@ -54,6 +55,13 @@ class CsfrMiddleware extends RequestMiddleware
         return $request;
     }
 
+    /**
+     * Validates the CSRF token.
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
     protected function validate(Request $request): bool
     {
         $session = $request->getAttribute('session');

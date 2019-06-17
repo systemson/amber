@@ -3,6 +3,7 @@
 namespace Amber\Framework\Http\Message\Traits;
 
 use Psr\Http\Message\StreamInterface;
+use Sunrise\Stream\StreamFactory;
 
 trait MessageTrait
 {
@@ -210,7 +211,11 @@ trait MessageTrait
      */
     public function getBody()
     {
-        return $this->body;
+        if ($this->body instanceof StreamInterface) {
+            return $this->body;
+        }
+
+        return $this->body = (new StreamFactory())->createStream();
     }
 
     /**

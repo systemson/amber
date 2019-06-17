@@ -18,12 +18,9 @@ use Psr\SimpleCache\CacheInterface;
  */
 class ThrottleRequestMiddleware extends RequestMiddleware
 {
-    public function __construct()
-    {
-        $this->maxAttempts = 60;
-        $this->secondsToReset = 60;
-        $this->retryAfter = 60;
-    }
+    private $maxAttempts = 60;
+    private $secondsToReset = 60;
+    // private $retryAfter;
 
     /**
      * Process an incoming server request.
@@ -37,7 +34,6 @@ class ThrottleRequestMiddleware extends RequestMiddleware
         $throttle = $this->getRequestThrottle($request);
 
         if ($throttle->remain >= 0) {
-
             return $handler->handle($request)
                 // Request limit per hour.
                 ->withHeader('X-RateLimit-Limit', $throttle->max)
@@ -46,9 +42,7 @@ class ThrottleRequestMiddleware extends RequestMiddleware
                 // The remaining window before the rate limit resets in UTC epoch seconds.
                 ->withHeader('X-RateLimit-Reset', $throttle->reset_at)
             ;
-
         } else {
-
             return ResponseFacade::forbidden()
                 // The api request timeout.
                 ->withHeader('Retry-After', $throttle->reset_at - $this->now()->timestamp)
@@ -130,7 +124,6 @@ class ThrottleRequestMiddleware extends RequestMiddleware
         $id = $this->getRequestIdentifier($request);
 
         return (object) $this->handleRequestThrottleFromCache($id);
-
     }
 
     protected function handleRequestThrottleFromCache($id)

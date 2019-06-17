@@ -18,13 +18,6 @@ use Amber\Framework\Container\ContainerAwareClass;
  */
 abstract class RequestMiddleware extends ContainerAwareClass implements MiddlewareInterface
 {
-    protected $responseFactory;
-
-    public function __construct(ResponseFactoryInterface $responseFactory)
-    {
-        $this->responseFactory = $responseFactory;
-    }
-
     /**
      * Process an incoming server request.
      *
@@ -44,6 +37,16 @@ abstract class RequestMiddleware extends ContainerAwareClass implements Middlewa
      */
     protected function createResponse(int $code = 200, string $reasonPhrase = ''): Response
     {
-        return $this->responseFactory->createResponse($code, $reasonPhrase);
+        return $this->factory()->createResponse($code, $reasonPhrase);
+    }
+
+    /**
+     * Returns a instance of ResponseFactory.
+     *
+     * @return ResponseFactoryInterface
+     */
+    public function factory(): ResponseFactoryInterface
+    {
+        return $this->getContainer()->get(ResponseFactoryInterface::class);
     }
 }
