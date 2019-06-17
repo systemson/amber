@@ -48,11 +48,11 @@ if (!function_exists('dd')) {
 
 
 if (!function_exists('carbon')) {
-    function carbon()
+    function carbon(string $tz = null)
     {
         return new Carbon\Factory([
+            'timezone' => $tz ?? config('app.timezone', 'America/Caracas'),
             'locale' => config('app.date_locale', 'es_ES'),
-            'timezone' => config('app.timezone', 'America/Caracas'),
         ]);
     }
 }

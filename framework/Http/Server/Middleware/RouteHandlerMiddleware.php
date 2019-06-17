@@ -54,9 +54,6 @@ class RouteHandlerMiddleware extends RequestMiddleware
         /* Set the route defaults */
         $request = $request->withAttribute('defaults', $defaults);
 
-        /* Set the default middleware handler */
-        $handler->addMiddleware(ActionHandlerMiddleware::class);
-
         return $handler->handle($request);
     }
 
