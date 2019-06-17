@@ -3,7 +3,7 @@
 return [
 
     // Drivers: simple, daily
-    'driver' => 'daily',
+    'driver' => 'simple',
 
     'path' => APP_DIR . 'tmp/amber.log',
 

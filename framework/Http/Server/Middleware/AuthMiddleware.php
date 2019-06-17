@@ -30,7 +30,7 @@ class AuthMiddleware extends RequestMiddleware
         $session = $request->getAttribute('session');
 
         if ($session->has('_token')) {
-            $cache = $this->getContainer()->get(CacheInterface::class);
+            $cache = $this->getContainer()->get('_session_cache');
 
             $token = $session->get('_token');
 

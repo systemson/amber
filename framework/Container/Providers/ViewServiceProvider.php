@@ -15,7 +15,7 @@ class ViewServiceProvider extends ServiceProvider
 
         $container->singleton(Sketch::class)
             ->afterConstruct('setViewsFolder', 'assets/views')
-            ->afterConstruct('setCacheFolder', 'tmp/cache/views')
+            ->afterConstruct('setCacheFolder', 'tmp/framework/views')
             ->afterConstruct(
                 'setTemplate',
                 function () use ($container) {

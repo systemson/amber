@@ -16,9 +16,16 @@ class CacheServiceProvider extends ServiceProvider
             ->afterConstruct(
                 'pushHandler',
                 function () {
-                    return new SimpleCache(config('cache.path'));
+                    $driver = config('cache.default.driver');
+                    return new $driver(config('cache.default.path'));
                 }
             )
         ->singleton();
+
+        $container->bind('_session_cache', function () {
+            $driver = config('cache.session.driver');
+                return new $driver(config('cache.session.path'));
+            }
+        );
     }
 }

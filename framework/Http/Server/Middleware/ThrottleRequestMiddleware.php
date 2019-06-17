@@ -67,7 +67,7 @@ class ThrottleRequestMiddleware extends RequestMiddleware
 
     protected function getCacheHandler(): CacheInterface
     {
-        return $this->getContainer()->get(CacheInterface::class);
+        return $this->getContainer()->get('_session_cache');
     }
 
     protected function loadRequestThrottle(string $id)
