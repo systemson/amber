@@ -9,7 +9,7 @@ use Amber\Framework\Container\ContainerAwareClass;
 use Carbon\Carbon;
 use Psr\Http\Message\StreamFactoryInterface;
 
-class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInterface
+class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInterface, StatusCodeInterface
 {
     /**
      * Create a new response.
@@ -20,7 +20,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      * @return ResponseInterface
      */
     public function createResponse(
-        int $code = StatusCodeInterface::STATUS_OK,
+        int $code = self::STATUS_OK,
         string $reasonPhrase = ''
     ): ResponseInterface {
         $response = static::getContainer()->get(ResponseInterface::class);
@@ -42,7 +42,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      */
     public function json(
         $content = null,
-        int $code = StatusCodeInterface::STATUS_OK,
+        int $code = self::STATUS_OK,
         string $reasonPhrase = ''
     ): ResponseInterface {
         $factory = static::getContainer()->get(StreamFactoryInterface::class);
@@ -64,7 +64,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      */
     public function redirect(string $to = '/'): ResponseInterface
     {
-        return $this->createResponse(303)->withHeader('Location', $to);
+        return $this->createResponse(self::STATUS_SEE_OTHER)->withHeader('Location', $to);
     }
 
     /**
@@ -76,7 +76,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      */
     public function badRequest(string $reasonPhrase = ''): ResponseInterface
     {
-        return $this->createResponse(400, $reasonPhrase);
+        return $this->createResponse(self::STATUS_BAD_REQUEST, $reasonPhrase);
     }
 
     /**
@@ -89,7 +89,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      */
     public function unauthorized(string $reasonPhrase = ''): ResponseInterface
     {
-        return $this->createResponse(401, $reasonPhrase);
+        return $this->createResponse(self::STATUS_UNAUTHORIZED, $reasonPhrase);
     }
 
     /**
@@ -102,7 +102,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      */
     public function forbidden(string $reasonPhrase = ''): ResponseInterface
     {
-        return $this->createResponse(403, $reasonPhrase);
+        return $this->createResponse(self::STATUS_FORBIDDEN, $reasonPhrase);
     }
 
     /**
@@ -115,7 +115,19 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      */
     public function notFound(string $reasonPhrase = ''): ResponseInterface
     {
-        return $this->createResponse(404, $reasonPhrase);
+        return $this->createResponse(self::STATUS_NOT_FOUND, $reasonPhrase);
+    }
+
+    /**
+     *
+     *
+     * @param string $reasonPhrase Reason phrase to associate with status code.
+     *
+     * @return ResponseInterface
+     */
+    public function tooManyRequest(string $reasonPhrase = ''): ResponseInterface
+    {
+        return $this->createResponse(self::STATUS_TOO_MANY_REQUESTS, $reasonPhrase);
     }
 
     /**
@@ -128,7 +140,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      */
     public function internalServerError(string $reasonPhrase = ''): ResponseInterface
     {
-        return $this->createResponse(500, $reasonPhrase);
+        return $this->createResponse(self::STATUS_INTERNAL_SERVER_ERROR, $reasonPhrase);
     }
 
     /**
@@ -141,7 +153,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      */
     public function badGateway(string $reasonPhrase = ''): ResponseInterface
     {
-        return $this->createResponse(502, $reasonPhrase);
+        return $this->createResponse(self::STATUS_BAD_GATEWAY, $reasonPhrase);
     }
 
     /**
@@ -154,7 +166,7 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      */
     public function serviceUnavailable(string $reasonPhrase = ''): ResponseInterface
     {
-        return $this->createResponse(503, $reasonPhrase);
+        return $this->createResponse(self::STATUS_SERVICE_UNAVAILABLE, $reasonPhrase);
     }
 
     /**
@@ -167,6 +179,6 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
      */
     public function gatewayTimeout(string $reasonPhrase = ''): ResponseInterface
     {
-        return $this->createResponse(504, $reasonPhrase);
+        return $this->createResponse(self::STATUS_GATEWAY_TIMEOUT, $reasonPhrase);
     }
 }

@@ -8,11 +8,12 @@ use Amber\Phraser\Str;
 use Amber\collection\collection;
 use Amber\Framework\Http\Server\Middleware\ControllerHandlerMiddleware;
 use Amber\Framework\Http\Server\Middleware\ClosureHandlerMiddleware;
+use Amber\Framework\Http\Message\Utils\RequestMethodInterface;
 
 /**
  *
  */
-class Router
+class Router implements RequestMethodInterface
 {
     protected $collection;
 
@@ -147,27 +148,27 @@ class Router
 
     public function get(string $url, $defaults)
     {
-        return $this->addRoute('GET', $url, $defaults);
+        return $this->addRoute(self::METHOD_GET, $url, $defaults);
     }
 
     public function post(string $url, $defaults)
     {
-        return $this->addRoute('POST', $url, $defaults);
+        return $this->addRoute(self::METHOD_POST, $url, $defaults);
     }
 
     public function patch(string $url, $defaults)
     {
-        return $this->addRoute('PATCH', $url, $defaults);
+        return $this->addRoute(self::METHOD_PATCH, $url, $defaults);
     }
 
     public function put(string $url, $defaults)
     {
-        return $this->addRoute('PUT', $url, $defaults);
+        return $this->addRoute(self::METHOD_PUT, $url, $defaults);
     }
 
     public function delete(string $url, $defaults)
     {
-        return $this->addRoute('DELETE', $url, $defaults);
+        return $this->addRoute(self::METHOD_DELETE, $url, $defaults);
     }
 
     public function group(\Closure $callback, array $options = [])
