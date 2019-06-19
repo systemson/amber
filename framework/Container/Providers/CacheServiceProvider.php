@@ -25,7 +25,6 @@ class CacheServiceProvider extends ServiceProvider
         $container->bind('_session_cache', function () {
             $driver = config('cache.session.driver');
                 return new $driver(config('cache.session.path'));
-            }
-        );
+        });
     }
 }

@@ -35,15 +35,17 @@ class ThrottleRequestMiddleware extends RequestMiddleware
 
         if ($throttle->remain >= 0) {
             return $handler->handle($request)
-                // Request limit per hour.
-                ->withHeader('X-RateLimit-Limit', $throttle->max)
+                // Request limit per minute.
+                ->withHeader('X-RateLimit-Limit', $this->maxAttempts)
                 // The number of requests left for the time window.
                 ->withHeader('X-RateLimit-Remaining', $throttle->remain)
                 // The remaining window before the rate limit resets in UTC epoch seconds.
                 ->withHeader('X-RateLimit-Reset', $throttle->reset_at)
+                // For testing purpose.
+                ->withHeader('Date-Timestamp', $this->now()->timestamp)
             ;
         } else {
-            return ResponseFacade::forbidden()
+            return ResponseFacade::tooManyRequest()
                 // The api request timeout.
                 ->withHeader('Retry-After', $throttle->reset_at - $this->now()->timestamp)
             ;
@@ -52,7 +54,7 @@ class ThrottleRequestMiddleware extends RequestMiddleware
 
     protected function now()
     {
-        return carbon('UTC')->now('UTC');
+        return carbon()->now();
     }
 
     protected function getRequestIdentifier(Request $request): string
@@ -62,6 +64,7 @@ class ThrottleRequestMiddleware extends RequestMiddleware
         } elseif ($ip = $request->getAttribute('client_ip')) {
             $id = $ip;
         }
+
         return sha1($id);
     }
 
@@ -133,7 +136,6 @@ class ThrottleRequestMiddleware extends RequestMiddleware
         $cache = $this->updateRequestThrottleCache($cache);
 
         return [
-            'max' => $this->maxAttempts,
             'remain' => $this->maxAttempts - $cache['attempts'],
             'reset_at' => $cache['reset_at'],
         ];

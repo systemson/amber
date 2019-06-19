@@ -19,6 +19,7 @@ use Psr\Http\Server\MiddlewareInterface;
 
 use Amber\Framework\Http\Message\ServerRequest;
 use Amber\Framework\Container\Facades\Filesystem;
+use Amber\Framework\Http\Routing\Router;
 
 /**
  * Participant in processing a server request and response.
@@ -41,11 +42,11 @@ class RouteHandlerMiddleware extends RequestMiddleware
         try {
             $defaults = $this->match($request);
         } catch (ResourceNotFoundException $e) {
-            return $this->responseFactory->notFound($e->getMessage());
+            return $this->factory()->notFound($e->getMessage());
         } catch (MethodNotAllowedException $e) {
-            return $this->responseFactory->forbidden($e->getMessage());
+            return $this->factory()->forbidden('Method not allowed.');
         } catch (NoConfigurationException $e) {
-            return $this->responseFactory->internalServerError($e->getMessage());
+            return $this->factory()->internalServerError($e->getMessage());
         }
 
         /* Add the matched route's middlewares */
@@ -59,7 +60,9 @@ class RouteHandlerMiddleware extends RequestMiddleware
 
     protected function match(Request $request)
     {
-        $matcher = static::getContainer()->get(Matcher::class);
+        $routes = static::getContainer()->get(Router::class);
+
+        $matcher = new Matcher($routes, $request);
 
         return $matcher->match($request->getUri()->getpath());
     }

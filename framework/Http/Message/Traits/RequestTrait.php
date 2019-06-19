@@ -72,7 +72,7 @@ trait RequestTrait
      */
     public function withRequestTarget($requestTarget)
     {
-        $new = $this->copy();
+        $new = $this->clone();
 
         //$new->version = $version;
 
@@ -106,7 +106,7 @@ trait RequestTrait
      */
     public function withMethod($method)
     {
-        $new = $this->copy();
+        $new = $this->clone();
 
         $new->method = $method;
 
@@ -159,7 +159,7 @@ trait RequestTrait
      */
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
-        $new = $this->copy();
+        $new = $this->clone();
 
         $new->uri = $uri;
 
