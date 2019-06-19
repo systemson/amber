@@ -119,7 +119,21 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
     }
 
     /**
+     * The 405 status code, or a Method Not Allowed error, indicates that the request method is known by the server but
+     * is not supported by the target resource.
      *
+     * @param string $reasonPhrase Reason phrase to associate with status code.
+     *
+     * @return ResponseInterface
+     */
+    public function methodNotAllowed(string $reasonPhrase = ''): ResponseInterface
+    {
+        return $this->createResponse(self::STATUS_METHOD_NOT_ALLOWED, $reasonPhrase);
+    }
+
+    /**
+     * The 429 status code, or a Too Many Requests response status code indicates the user has sent too many requests in
+     * a given amount of time ("rate limiting").
      *
      * @param string $reasonPhrase Reason phrase to associate with status code.
      *

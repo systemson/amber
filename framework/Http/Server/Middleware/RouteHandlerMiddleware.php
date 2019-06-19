@@ -44,7 +44,13 @@ class RouteHandlerMiddleware extends RequestMiddleware
         } catch (ResourceNotFoundException $e) {
             return $this->factory()->notFound($e->getMessage());
         } catch (MethodNotAllowedException $e) {
-            return $this->factory()->forbidden('Method not allowed.');
+            return $this->factory()->methodNotAllowed(
+                sprintf(
+                    "Method [%s] Not Allowed For [%s]",
+                    $request->getMethod(),
+                    $request->getUri()->getPath()
+                )
+            );
         } catch (NoConfigurationException $e) {
             return $this->factory()->internalServerError($e->getMessage());
         }

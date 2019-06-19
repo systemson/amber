@@ -33,14 +33,14 @@ class Matcher extends UrlMatcher
         $uri = $request->getUri();
 
         $context
-        	->setBaseUrl($uri->getAuthority())
-        	->setPathInfo($uri->getPath())
-        	->setMethod($request->getMethod())
-        	->setHost($uri->getHost())
-        	->setScheme($scheme = $uri->getScheme())
-        	->setHttpPort($uri->getPort() ?? $uri::DEFAULT_PORT['http'])
-        	->setHttpsPort($uri->getPort() ?? $uri::DEFAULT_PORT['http'])
-        	->setQueryString($request->getServerParams()->get('QUERY_STRING') ?? '')
+            ->setBaseUrl($uri->getAuthority())
+            ->setPathInfo($uri->getPath())
+            ->setMethod($request->getMethod())
+            ->setHost($uri->getHost())
+            ->setScheme($scheme = $uri->getScheme())
+            ->setHttpPort($uri->getPort() ?? $uri::DEFAULT_PORT['http'])
+            ->setHttpsPort($uri->getPort() ?? $uri::DEFAULT_PORT['http'])
+            ->setQueryString($request->getServerParams()->get('QUERY_STRING') ?? '')
         ;
 
         return $context;
