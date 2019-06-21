@@ -32,15 +32,49 @@ class Uri implements UriInterface
 {
     use ClonableTrait;
 
+    /**
+     * @var string $scheme
+     */
     protected $scheme;
+
+    /**
+     * @var string $host
+     */
     protected $host;
+
+    /**
+     * @var string $user
+     */
     protected $user;
+
+    /**
+     * @var string $pass
+     */
     protected $pass;
+
+    /**
+     * @var int $port
+     */
     protected $port;
+
+    /**
+     * @var string $path
+     */
     protected $path;
+
+    /**
+     * @var array $query
+     */
     protected $query = [];
+
+    /**
+     * @var array $fragment
+     */
     protected $fragment;
 
+    /**
+     * A array pairing schmeme and its default port.
+     */
     const DEFAULT_PORT = [
         'http' => 80,
         'https' => 443,

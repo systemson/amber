@@ -2,15 +2,26 @@
 
 namespace Amber\Framework\Http\Message;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Amber\Framework\Http\Message\Utils\StatusCodeInterface;
-use Amber\Framework\Container\ContainerAwareClass;
-use Carbon\Carbon;
 use Psr\Http\Message\StreamFactoryInterface;
+use Amber\Framework\Http\Message\Utils\StatusCodeInterface;
 
-class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInterface, StatusCodeInterface
+class ResponseFactory implements ResponseFactoryInterface, StatusCodeInterface
 {
+    private $container;
+
+    /**
+     * Creates a new instance of the class.
+     *
+     * @param ContainerInterface $container An instance of a PSR Container.
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * Create a new response.
      *
@@ -23,12 +34,47 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
         int $code = self::STATUS_OK,
         string $reasonPhrase = ''
     ): ResponseInterface {
-        $response = static::getContainer()->get(ResponseInterface::class);
+        $response = $this->ok();
 
         return $response
             ->withHeader('Cache-Control', ['no-cache', 'private'])
             ->withStatus($code, $reasonPhrase)
         ;
+    }
+
+    /**
+     * A 200 status code, or OK, indicates that the request has succeeded.
+     *
+     * A 200 response is cacheable by default.
+     *
+     * @param string $reasonPhrase Reason phrase to associate with status code.
+     *
+     * @return ResponseInterface
+     */
+    public function ok()
+    {
+        if ($this->container instanceof ContainerInterface && $this->container->has(ResponseInterface::class)) {
+            return $this->container->get(ResponseInterface::class);
+        }
+
+        return new Response();
+    }
+
+    /**
+     * A 201 status code, or Created, indicates that the request has succeeded and has led to the creation of
+     * a resource.
+     *
+     * The new resource must be returned in the body of the message, and its location being either the URL of
+     * the request, or the content of the Location header.
+     * The common use case of this status code is as the result of a POST request.
+     *
+     * @param string $reasonPhrase Reason phrase to associate with status code.
+     *
+     * @return ResponseInterface
+     */
+    public function created(string $reasonPhrase = ''): ResponseInterface
+    {
+        return $this->createResponse(self::STATUS_CREATED, $reasonPhrase);
     }
 
     /**
@@ -45,18 +91,19 @@ class ResponseFactory extends ContainerAwareClass implements ResponseFactoryInte
         int $code = self::STATUS_OK,
         string $reasonPhrase = ''
     ): ResponseInterface {
-        $factory = static::getContainer()->get(StreamFactoryInterface::class);
+        $response = $this->createResponse($code, $reasonPhrase);
 
-        $body = $factory->createStream(json_encode($content));
+        $response->getBody()
+            ->write(json_encode($content))
+        ;
 
-        return $this->createResponse($code, $reasonPhrase)
+        return $response
             ->withHeader('Content-Type', 'application/json')
-            ->withBody($body)
         ;
     }
 
     /**
-     * A 303 redirect is meant to redirect a POST, PUT, PATCH, DELETE request to a GET resource.
+     * A 303 status code, or Redirect, is meant to redirect a POST, PUT, PATCH, DELETE request to a GET resource.
      *
      * @param string $to The url to redirect to.
      *

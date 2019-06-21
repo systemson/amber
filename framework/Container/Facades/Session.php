@@ -23,4 +23,9 @@ class Session extends ContainerFacade
      * @var array The method(s) that should be publicly exposed. An empty array means all.
      */
     protected static $passthru = [];
+
+    public static function cache()
+    {
+        return static::getContainer()->get('_session_cache');
+    }
 }

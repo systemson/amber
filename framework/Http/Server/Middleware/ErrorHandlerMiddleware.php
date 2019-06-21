@@ -28,7 +28,7 @@ class ErrorHandlerMiddleware extends RequestMiddleware
         if (getenv('APP_ENV') == 'dev') {
             $whoops = new \Whoops\Run();
 
-            if ($request->acceptJson()) {
+            if ($request->acceptsJson()) {
                 $whoops->pushHandler(new \Whoops\Handler\JsonResponseHandler());
             /*} elseif ($request->acceptXml()) {
                 $whoops->pushHandler(new \Whoops\Handler\XmlResponseHandler());*/

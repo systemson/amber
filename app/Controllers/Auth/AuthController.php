@@ -5,13 +5,11 @@ namespace App\Controllers\Auth;
 use Symfony\Component\HttpFoundation\Request;
 use Amber\Framework\Container\Facades\Response;
 use Amber\Framework\Container\Facades\View;
-use App\Models\User;
 use App\Controllers\Controller;
 use Amber\Framework\Http\Message\POST;
 use Amber\Framework\Auth\UserProvider;
 use Carbon\Carbon;
-use Amber\Container\Container;
-use Amber\Framework\Container\Facades\Cache;
+use Psr\Container\ContainerInterface;
 use Amber\Framework\Container\Facades\Session;
 use Amber\Framework\Helpers\Hash;
 use Psr\Http\Message\ServerRequestInterface;
@@ -32,7 +30,7 @@ class AuthController extends Controller
         return View::toHtml();
     }
 
-    public function login(ServerRequestInterface $request, Container $container)
+    public function login(ServerRequestInterface $request, ContainerInterface $container)
     {
         $credentials = $this->getCredentialsFromRequest($request);
 
@@ -46,7 +44,7 @@ class AuthController extends Controller
             $user->save();
 
             Session::set('_token', $newToken);
-            Cache::set($newToken, $user, 15);
+            Session::cache()->set($newToken, $user, 15);
 
             return Response::redirect('/');
         }
@@ -64,7 +62,7 @@ class AuthController extends Controller
             $user->save();
 
             // Deletes the session cache
-            Cache::delete($token);
+            Session::cache()->delete($token);
         }
 
         Session::close();
@@ -74,7 +72,7 @@ class AuthController extends Controller
 
     protected function newToken($user): string
     {
-        return Hash::make($user->email . Carbon::now());
+        return Hash::token(32);
     }
 
     protected function getCredentialsFromRequest(ServerRequestInterface $request): array

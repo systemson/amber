@@ -9,13 +9,14 @@ use Amber\Framework\Container\Facades\Router;
 use Amber\Framework\Http\Server\ResponseDispatcher;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Container\ContainerInterface;
 
 class Application extends ContainerFacade
 {
     /**
      * @var string The class accessor.
      */
-    protected static $accessor = Container::class;
+    protected static $accessor = ContainerInterface::class;
 
     /**
      * @var mixed The instance of the accessor.
@@ -63,7 +64,7 @@ class Application extends ContainerFacade
         self::lap('Container instantiation');
 
         // Binds the container to itself
-        $app->register(Container::class)
+        $app->register(ContainerInterface::class)
             ->setInstance($app)
         ;
         self::lap('Container self registration');
@@ -121,7 +122,7 @@ class Application extends ContainerFacade
     }
 
     /**
-     * Shut downs the application after.
+     * Shut downs the application after the response is dispatched.
      */
     public static function shutDown(): void
     {
@@ -170,6 +171,9 @@ class Application extends ContainerFacade
         );
     }
 
+    /**
+     * Load the console commands.
+     */
     private static function setUpCliCommands(): void
     {
         $console = new \Symfony\Component\Console\Application();
@@ -181,6 +185,10 @@ class Application extends ContainerFacade
         $console->run();
     }
 
+
+    /**
+     * Prepares the application for CLI running.
+     */
     public static function bootCli(): void
     {
         self::boot();

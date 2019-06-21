@@ -2,7 +2,7 @@
 
 namespace Amber\Framework\Http\Server;
 
-use Amber\Container\Container;
+use Psr\Container\ContainerInterface;
 use Amber\Collection\Collection;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -21,7 +21,7 @@ class RequestHandler implements RequestHandlerInterface
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         array $middlewares = [],
-        Container $container = null
+        ContainerInterface $container = null
     ) {
         $this->responseFactory = $responseFactory;
         $this->middlewares = new Collection($middlewares);
@@ -81,7 +81,7 @@ class RequestHandler implements RequestHandlerInterface
 
         if ($middleware instanceof MiddlewareInterface) {
             return $middleware;
-        } elseif ($this->container instanceof Container) {
+        } elseif ($this->container instanceof ContainerInterface) {
             return $this->container->get($middleware);
         } else {
             throw new \Exception('Middleware is invalid');
