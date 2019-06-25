@@ -53,6 +53,12 @@ class ViewServiceProvider extends ServiceProvider
                 '<?php if (Amber\Framework\Container\Facades\Auth::check()) : ?>',
                 '<?php endif; ?>'
             )
+            ->afterConstruct(
+                'setTag',
+                'has_errors',
+                '<?php if (Amber\Framework\Container\Facades\Session::flash()->has(\'errors\')) : ?>',
+                '<?php endif; ?>'
+            )
             ->afterConstruct('dev')
         ;
     }

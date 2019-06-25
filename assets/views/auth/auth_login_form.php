@@ -1,5 +1,11 @@
 <div class="col-sm-4 offset-sm-4 bg-light px-5 py-3">
+	<skHasErrors>
+		<skForeach="$erros as $error">
+			<h1>Error <skEcho>$error</skEcho></h1>
+		</skForeach>
+	</skHasErrors>
 	<form class="form-signin" action="/login" method="POST">
+
 
 		<skCsrf>
 

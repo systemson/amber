@@ -106,12 +106,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/common.git",
-                "reference": "77a89058e21d3ff0e86dae867ab033ad500c05cc"
+                "reference": "d343ddce6ddcbf5c289b76979f5125d90391449e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/common/zipball/77a89058e21d3ff0e86dae867ab033ad500c05cc",
-                "reference": "77a89058e21d3ff0e86dae867ab033ad500c05cc",
+                "url": "https://api.github.com/repos/systemson/common/zipball/d343ddce6ddcbf5c289b76979f5125d90391449e",
+                "reference": "d343ddce6ddcbf5c289b76979f5125d90391449e",
                 "shasum": ""
             },
             "require": {
@@ -143,7 +143,7 @@
                 }
             ],
             "description": "Common Amber Project files.",
-            "time": "2019-06-25T18:40:19+00:00"
+            "time": "2019-06-25T19:48:39+00:00"
         },
         {
             "name": "amber/container",

@@ -2,7 +2,6 @@
 
 namespace App\Controllers\Auth;
 
-use Symfony\Component\HttpFoundation\Request;
 use Amber\Framework\Container\Facades\Response;
 use Amber\Framework\Container\Facades\View;
 use App\Controllers\Controller;
@@ -13,6 +12,7 @@ use Psr\Container\ContainerInterface;
 use Amber\Framework\Container\Facades\Session;
 use Amber\Framework\Helpers\Hash;
 use Psr\Http\Message\ServerRequestInterface;
+use Amber\Validator\Validator;
 
 class AuthController extends Controller
 {
@@ -33,6 +33,13 @@ class AuthController extends Controller
     public function login(ServerRequestInterface $request, ContainerInterface $container)
     {
         $credentials = $this->getCredentialsFromRequest($request);
+
+        $validations = $this->prevalidate($credentials);
+        if ($validations !== true) {
+
+            Session::flash()->set('errors'. $validations);
+            return Response::redirect('/login');
+        }
 
         $provider = $container->get(UserProvider::class);
         $user = $provider->getUserByEmail($credentials['email']);
@@ -97,6 +104,16 @@ class AuthController extends Controller
         }
 
         return true;
+    }
+
+    protected function prevalidate($values)
+    {
+        $validations = array_combine($values, [
+            'email|length:null,50',
+            'alnum|length:5,16',
+        ]);
+
+        return Validator::validateAll($validations);
     }
 
     protected function isValid($key, $value, $userValue)
