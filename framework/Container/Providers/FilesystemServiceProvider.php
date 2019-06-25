@@ -13,7 +13,7 @@ class FilesystemServiceProvider extends ServiceProvider
     {
         $container = static::getContainer();
 
-        $container->register(Filesystem::class, FilesystemInterface::class)
+        $container->register(FilesystemInterface::class, Filesystem::class)
             ->setArgument(
                 AdapterInterface::class,
                 function () {

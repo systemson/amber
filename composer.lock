@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "amber/cache",
-            "version": "v1.0.3-beta",
+            "version": "v1.0.4-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/cache.git",
-                "reference": "205b36e7ee845fe9083b36e095b1825e11b61789"
+                "reference": "dcddfa0bfbced97b760a3bf062c21e023b7711d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/cache/zipball/205b36e7ee845fe9083b36e095b1825e11b61789",
-                "reference": "205b36e7ee845fe9083b36e095b1825e11b61789",
+                "url": "https://api.github.com/repos/systemson/cache/zipball/dcddfa0bfbced97b760a3bf062c21e023b7711d1",
+                "reference": "dcddfa0bfbced97b760a3bf062c21e023b7711d1",
                 "shasum": ""
             },
             "require": {
@@ -51,7 +51,7 @@
                 }
             ],
             "description": "Simple Cache.",
-            "time": "2019-06-13T18:55:24+00:00"
+            "time": "2019-06-25T18:48:30+00:00"
         },
         {
             "name": "amber/collection",
@@ -106,12 +106,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/common.git",
-                "reference": "3a1e7c6c10988dc16c3f47aadeda302311833568"
+                "reference": "77a89058e21d3ff0e86dae867ab033ad500c05cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/common/zipball/3a1e7c6c10988dc16c3f47aadeda302311833568",
-                "reference": "3a1e7c6c10988dc16c3f47aadeda302311833568",
+                "url": "https://api.github.com/repos/systemson/common/zipball/77a89058e21d3ff0e86dae867ab033ad500c05cc",
+                "reference": "77a89058e21d3ff0e86dae867ab033ad500c05cc",
                 "shasum": ""
             },
             "require": {
@@ -143,20 +143,20 @@
                 }
             ],
             "description": "Common Amber Project files.",
-            "time": "2019-06-04T00:41:30+00:00"
+            "time": "2019-06-25T18:40:19+00:00"
         },
         {
             "name": "amber/container",
-            "version": "v1.1.1-beta",
+            "version": "v1.1.2-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/container.git",
-                "reference": "fe4b8dfbebba2d664792e54ae336bda285dd546b"
+                "reference": "4b4cde5ce2a6de8b3333019dc501233525eb856d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/container/zipball/fe4b8dfbebba2d664792e54ae336bda285dd546b",
-                "reference": "fe4b8dfbebba2d664792e54ae336bda285dd546b",
+                "url": "https://api.github.com/repos/systemson/container/zipball/4b4cde5ce2a6de8b3333019dc501233525eb856d",
+                "reference": "4b4cde5ce2a6de8b3333019dc501233525eb856d",
                 "shasum": ""
             },
             "require": {
@@ -166,10 +166,7 @@
                 "psr/container": "^1.0"
             },
             "require-dev": {
-                "lavoiesl/php-benchmark": "^1.4",
                 "php-coveralls/php-coveralls": "^2.1",
-                "phpunit/phpunit": "^8.0",
-                "squizlabs/php_codesniffer": "^3.3",
                 "symfony/var-dumper": "^4.2"
             },
             "type": "library",
@@ -194,7 +191,7 @@
                 }
             ],
             "description": "Simple PHP DI Container.",
-            "time": "2019-06-03T14:52:34+00:00"
+            "time": "2019-06-25T18:47:16+00:00"
         },
         {
             "name": "amber/phraser",
@@ -729,16 +726,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.19.2",
+            "version": "2.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "adcad3f3af52d0ad4ad7b05f43aa58243b6ca67b"
+                "reference": "bc671b896c276795fad8426b0aa24e8ade0f2498"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/adcad3f3af52d0ad4ad7b05f43aa58243b6ca67b",
-                "reference": "adcad3f3af52d0ad4ad7b05f43aa58243b6ca67b",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bc671b896c276795fad8426b0aa24e8ade0f2498",
+                "reference": "bc671b896c276795fad8426b0aa24e8ade0f2498",
                 "shasum": ""
             },
             "require": {
@@ -785,7 +782,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2019-06-07T09:56:45+00:00"
+            "time": "2019-06-25T10:00:57+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -2221,16 +2218,16 @@
     "packages-dev": [
         {
             "name": "filp/whoops",
-            "version": "2.3.2",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "a28d5cef33627c069a2bd8fbb35ebe1a54881d35"
+                "reference": "1a1a1044ad00e285bd2825fac4c3a0443d90ad33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/a28d5cef33627c069a2bd8fbb35ebe1a54881d35",
-                "reference": "a28d5cef33627c069a2bd8fbb35ebe1a54881d35",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/1a1a1044ad00e285bd2825fac4c3a0443d90ad33",
+                "reference": "1a1a1044ad00e285bd2825fac4c3a0443d90ad33",
                 "shasum": ""
             },
             "require": {
@@ -2278,7 +2275,7 @@
                 "throwable",
                 "whoops"
             ],
-            "time": "2019-06-21T09:00:00+00:00"
+            "time": "2019-06-23T09:00:00+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

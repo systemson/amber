@@ -37,7 +37,7 @@ class HttpServiceProvider extends ServiceProvider
         $container->bind(Matcher::class);
 
         $container
-            ->singleton(Context::class, RequestContext::class)
+            ->singleton(RequestContext::class, Context::class)
             ->afterConstruct(
                 'fromPrsRequest',
                 function () use ($container) {
@@ -48,13 +48,13 @@ class HttpServiceProvider extends ServiceProvider
 
         $container->singleton(Session::class);
 
-        $container->register(ServerRequest::class, ServerRequestInterface::class);
-        $container->register(Response::class, ResponseInterface::class);
-        $container->register(RequestHandler::class, RequestHandlerInterface::class)
+        $container->register(ServerRequestInterface::class, ServerRequest::class);
+        $container->register(ResponseInterface::class, Response::class);
+        $container->register(RequestHandlerInterface::class, RequestHandler::class)
             ->setArgument('middlewares', config('app.middlewares'))
         ;
-        $container->register(Uri::class, UriInterface::class);
-        $container->register(ResponseFactory::class, ResponseFactoryInterface::class);
+        $container->register(UriInterface::class, Uri::class);
+        $container->register(ResponseFactoryInterface::class, ResponseFactory::class);
         $container->bind(ResponseDispatcher::class);
         $container->bind(StreamFactoryInterface::class, StreamFactory::class);
     }

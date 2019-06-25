@@ -12,7 +12,7 @@ class CacheServiceProvider extends ServiceProvider
     {
         $container = static::getContainer();
 
-        $container->register(Cache::class, CacheInterface::class)
+        $container->register(CacheInterface::class, Cache::class)
             ->afterConstruct(
                 'pushHandler',
                 function () {
