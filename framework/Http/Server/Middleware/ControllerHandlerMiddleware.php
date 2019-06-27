@@ -28,27 +28,27 @@ class ControllerHandlerMiddleware extends RequestMiddleware
     {
         $defaults = $request->getAttribute('defaults');
 
-        $return = $this->handleController($defaults['_controller'], $defaults['_action']);
+        $callback = $this->getControllerCallback($defaults['_controller'], $defaults['_action']);
 
-        if ($return instanceof Response) {
-            return $return;
-        } elseif (is_string($return)) {
+        $ret = $callback->__invoke();
+
+        if ($ret instanceof Response) {
+            return $ret;
+        } elseif (is_string($ret)) {
             $streamFactory = static::getContainer()->get(StreamFactoryInterface::class);
 
-            $body = $streamFactory->createStream($return);
+            $body = $streamFactory->createStream($ret);
 
             return $this->createResponse()->withBody($body);
-        } elseif ($return instanceof StreamInterface) {
-            return $this->createResponse()->withBody($return);
+        } elseif ($ret instanceof StreamInterface) {
+            return $this->createResponse()->withBody($ret);
         }
 
-        return $handler->next($request);
+        return $handler->handle($request);
     }
 
-    protected function handleController(string $contoller, string $action = '__invoke')
+    protected function getControllerCallback(string $contoller, string $action = '__invoke')
     {
-        $callback = static::getContainer()->getClosureFor($contoller, $action);
-
-        return $callback();
+        return static::getContainer()->getClosureFor($contoller, $action);
     }
 }

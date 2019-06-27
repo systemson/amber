@@ -42,6 +42,6 @@ class ClosureHandlerMiddleware extends RequestMiddleware
             return $this->createResponse()->withBody($return);
         }
 
-        return $handler->next($request);
+        return $handler->handle($request);
     }
 }

@@ -115,6 +115,16 @@ class ResponseFactory implements ResponseFactoryInterface, StatusCodeInterface
     }
 
     /**
+     * A 303 status code, or Redirect, is meant to redirect a POST, PUT, PATCH, DELETE request to a GET resource.
+     *
+     * @return ResponseInterface
+     */
+    public function redirectBack(): ResponseInterface
+    {
+        return $this->redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    /**
      * The 400 status code, or Bad Request error, means the HTTP request that was sent to the server has invalid syntax.
      *
      * @param string $reasonPhrase Reason phrase to associate with status code.

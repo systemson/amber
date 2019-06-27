@@ -32,32 +32,35 @@ class AuthController extends Controller
 
     public function login(ServerRequestInterface $request, ContainerInterface $container)
     {
+        /*
+         * Validates the request
+         */
+
+        if (($errors = $this->validateRequest($request)) !== true) {
+            return $this->failedLoginResponse($errors);
+        }
+
+
+        /*
+         * Validates the credentials
+         */
+
         $credentials = $this->getCredentialsFromRequest($request);
 
-        $validations = $this->prevalidate($request);
+        $user = $container->get(UserProvider::class)
+            ->getUserByEmail($credentials['email'])
+        ;
 
-        if ($validations !== true) {
-            Session::flash()->set('errors', $validations);
-
-            return Response::redirect('/login');
+        if (!$this->validateCredentials($credentials, $user)) {
+            return $this->failedLoginResponse('This credentials are not valid.');
         }
 
-        $provider = $container->get(UserProvider::class);
-        $user = $provider->getUserByEmail($credentials['email']);
 
-        if ($this->validateCredentials($credentials, $user)) {
-            $newToken = $this->newToken($user);
+        /*
+         * Returns a response after the user is successfully logged in.
+         */
 
-            $user->remember_token = $newToken;
-            $user->save();
-
-            Session::set('_token', $newToken);
-            Session::cache()->set($newToken, $user, 15);
-
-            return Response::redirect('/');
-        }
-
-        throw new \Exception('These credentials are not valid');
+        return $this->successfulLoginResponse($user);
     }
 
     public function logout(UserProvider $provider)
@@ -78,7 +81,39 @@ class AuthController extends Controller
 
         Session::close();
 
+        return $this->redirectToLoginResponse();
+    }
+
+    protected function redirectToLoginResponse()
+    {
         return Response::redirect('/login');
+    }
+
+    protected function successfulLoginResponse($user)
+    {
+        $this->setRememberToken($user);
+
+        return Response::redirect('/');
+    }
+
+    protected function failedLoginResponse($errors = null)
+    {
+        if ($errors) {
+            Session::flash()->set('errors', $errors);
+        }
+
+        return Response::redirectBack('/');
+    }
+
+    protected function setRememberToken($user): void
+    {
+        $newToken = $this->newToken($user);
+
+        $user->remember_token = $newToken;
+        $user->save();
+
+        Session::set('_token', $newToken);
+        Session::cache()->set($newToken, $user, 15);
     }
 
     protected function newToken($user): string
@@ -110,14 +145,19 @@ class AuthController extends Controller
         return true;
     }
 
-    protected function prevalidate($request)
+    protected function validateRequest($request)
     {
-        $validations = [
+        $validations = $this->getRequestValidations();
+
+        return Validator::assert($validations, (object) $request->getParsedBody()->toArray());
+    }
+
+    protected function getRequestValidations(): array
+    {
+        return [
             'email' => 'email|length:null,50',
             'password' => 'alnum|length:5,16',
         ];
-
-        return Validator::assert($validations, (object) $request->getParsedBody()->toArray());
     }
 
     protected function isValid($key, $value, $userValue)

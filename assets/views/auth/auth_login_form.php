@@ -1,15 +1,21 @@
+<skHasErrors>
+	<div class="col-sm-4 offset-sm-4 bg-light p-3">
+	  	<div class="alert alert-danger" role="alert">
+	  		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    			<span aria-hidden="true">&times;</span>
+  			</button>
+        	<h4 class="alert-heading">Errors:</h4>
+			<ul>
+				<skForeach="$errors as $error">
+					<li><skEcho>$error</skEcho></li>
+				</skForeach>
+			</ul>
+		</div>
+	</div>
+</skHasErrors>
+
 <div class="col-sm-4 offset-sm-4 bg-light px-5 py-3">
-	<skHasErrors>
-		<h3>Errors:</h3>
-		<ul>
-			<skForeach="$errors as $error">
-				<li><skEcho>$error</skEcho></li>
-			</skForeach>
-		</ul>
-	</skHasErrors>
 	<form class="form-signin" action="/login" method="POST">
-
-
 		<skCsrf>
 
 		<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
