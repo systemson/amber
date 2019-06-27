@@ -39,8 +39,8 @@ return [
         Amber\Framework\Container\Providers\LoggerServiceProvider::class,
         Amber\Framework\Container\Providers\HttpServiceProvider::class,
         Amber\Framework\Container\Providers\FilesystemServiceProvider::class,
-        Amber\Framework\Container\Providers\ViewServiceProvider::class,
         Amber\Framework\Container\Providers\AmberSuiteServiceProvider::class,
+        Amber\Framework\Container\Providers\ViewServiceProvider::class,
     ],
 
     /*

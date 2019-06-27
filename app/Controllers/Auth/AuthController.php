@@ -34,10 +34,11 @@ class AuthController extends Controller
     {
         $credentials = $this->getCredentialsFromRequest($request);
 
-        $validations = $this->prevalidate($credentials);
-        if ($validations !== true) {
+        $validations = $this->prevalidate($request);
 
-            Session::flash()->set('errors'. $validations);
+        if ($validations !== true) {
+            Session::flash()->set('errors', $validations);
+
             return Response::redirect('/login');
         }
 
@@ -65,8 +66,11 @@ class AuthController extends Controller
 
         if (!is_null($token)) {
             $user = $provider->getUserByToken($token);
-            $user->remember_token = null;
-            $user->save();
+
+            if (!is_null($user)) {
+                $user->remember_token = null;
+                $user->save();
+            }
 
             // Deletes the session cache
             Session::cache()->delete($token);
@@ -106,14 +110,14 @@ class AuthController extends Controller
         return true;
     }
 
-    protected function prevalidate($values)
+    protected function prevalidate($request)
     {
-        $validations = array_combine($values, [
-            'email|length:null,50',
-            'alnum|length:5,16',
-        ]);
+        $validations = [
+            'email' => 'email|length:null,50',
+            'password' => 'alnum|length:5,16',
+        ];
 
-        return Validator::validateAll($validations);
+        return Validator::assert($validations, (object) $request->getParsedBody()->toArray());
     }
 
     protected function isValid($key, $value, $userValue)

@@ -3,10 +3,12 @@
 namespace Amber\Framework\Http\Message;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Amber\Framework\Http\Message\Traits\RequestTrait;
 use Amber\Framework\Http\Message\Traits\RequestUtilsTrait;
 use Amber\Collection\Collection;
 use Amber\Collection\ImmutableCollection;
+use Amber\Framework\Http\Message\Utils\FileCollection;
 
 /**
  * Representation of an incoming, server-side HTTP request.
@@ -53,29 +55,28 @@ class ServerRequest implements ServerRequestInterface
     protected $version;
     protected $method;
     protected $uri;
-    protected $headers;
     protected $body;
 
-    protected $server;
-    protected $cookies;
-    protected $query;
-    protected $files;
-    protected $post;
-
-    protected $attributes;
+    public $headers;
+    public $server;
+    public $cookies;
+    public $query;
+    public $post;
+    public $files;
+    public $attributes;
 
     public function __construct(
         string $version = null,
         string $method = null,
         string $uri = null,
         array $headers = null,
-        string $body = null,
+        StreamInterface $body = null,
         $params = []
     ) {
         $this->server = new ImmutableCollection($params['server'] ?? $_SERVER);
         $this->cookies = new Collection($params['cookies'] ?? $_COOKIE);
         $this->query = new Collection($params['query'] ?? $_GET);
-        $this->files = new Collection($params['files'] ?? $_FILES);
+        $this->files = new FileCollection($params['files'] ?? $_FILES);
         $this->post = new Collection($params['post'] ?? $_POST);
         $this->attributes = new Collection($params['attributes'] = []);
         $this->headers = new Collection($headers ?? getallheaders());

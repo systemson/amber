@@ -3,6 +3,7 @@
 namespace Amber\Framework\Http\Message;
 
 use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Value object representing a file uploaded through an HTTP request.
@@ -52,6 +53,21 @@ class UploadedFile implements UploadedFileInterface
         $this->error = $error;
         $this->clientFilename = $clientFilename;
         $this->clientMediaType = $clientMediaType;
+    }
+
+    protected function isDir($path)
+    {
+        if (is_dir($path)) {
+            return true;
+        }
+
+        $lenght = strlen($path);
+
+        if ($lenght !== 0 & substr_compare($path, DIRECTORY_SEPARATOR, $lenght - 1, 1) === 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -109,6 +125,16 @@ class UploadedFile implements UploadedFileInterface
      */
     public function moveTo($targetPath)
     {
+        $metadata = $this->getStream()->getMetadata();
+
+        if ($this->isDir($targetPath)) {
+            if (!file_exists($targetPath)) {
+                mkdir($targetPath);
+            }
+            $targetPath .= sha1(uniqid()) . '.' . $this->getClientFileExt();
+        }
+
+        move_uploaded_file($metadata['uri'], $targetPath);
     }
     
     /**
@@ -178,5 +204,20 @@ class UploadedFile implements UploadedFileInterface
     public function getClientMediaType()
     {
         return $this->clientMediaType;
+    }
+    
+    /**
+     * Retrieve the media type extension sent by the client.
+     *
+     * Do not trust the value returned by this method. A client could send
+     * a malicious media type with the intention to corrupt or hack your
+     * application.
+     *
+     * @return string|null The media type extension sent by the client or null
+     *                     if none was provided.
+     */
+    public function getClientFileExt()
+    {
+        return pathinfo($this->getClientFilename(), PATHINFO_EXTENSION);
     }
 }

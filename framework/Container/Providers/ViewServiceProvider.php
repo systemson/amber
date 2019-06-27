@@ -4,6 +4,7 @@ namespace Amber\Framework\Container\Providers;
 
 use Amber\Sketch\Sketch;
 use Amber\Sketch\Template\Template;
+use Amber\Framework\Container\Facades\Session;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,7 @@ class ViewServiceProvider extends ServiceProvider
     {
         $container = static::getContainer();
 
-        $container->bind('Amber\Framework\Helpers\Amber');
+        $container->bind(\Amber\Framework\Helpers\Amber::class);
 
         $container->singleton(Sketch::class)
             ->afterConstruct('setViewsFolder', 'assets/views')
@@ -58,6 +59,11 @@ class ViewServiceProvider extends ServiceProvider
                 'has_errors',
                 '<?php if (Amber\Framework\Container\Facades\Session::flash()->has(\'errors\')) : ?>',
                 '<?php endif; ?>'
+            )
+            ->afterConstruct(
+                'setGlobal',
+                'errors',
+                Session::flash()->get('errors')
             )
             ->afterConstruct('dev')
         ;
