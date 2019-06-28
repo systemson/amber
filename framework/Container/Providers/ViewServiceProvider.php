@@ -61,9 +61,16 @@ class ViewServiceProvider extends ServiceProvider
                 '<?php endif; ?>'
             )
             ->afterConstruct(
-                'setGlobal',
-                'errors',
-                Session::flash()->get('errors')
+                'setTag',
+                'translate',
+                '<?php echo Amber\Framework\Container\Facades\Lang::translate("',
+                '"); ?>'
+            )
+            ->afterConstruct(
+                'setGlobals',
+                [
+                    'errors' => Session::flash()->get('errors'),
+                ]
             )
             ->afterConstruct('dev')
         ;

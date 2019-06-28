@@ -13,6 +13,7 @@ use Amber\Framework\Container\Facades\Session;
 use Amber\Framework\Helpers\Hash;
 use Psr\Http\Message\ServerRequestInterface;
 use Amber\Validator\Validator;
+use Amber\Framework\Helpers\Localization\Lang;
 
 class AuthController extends Controller
 {
@@ -52,7 +53,9 @@ class AuthController extends Controller
         ;
 
         if (!$this->validateCredentials($credentials, $user)) {
-            return $this->failedLoginResponse('This credentials are not valid.');
+            return $this->failedLoginResponse(
+                $container->get(Lang::class)->translate('validations.credentials')
+            );
         }
 
 

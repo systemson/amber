@@ -4,7 +4,7 @@
 	  		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
     			<span aria-hidden="true">&times;</span>
   			</button>
-        	<h4 class="alert-heading">Errors:</h4>
+        	<h4 class="alert-heading"><skTranslate>messages.errors</skTranslate>:</h4>
 			<ul>
 				<skForeach="$errors as $error">
 					<li><skEcho>$error</skEcho></li>
