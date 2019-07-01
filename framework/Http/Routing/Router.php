@@ -1,14 +1,14 @@
 <?php
 
-namespace Amber\Framework\Http\Routing;
+namespace Amber\Http\Routing;
 
 use Symfony\Component\Routing\RouteCollection;
 use Amber\Phraser\Phraser;
 use Amber\Phraser\Str;
 use Amber\collection\collection;
-use Amber\Framework\Http\Server\Middleware\ControllerHandlerMiddleware;
-use Amber\Framework\Http\Server\Middleware\ClosureHandlerMiddleware;
-use Amber\Framework\Http\Message\Utils\RequestMethodInterface;
+use Amber\Http\Server\Middleware\ControllerHandlerMiddleware;
+use Amber\Http\Server\Middleware\ClosureHandlerMiddleware;
+use Amber\Http\Message\Utils\RequestMethodInterface;
 
 /**
  *

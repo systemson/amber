@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Container;
+namespace Amber\Container;
 
 use Amber\Utils\Implementations\AbstractWrapper;
 

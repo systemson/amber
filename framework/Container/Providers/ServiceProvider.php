@@ -1,9 +1,9 @@
 <?php
 
-namespace Amber\Framework\Container\Providers;
+namespace Amber\Container\Providers;
 
-use Amber\Framework\Container\StaticContainerAwareTrait;
-use Amber\Framework\Container\ContainerAwareClass;
+use Amber\Container\StaticContainerAwareTrait;
+use Amber\Container\ContainerAwareClass;
 
 class ServiceProvider extends ContainerAwareClass
 {

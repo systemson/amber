@@ -1,9 +1,9 @@
 <?php
 
-namespace Amber\Framework\Http\Routing;
+namespace Amber\Http\Routing;
 
 use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Amber\Framework\Http\Routing\Router;
+use Amber\Http\Routing\Router;
 use Symfony\Component\Routing\RequestContext;
 use Psr\Http\Message\ServerRequestInterface;
 

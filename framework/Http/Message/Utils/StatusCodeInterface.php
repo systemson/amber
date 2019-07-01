@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Http\Message\Utils;
+namespace Amber\Http\Message\Utils;
 
 /**
  * Defines constants for common HTTP status code.

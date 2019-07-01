@@ -1,10 +1,10 @@
 <?php
 
-namespace Amber\Framework\Http\Message;
+namespace Amber\Http\Message;
 
 use Amber\Utils\Implementations\AbstractWrapper;
 use Amber\Collection\Collection;
-use Amber\Framework\Container\Application;
+use Amber\Container\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Psr\Http\Message\ServerRequestInterface;
 

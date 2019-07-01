@@ -1,9 +1,9 @@
 <?php
 
-namespace Amber\Framework\Container\Facades;
+namespace Amber\Container\Facades;
 
-use Amber\Framework\Container\ContainerFacade;
-use Amber\Framework\Http\Routing\Router as Accessor;
+use Amber\Container\ContainerFacade;
+use Amber\Http\Routing\Router as Accessor;
 
 class Router extends ContainerFacade
 {

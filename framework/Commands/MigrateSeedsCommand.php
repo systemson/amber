@@ -1,12 +1,12 @@
 <?php
 
-namespace Amber\Framework\Commands;
+namespace Amber\Commands;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Illuminate\Database\Schema\Builder as Schema;
-use Amber\Framework\Container\Application;
+use Amber\Container\Application;
 
 class MigrateSeedsCommand extends Command
 {

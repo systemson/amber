@@ -1,12 +1,12 @@
 <?php
 
-namespace Amber\Framework\Dispatch;
+namespace Amber\Dispatch;
 
 use Amber\Container\Container;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Amber\Framework\Response;
+use Amber\Response;
 
 class Dispatch
 {

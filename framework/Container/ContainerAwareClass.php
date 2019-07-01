@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Container;
+namespace Amber\Container;
 
 use Amber\Container\Container;
 

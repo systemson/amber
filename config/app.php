@@ -12,22 +12,22 @@ return [
      * Feel free to add as much services as you need since they are lazy loaded.
      */
     'binds' => [
-        Amber\Framework\Auth\AuthClass::class,
-        Amber\Framework\Auth\UserProvider::class,
+        Amber\Auth\AuthClass::class,
+        Amber\Auth\UserProvider::class,
         Amber\Sketch\Template\Template::class,
-        Amber\Framework\Http\Server\Middleware\InitTestsiddleware::class,
-        Amber\Framework\Http\Server\Middleware\SessionMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\RouteHandlerMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\AuthMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\CsfrMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\ControllerHandlerMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\ClosureHandlerMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\AuthenticatedMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\ErrorHandlerMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\RequestMethodHandlerMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\ApiTokenMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\ThrottleRequestMiddleware::class,
+        Amber\Http\Server\Middleware\InitTestsiddleware::class,
+        Amber\Http\Server\Middleware\SessionMiddleware::class,
+        Amber\Http\Server\Middleware\RouteHandlerMiddleware::class,
+        Amber\Http\Server\Middleware\AuthMiddleware::class,
+        Amber\Http\Server\Middleware\CsfrMiddleware::class,
+        Amber\Http\Server\Middleware\ControllerHandlerMiddleware::class,
+        Amber\Http\Server\Middleware\ClosureHandlerMiddleware::class,
+        Amber\Http\Server\Middleware\AuthenticatedMiddleware::class,
+        Amber\Http\Server\Middleware\ErrorHandlerMiddleware::class,
+        Amber\Http\Server\Middleware\RequestMethodHandlerMiddleware::class,
+        Amber\Http\Server\Middleware\ApiTokenMiddleware::class,
+        Amber\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
+        Amber\Http\Server\Middleware\ThrottleRequestMiddleware::class,
     ],
 
     /*
@@ -36,16 +36,16 @@ return [
      * The service providers are loaded in this order.
      */
     'providers' => [
-        Amber\Framework\Container\Providers\DotenvServiceProvider::class,
-        Amber\Framework\Container\Providers\ModelServiceProvider::class,
-        Amber\Framework\Container\Providers\DataMapperServiceProvider::class,
-        Amber\Framework\Container\Providers\CacheServiceProvider::class,
-        Amber\Framework\Container\Providers\LoggerServiceProvider::class,
-        Amber\Framework\Container\Providers\HttpServiceProvider::class,
-        Amber\Framework\Container\Providers\FilesystemServiceProvider::class,
-        Amber\Framework\Container\Providers\AmberSuiteServiceProvider::class,
-        Amber\Framework\Container\Providers\ViewServiceProvider::class,
-        Amber\Framework\Container\Providers\LocalizationServiceProvider::class,
+        Amber\Container\Providers\DotenvServiceProvider::class,
+        Amber\Container\Providers\ModelServiceProvider::class,
+        Amber\Container\Providers\DataMapperServiceProvider::class,
+        Amber\Container\Providers\CacheServiceProvider::class,
+        Amber\Container\Providers\LoggerServiceProvider::class,
+        Amber\Container\Providers\HttpServiceProvider::class,
+        Amber\Container\Providers\FilesystemServiceProvider::class,
+        Amber\Container\Providers\AmberSuiteServiceProvider::class,
+        Amber\Container\Providers\ViewServiceProvider::class,
+        Amber\Container\Providers\LocalizationServiceProvider::class,
     ],
 
     /*
@@ -55,22 +55,22 @@ return [
      * If your middleware is route dependent add the middleware(s) as a route option.
      */
     'middlewares' => [
-        Amber\Framework\Http\Server\Middleware\ErrorHandlerMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\InitTestsiddleware::class,
-        Amber\Framework\Http\Server\Middleware\RequestMethodHandlerMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\RouteHandlerMiddleware::class,
-        Amber\Framework\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
+        Amber\Http\Server\Middleware\ErrorHandlerMiddleware::class,
+        Amber\Http\Server\Middleware\InitTestsiddleware::class,
+        Amber\Http\Server\Middleware\RequestMethodHandlerMiddleware::class,
+        Amber\Http\Server\Middleware\RouteHandlerMiddleware::class,
+        Amber\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
     ],
 
     /*
      * The command line interface commands registration.
      */
     'cli_commands' => [
-        Amber\Framework\Commands\MigrateUpCommand::class,
-        Amber\Framework\Commands\MigrateDownCommand::class,
-        Amber\Framework\Commands\MigrateSeedsCommand::class,
-        Amber\Framework\Commands\MigrateRestartCommand::class,
-        Amber\Framework\Commands\AppCacheCommand::class,
-        Amber\Framework\Commands\ServerCommand::class,
+        Amber\Commands\MigrateUpCommand::class,
+        Amber\Commands\MigrateDownCommand::class,
+        Amber\Commands\MigrateSeedsCommand::class,
+        Amber\Commands\MigrateRestartCommand::class,
+        Amber\Commands\AppCacheCommand::class,
+        Amber\Commands\ServerCommand::class,
     ],
 ];

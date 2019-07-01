@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Http\Server\Middleware;
+namespace Amber\Http\Server\Middleware;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

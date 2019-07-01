@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Helpers;
+namespace Amber\Helpers;
 
 class Hash
 {

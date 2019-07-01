@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Http\Message\Traits;
+namespace Amber\Http\Message\Traits;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;

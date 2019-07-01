@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Container\Providers;
+namespace Amber\Container\Providers;
 
 use Illuminate\Database\Schema\Builder as Schema;
 use Illuminate\Database\Capsule\Manager;

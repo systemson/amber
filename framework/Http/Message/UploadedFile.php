@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Http\Message;
+namespace Amber\Http\Message;
 
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\StreamInterface;

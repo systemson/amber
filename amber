@@ -5,10 +5,10 @@ define('INIT_TIME', microtime(true));
 
 require __DIR__.'/vendor/autoload.php';
 
-use Amber\Framework\Container\Facades\CommandsCollection;
+use Amber\Container\Facades\CommandsCollection;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\ConsoleEvents;
-use Amber\Framework\Container\Application as App;
+use Amber\Container\Application as App;
 
 
 /**

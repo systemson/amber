@@ -1,9 +1,9 @@
 <?php
 
-namespace Amber\Framework\Container\Facades;
+namespace Amber\Container\Facades;
 
-use Amber\Framework\Container\ContainerFacade;
-use Amber\Framework\Helpers\Amber as Accessor;
+use Amber\Container\ContainerFacade;
+use Amber\Helpers\Amber as Accessor;
 
 class Amber extends ContainerFacade
 {

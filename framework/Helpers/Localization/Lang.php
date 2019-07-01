@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Helpers\Localization;
+namespace Amber\Helpers\Localization;
 
 use Amber\Collection\MultilevelCollection;
 use Amber\Phraser\Phraser;

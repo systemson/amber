@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Container\Providers;
+namespace Amber\Container\Providers;
 
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;

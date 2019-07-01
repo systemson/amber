@@ -7,7 +7,7 @@ $routes->group(function ($routes) {
     $routes->post('/login', 'App\Controllers\Auth\AuthController::login');
 }, [
     'middlewares' => [
-        'Amber\Framework\Http\Server\Middleware\AuthenticatedMiddleware',
+        'Amber\Http\Server\Middleware\AuthenticatedMiddleware',
     ]
 ]);
 

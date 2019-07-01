@@ -1,12 +1,12 @@
 <?php
 
-namespace Amber\Framework\Http\Server\Middleware;
+namespace Amber\Http\Server\Middleware;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
-use Amber\Framework\Http\Session\Session;
+use Amber\Http\Session\Session;
 
 /**
  * Participant in processing a server request and response.

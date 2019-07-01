@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Commands\CommandsCollection;
+namespace Amber\Commands;
 
 use Amber\Collection\Collection;
 

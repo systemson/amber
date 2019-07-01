@@ -1,25 +1,25 @@
 <?php
 
-namespace Amber\Framework\Http\Server\Middleware;
+namespace Amber\Http\Server\Middleware;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Amber\Framework\Http\Routing\Matcher;
+use Amber\Http\Routing\Matcher;
 use Symfony\Component\Routing\Exception\NoConfigurationException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Amber\Framework\Http\Server\Middleware\ActionHandlerMiddleware;
+use Amber\Http\Server\Middleware\ActionHandlerMiddleware;
 use Psr\Http\Message\StreamFactoryInterface;
 
 
 use Psr\Http\Server\MiddlewareInterface;
 
 
-use Amber\Framework\Http\Message\ServerRequest;
-use Amber\Framework\Container\Facades\Filesystem;
-use Amber\Framework\Http\Routing\Router;
+use Amber\Http\Message\ServerRequest;
+use Amber\Container\Facades\Filesystem;
+use Amber\Http\Routing\Router;
 
 /**
  * Participant in processing a server request and response.

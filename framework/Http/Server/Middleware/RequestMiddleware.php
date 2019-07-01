@@ -1,13 +1,13 @@
 <?php
 
-namespace Amber\Framework\Http\Server\Middleware;
+namespace Amber\Http\Server\Middleware;
 
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Amber\Framework\Container\ContainerAwareClass;
+use Amber\Container\ContainerAwareClass;
 
 /**
  * Participant in processing a server request and response.

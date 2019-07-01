@@ -1,11 +1,11 @@
 <?php
 
-namespace Amber\Framework\Http\Session;
+namespace Amber\Http\Session;
 
 use Amber\Collection\Collection;
 use Amber\Collection\ImmutableCollection;
-use Amber\Framework\Http\Session\FlashCollection;
-use Amber\Framework\Http\Session\MetadataCollection;
+use Amber\Http\Session\FlashCollection;
+use Amber\Http\Session\MetadataCollection;
 
 class Session extends Collection
 {

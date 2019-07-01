@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Http\Server;
+namespace Amber\Http\Server;
 
 use Psr\Container\ContainerInterface;
 use Amber\Collection\Collection;

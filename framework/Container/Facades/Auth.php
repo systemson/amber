@@ -1,9 +1,9 @@
 <?php
 
-namespace Amber\Framework\Container\Facades;
+namespace Amber\Container\Facades;
 
-use Amber\Framework\Container\ContainerFacade;
-use Amber\Framework\Auth\AuthClass as Accessor;
+use Amber\Container\ContainerFacade;
+use Amber\Auth\AuthClass as Accessor;
 
 class Auth extends ContainerFacade
 {

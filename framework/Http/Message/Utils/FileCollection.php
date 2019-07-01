@@ -1,10 +1,10 @@
 <?php
 
-namespace Amber\Framework\Http\Message\Utils;
+namespace Amber\Http\Message\Utils;
 
 use Amber\Collection\Collection;
-use Amber\Framework\Http\Message\FileFactory;
-use Amber\Framework\Http\Message\UploadedFile;
+use Amber\Http\Message\FileFactory;
+use Amber\Http\Message\UploadedFile;
 use Psr\Http\Message\UploadedFileInterface;
 
 class FileCollection extends Collection

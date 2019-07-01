@@ -1,13 +1,13 @@
 <?php
 
-namespace Amber\Framework\Commands;
+namespace Amber\Commands;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Amber\Framework\DataMapper\Migration\Migration;
-use Amber\Framework\Container\Application;
-use Amber\Framework\Container\Facades\Filesystem;
+use Amber\DataMapper\Migration\Migration;
+use Amber\Container\Application;
+use Amber\Container\Facades\Filesystem;
 use Amber\Phraser\Phraser;
 use Illuminate\Database\Schema\Builder as Schema;
 

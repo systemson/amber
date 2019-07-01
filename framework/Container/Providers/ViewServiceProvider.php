@@ -1,10 +1,10 @@
 <?php
 
-namespace Amber\Framework\Container\Providers;
+namespace Amber\Container\Providers;
 
 use Amber\Sketch\Sketch;
 use Amber\Sketch\Template\Template;
-use Amber\Framework\Container\Facades\Session;
+use Amber\Container\Facades\Session;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -12,7 +12,7 @@ class ViewServiceProvider extends ServiceProvider
     {
         $container = static::getContainer();
 
-        $container->bind(\Amber\Framework\Helpers\Amber::class);
+        $container->bind(\Amber\Helpers\Amber::class);
 
         $container->singleton(Sketch::class)
             ->afterConstruct('setViewsFolder', 'assets/views')
@@ -26,7 +26,7 @@ class ViewServiceProvider extends ServiceProvider
             ->afterConstruct(
                 'setTag',
                 'authname',
-                '<?= Amber\Framework\Container\Facades\Auth::name(); ?>'
+                '<?= Amber\Container\Facades\Auth::name(); ?>'
             )
             ->afterConstruct(
                 'setTag',
@@ -41,23 +41,23 @@ class ViewServiceProvider extends ServiceProvider
             ->afterConstruct(
                 'setTag',
                 'appversion',
-                '<?= Amber\Framework\Container\Facades\Amber::version(); ?>'
+                '<?= Amber\Container\Facades\Amber::version(); ?>'
             )
             ->afterConstruct(
                 'setTag',
                 'csrf',
-                '<?= Amber\Framework\Container\Facades\Amber::csrf(); ?>'
+                '<?= Amber\Container\Facades\Amber::csrf(); ?>'
             )
             ->afterConstruct(
                 'setTag',
                 'auth_check',
-                '<?php if (Amber\Framework\Container\Facades\Auth::check()) : ?>',
+                '<?php if (Amber\Container\Facades\Auth::check()) : ?>',
                 '<?php endif; ?>'
             )
             ->afterConstruct(
                 'setTag',
                 'has_errors',
-                '<?php if (Amber\Framework\Container\Facades\Session::flash()->has(\'errors\')) : ?>',
+                '<?php if (Amber\Container\Facades\Session::flash()->has(\'errors\')) : ?>',
                 '<?php endif; ?>'
             )
             ->afterConstruct(
@@ -69,7 +69,7 @@ class ViewServiceProvider extends ServiceProvider
             ->afterConstruct(
                 'setTag',
                 'translate',
-                '<?php echo Amber\Framework\Container\Facades\Lang::translate("',
+                '<?php echo Amber\Container\Facades\Lang::translate("',
                 '"); ?>'
             )
             ->afterConstruct(

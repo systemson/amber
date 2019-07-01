@@ -1,12 +1,12 @@
 <?php
 
-namespace Amber\Framework\Http\Message;
+namespace Amber\Http\Message;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Amber\Framework\Http\Message\Utils\StatusCodeInterface;
+use Amber\Http\Message\Utils\StatusCodeInterface;
 
 class ResponseFactory implements ResponseFactoryInterface, StatusCodeInterface
 {

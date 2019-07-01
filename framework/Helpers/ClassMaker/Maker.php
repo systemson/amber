@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Helpers\ClassMaker;
+namespace Amber\Helpers\ClassMaker;
 
 use Amber\Validator\Validator;
 use Amber\Phraser\Phraser;

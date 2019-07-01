@@ -1,8 +1,8 @@
 <?php
 
-namespace Amber\Framework\Container\Facades;
+namespace Amber\Container\Facades;
 
-use Amber\Framework\Container\ContainerFacade;
+use Amber\Container\ContainerFacade;
 use League\Flysystem\FilesystemInterface as Accessor;
 
 class Filesystem extends ContainerFacade

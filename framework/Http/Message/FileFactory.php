@@ -1,13 +1,13 @@
 <?php
 
-namespace Amber\Framework\Http\Message;
+namespace Amber\Http\Message;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
-use Amber\Framework\Http\Message\Utils\StatusCodeInterface;
+use Amber\Http\Message\Utils\StatusCodeInterface;
 use Sunrise\Stream\StreamFactory;
 
 class FileFactory implements UploadedFileFactoryInterface

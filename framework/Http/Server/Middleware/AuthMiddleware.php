@@ -1,12 +1,12 @@
 <?php
 
-namespace Amber\Framework\Http\Server\Middleware;
+namespace Amber\Http\Server\Middleware;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
-use Amber\Framework\Auth\UserProvider;
-use Amber\Framework\Container\Facades\Auth;
+use Amber\Auth\UserProvider;
+use Amber\Container\Facades\Auth;
 use Psr\SimpleCache\CacheInterface;
 
 /**

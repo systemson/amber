@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/gpl-license GNU Public License
  */
 
-namespace Amber\Framework\Http\Session;
+namespace Amber\Http\Session;
 
 use Amber\Collection\ImmutableCollection;
 use Carbon\Carbon;

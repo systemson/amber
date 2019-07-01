@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Amber\Framework\Commands;
+namespace Amber\Commands;
 
 use Symfony\Component\Process\Process;
 

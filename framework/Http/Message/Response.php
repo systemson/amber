@@ -1,12 +1,12 @@
 <?php
 
-namespace Amber\Framework\Http\Message;
+namespace Amber\Http\Message;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Amber\Framework\Http\Message\Traits\MessageTrait;
-use Amber\Framework\Http\Message\Utils\StatusCodeInterface;
-use Amber\Framework\Http\Message\Utils\RequestMethodInterface;
+use Amber\Http\Message\Traits\MessageTrait;
+use Amber\Http\Message\Utils\StatusCodeInterface;
+use Amber\Http\Message\Utils\RequestMethodInterface;
 use Amber\Collection\Collection;
 
 /**

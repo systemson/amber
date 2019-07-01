@@ -2,18 +2,18 @@
 
 namespace App\Controllers\Auth;
 
-use Amber\Framework\Container\Facades\Response;
-use Amber\Framework\Container\Facades\View;
+use Amber\Container\Facades\Response;
+use Amber\Container\Facades\View;
 use App\Controllers\Controller;
-use Amber\Framework\Http\Message\POST;
-use Amber\Framework\Auth\UserProvider;
+use Amber\Http\Message\POST;
+use Amber\Auth\UserProvider;
 use Carbon\Carbon;
 use Psr\Container\ContainerInterface;
-use Amber\Framework\Container\Facades\Session;
-use Amber\Framework\Helpers\Hash;
+use Amber\Container\Facades\Session;
+use Amber\Helpers\Hash;
 use Psr\Http\Message\ServerRequestInterface;
 use Amber\Validator\Validator;
-use Amber\Framework\Helpers\Localization\Lang;
+use Amber\Helpers\Localization\Lang;
 
 class AuthController extends Controller
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Amber\Framework\Http\Message;
+namespace Amber\Http\Message;
 
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Amber\Framework\Http\Message\Traits\ClonableTrait;
+use Amber\Http\Message\Traits\ClonableTrait;
 use Amber\Collection\Collection;
 use Amber\Phraser\Phraser;
 

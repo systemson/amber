@@ -1,11 +1,11 @@
 <?php
 
-namespace Amber\Framework\Helpers;
+namespace Amber\Helpers;
 
 use Carbon\Carbon;
-use Amber\Framework\Container\Application;
+use Amber\Container\Application;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Amber\Framework\Http\Server\Middleware\CsfrMiddleware;
+use Amber\Http\Server\Middleware\CsfrMiddleware;
 
 class Amber
 {

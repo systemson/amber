@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Auth;
+namespace Amber\Auth;
 
 use App\Models\User;
 

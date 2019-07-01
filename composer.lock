@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e33ac0b72e291ab2bcc6e4e2b1716b8",
+    "content-hash": "990b751aa1ff3124dc08c449ffeb4ec6",
     "packages": [
         {
             "name": "amber/cache",
@@ -106,12 +106,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/common.git",
-                "reference": "01f94e00b060f2cd801d9250bfb13661446f16f8"
+                "reference": "64f98a656f653dd58e3a5ec552b6cff84ffc451e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/common/zipball/01f94e00b060f2cd801d9250bfb13661446f16f8",
-                "reference": "01f94e00b060f2cd801d9250bfb13661446f16f8",
+                "url": "https://api.github.com/repos/systemson/common/zipball/64f98a656f653dd58e3a5ec552b6cff84ffc451e",
+                "reference": "64f98a656f653dd58e3a5ec552b6cff84ffc451e",
                 "shasum": ""
             },
             "require": {
@@ -143,7 +143,7 @@
                 }
             ],
             "description": "Common Amber Project files.",
-            "time": "2019-06-28T15:50:23+00:00"
+            "time": "2019-07-01T16:35:55+00:00"
         },
         {
             "name": "amber/container",
@@ -284,6 +284,128 @@
             ],
             "description": "Lightweight PHP templating engine.",
             "time": "2019-06-06T21:23:35+00:00"
+        },
+        {
+            "name": "aura/sqlquery",
+            "version": "2.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.SqlQuery.git",
+                "reference": "dd81b57aeb43628180a9c70a4df58d872024d7f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.SqlQuery/zipball/dd81b57aeb43628180a9c70a4df58d872024d7f2",
+                "reference": "dd81b57aeb43628180a9c70a4df58d872024d7f2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "suggest": {
+                "aura/sql": "Provides an extension to the native PDO along with a profiler and connection locator. Use version 2.*."
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\SqlQuery\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.SqlQuery Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.SqlQuery/contributors"
+                }
+            ],
+            "description": "Object-oriented query builders for MySQL, Postgres, SQLite, and SQLServer; can be used with any database connection library.",
+            "homepage": "https://github.com/auraphp/Aura.SqlQuery",
+            "keywords": [
+                "database",
+                "db",
+                "delete",
+                "dml",
+                "insert",
+                "mysql",
+                "pdo",
+                "pgsql",
+                "postgres",
+                "postgresql",
+                "query",
+                "select",
+                "sql",
+                "sql server",
+                "sqlite",
+                "sqlserver",
+                "update"
+            ],
+            "time": "2016-10-03T20:34:56+00:00"
+        },
+        {
+            "name": "aura/sqlschema",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.SqlSchema.git",
+                "reference": "0670487532731e51fcd7b8088e9920b4671453b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.SqlSchema/zipball/0670487532731e51fcd7b8088e9920b4671453b2",
+                "reference": "0670487532731e51fcd7b8088e9920b4671453b2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\SqlSchema\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.SqlSchema Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.SqlSchema/contributors"
+                }
+            ],
+            "description": "Provides facilities to read table names and table columns from a database using PDO.",
+            "homepage": "https://github.com/auraphp/Aura.SqlSchema",
+            "keywords": [
+                "database",
+                "db",
+                "ddl",
+                "mysql",
+                "pdo",
+                "pgsql",
+                "postgres",
+                "postgresql",
+                "schema",
+                "sql",
+                "sql server",
+                "sqlite",
+                "sqlserver",
+                "sqlsrv"
+            ],
+            "time": "2016-04-29T13:48:25+00:00"
         },
         {
             "name": "doctrine/inflector",

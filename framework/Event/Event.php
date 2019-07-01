@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Event;
+namespace Amber\Event;
 
 use Psr\EventDispatcher\StoppableEventInterface;
 

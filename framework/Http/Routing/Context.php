@@ -1,11 +1,11 @@
 <?php
 
-namespace Amber\Framework\Http\Routing;
+namespace Amber\Http\Routing;
 
 use Symfony\Component\Routing\RequestContext;
-use Amber\Framework\Http\Message\ServerRequest;
+use Amber\Http\Message\ServerRequest;
 use Psr\Http\Message\ServerRequestInterface;
-use Amber\Framework\Http\Message\Uri;
+use Amber\Http\Message\Uri;
 
 class Context extends RequestContext
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Auth;
+namespace Amber\Auth;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 

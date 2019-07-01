@@ -1,9 +1,9 @@
 <?php
 
-namespace Amber\Framework\Container\Providers;
+namespace Amber\Container\Providers;
 
 use Illuminate\Database\Capsule\Manager as Eloquent;
-use Amber\Framework\Helpers\Localization\Lang;
+use Amber\Helpers\Localization\Lang;
 use Amber\Validator\Validator;
 
 class LocalizationServiceProvider extends ServiceProvider

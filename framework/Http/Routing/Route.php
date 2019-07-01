@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Http\Routing;
+namespace Amber\Http\Routing;
 
 use Symfony\Component\Routing\Route as SymfonyRoute;
 

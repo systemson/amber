@@ -1,8 +1,8 @@
 <?php
 
-namespace Amber\Framework\Container\Facades;
+namespace Amber\Container\Facades;
 
-use Amber\Framework\Container\ContainerFacade;
+use Amber\Container\ContainerFacade;
 use Amber\Collection\Collection as Accessor;
 
 class CommandsCollection extends ContainerFacade

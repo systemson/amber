@@ -1,9 +1,9 @@
 <?php
 
-namespace Amber\Framework\Container\Facades;
+namespace Amber\Container\Facades;
 
-use Amber\Framework\Container\ContainerFacade;
-use Amber\Framework\Http\Session\Session as Accessor;
+use Amber\Container\ContainerFacade;
+use Amber\Http\Session\Session as Accessor;
 
 class Session extends ContainerFacade
 {

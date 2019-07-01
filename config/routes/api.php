@@ -1,9 +1,9 @@
 <?php
 
 $routes->get('/api', function () {
-    $version = Amber\Framework\Container\Facades\Amber::version();
+    $version = Amber\Container\Facades\Amber::version();
 
-    return Amber\Framework\Container\Facades\Response::json([
+    return Amber\Container\Facades\Response::json([
         'message' => $version,
     ]);
 });

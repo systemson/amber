@@ -1,9 +1,9 @@
 <?php
 
-namespace Amber\Framework\Container\Facades;
+namespace Amber\Container\Facades;
 
-use Amber\Framework\Http\Security\Csrf as Accessor;
-use Amber\Framework\Container\ContainerFacade;
+use Amber\Http\Security\Csrf as Accessor;
+use Amber\Container\ContainerFacade;
 
 class Csrf extends ContainerFacade
 {

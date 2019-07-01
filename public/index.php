@@ -12,7 +12,7 @@ define('INIT_TIME', microtime(true));
  */
 require __DIR__.'/../vendor/autoload.php';
 
-use Amber\Framework\Container\Application as App;
+use Amber\Container\Application as App;
 
 
 /**

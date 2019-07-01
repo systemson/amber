@@ -1,12 +1,12 @@
 <?php
 
-namespace Amber\Framework\Container;
+namespace Amber\Container;
 
 use Amber\Container\Container;
-use Amber\Framework\Container\ContainerFacade;
-use Amber\Framework\Container\ContainerAwareClass;
-use Amber\Framework\Container\Facades\Router;
-use Amber\Framework\Http\Server\ResponseDispatcher;
+use Amber\Container\ContainerFacade;
+use Amber\Container\ContainerAwareClass;
+use Amber\Container\Facades\Router;
+use Amber\Http\Server\ResponseDispatcher;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\ContainerInterface;

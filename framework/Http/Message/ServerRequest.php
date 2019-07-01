@@ -1,14 +1,14 @@
 <?php
 
-namespace Amber\Framework\Http\Message;
+namespace Amber\Http\Message;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
-use Amber\Framework\Http\Message\Traits\RequestTrait;
-use Amber\Framework\Http\Message\Traits\RequestUtilsTrait;
+use Amber\Http\Message\Traits\RequestTrait;
+use Amber\Http\Message\Traits\RequestUtilsTrait;
 use Amber\Collection\Collection;
 use Amber\Collection\ImmutableCollection;
-use Amber\Framework\Http\Message\Utils\FileCollection;
+use Amber\Http\Message\Utils\FileCollection;
 
 /**
  * Representation of an incoming, server-side HTTP request.

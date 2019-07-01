@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Http\Message\Traits;
+namespace Amber\Http\Message\Traits;
 
 trait ClonableTrait
 {

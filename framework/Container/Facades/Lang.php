@@ -1,9 +1,9 @@
 <?php
 
-namespace Amber\Framework\Container\Facades;
+namespace Amber\Container\Facades;
 
-use Amber\Framework\Container\ContainerFacade;
-use Amber\Framework\Helpers\Localization\Lang as Accessor;
+use Amber\Container\ContainerFacade;
+use Amber\Helpers\Localization\Lang as Accessor;
 
 class Lang extends ContainerFacade
 {

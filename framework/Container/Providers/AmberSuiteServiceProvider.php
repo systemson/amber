@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Framework\Container\Providers;
+namespace Amber\Container\Providers;
 
 use Illuminate\Database\Capsule\Manager as Eloquent;
 use Amber\Collection\Collection;

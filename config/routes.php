@@ -9,9 +9,9 @@ return [
         'web' => [
             'path' => CONFIG_DIR . '/routes/web.php',
             'middlewares' => [
-                Amber\Framework\Http\Server\Middleware\SessionMiddleware::class,
-                Amber\Framework\Http\Server\Middleware\AuthMiddleware::class,
-                Amber\Framework\Http\Server\Middleware\CsfrMiddleware::class,
+                Amber\Http\Server\Middleware\SessionMiddleware::class,
+                Amber\Http\Server\Middleware\AuthMiddleware::class,
+                Amber\Http\Server\Middleware\CsfrMiddleware::class,
             ],
             'prefix' => '',
             'namespace' => 'App\Http\Controllers',
@@ -21,7 +21,7 @@ return [
         'api' => [
             'path' => CONFIG_DIR . '/routes/api.php',
             'middlewares' => [
-                Amber\Framework\Http\Server\Middleware\ThrottleRequestMiddleware::class,
+                Amber\Http\Server\Middleware\ThrottleRequestMiddleware::class,
             ],
             'prefix' => 'api',
             'namespace' => 'App\Http\Controllers\Api',
