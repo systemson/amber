@@ -54,7 +54,7 @@ class AuthController extends Controller
 
         if (!$this->validateCredentials($credentials, $user)) {
             return $this->failedLoginResponse(
-                $container->get(Lang::class)->translate('validations.credentials')
+                $this->getFailLoginMessage($container)
             );
         }
 
@@ -99,9 +99,16 @@ class AuthController extends Controller
         return Response::redirect('/');
     }
 
-    protected function failedLoginResponse($errors = null)
+    protected function getFailLoginMessage($container): array
     {
-        if ($errors) {
+        return [
+            'email' => $container->get(Lang::class)->translate('validations.fail-login'),
+        ];
+    }
+
+    protected function failedLoginResponse(iterable $errors = [])
+    {
+        if (!empty($errors)) {
             Session::flash()->set('errors', $errors);
         }
 

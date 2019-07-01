@@ -31,8 +31,9 @@ class Response implements ResponseInterface
     public $protocol = '1.1';
     public $code;
     public $reasonPhrase;
-    public $headers;
     public $body;
+
+    public $headers;
 
     public function __construct(
         $code = StatusCodeInterface::STATUS_OK,

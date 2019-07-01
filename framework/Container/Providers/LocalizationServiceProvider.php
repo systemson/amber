@@ -13,8 +13,8 @@ class LocalizationServiceProvider extends ServiceProvider
         $this->getContainer()->register(Lang::class)
             ->setArguments([
                 'folder' => ASSETS_FOLDER . 'lang',
-                'default' => 'es',
-                'fallback' => 'en',
+                'default' => config('app.locale', 'es'),
+                'fallback' => config('app.fallback_locale', 'en'),
             ])
         ;
 

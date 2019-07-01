@@ -6,12 +6,12 @@
                 <li class="nav-item text-nowrap">
                     <form action="/logout" method="POST">
                         <skCsrf>
-                        <button class="btn btn-sm btn-danger">Sign out</button>
+                        <button class="btn btn-sm btn-danger"><skTranslate>auth.sign-out</skTranslate></button>
                     </form>
                 </li>
             <skElse>
                 <li class="nav-item text-nowrap">
-                    <a class="btn btn-sm btn-primary" href="/login">Sign in</a>
+                    <a class="btn btn-sm btn-primary" href="/login"><skTranslate>auth.sign-in</skTranslate></a>
                 </li>
             </skAuthCheck>
         </ul>

@@ -4,11 +4,11 @@
 	  		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
     			<span aria-hidden="true">&times;</span>
   			</button>
-        	<h4 class="alert-heading"><skTranslate>messages.errors</skTranslate>:</h4>
+        	<h4 class="alert-heading"><skTranslate>auth.errors</skTranslate>:</h4>
 			<ul>
-				<skForeach="$errors as $error">
-					<li><skEcho>$error</skEcho></li>
-				</skForeach>
+				<skShowErrors>
+					<li><skEcho>ucfirst($input)</skEcho>: <skEcho>$error</skEcho></li>
+				</skShowErrors>
 			</ul>
 		</div>
 	</div>
@@ -18,16 +18,16 @@
 	<form class="form-signin" action="/login" method="POST">
 		<skCsrf>
 
-		<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-		<label for="email" class="sr-only">Email address</label>
-		<input type="text" id="email" name="email" class="form-control" placeholder="Email address" required autofocus>
-		<label for="password" class="sr-only">Password</label>
-		<input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+		<h1 class="h3 mb-3 font-weight-normal"><skTranslate>auth.please-sign-in</skTranslate></h1>
+		<label for="email" class="sr-only"><skTranslate>auth.email</skTranslate></label>
+		<input type="text" id="email" name="email" class="form-control" placeholder="<skTranslate>auth.email</skTranslate>" required autofocus>
+		<label for="password" class="sr-only"><skTranslate>auth.password</skTranslate></label>
+		<input type="password" id="password" name="password" class="form-control" placeholder="<skTranslate>auth.password</skTranslate>" required>
 		<div class="checkbox mb-3">
 			<label>
-				<input type="checkbox" value="remember-me"> Remember me
+				<input type="checkbox" value="remember-me"> <skTranslate>auth.remember-me</skTranslate>
 			</label>
 		</div>
-		<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>	
+		<button class="btn btn-lg btn-primary btn-block" type="submit"><skTranslate>auth.sign-in</skTranslate></button>	
 	</form>
 </div>

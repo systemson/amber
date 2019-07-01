@@ -62,6 +62,12 @@ class ViewServiceProvider extends ServiceProvider
             )
             ->afterConstruct(
                 'setTag',
+                'show_errors',
+                '<?php foreach($errors as $input => $error): ?>',
+                '<?php endforeach; ?>'
+            )
+            ->afterConstruct(
+                'setTag',
                 'translate',
                 '<?php echo Amber\Framework\Container\Facades\Lang::translate("',
                 '"); ?>'

@@ -2,6 +2,10 @@
 
 return [
 
+    'locale' => 'es',
+
+    'fallback_locale' => 'en',
+
     /*
      * Registers the dependency injection container services.
      *
@@ -48,7 +52,7 @@ return [
      * The app default middlewares.
      *
      * This are the default and mandatory middlewares for every server request.
-     * If your middleware is route dependent add the middleware(s) as a route option(s.
+     * If your middleware is route dependent add the middleware(s) as a route option.
      */
     'middlewares' => [
         Amber\Framework\Http\Server\Middleware\ErrorHandlerMiddleware::class,
