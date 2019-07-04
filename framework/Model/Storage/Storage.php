@@ -20,11 +20,11 @@ class Storage extends ContainerAwareClass
 
     public function getProvider(string $name)
     {
-    	$provider = $this->providers[$name];
+        $provider = $this->providers[$name];
 
-    	if ($provider instanceof AbstractProvider) {
-    		return $provider;
-    	}
+        if ($provider instanceof AbstractProvider) {
+            return $provider;
+        }
         return $this->providers[$name] = $this->getContainer()->make($provider);
     }
 
@@ -51,11 +51,11 @@ class Storage extends ContainerAwareClass
 
     public function getMediator(string $name)
     {
-    	$mediator = $this->mediators[$name];
+        $mediator = $this->mediators[$name];
 
-    	if ($mediator instanceof PgsqlMediator) {
-    		return $mediator;
-    	}
+        if ($mediator instanceof PgsqlMediator) {
+            return $mediator;
+        }
 
         return $this->mediators[$name] = $this->getContainer()->make($mediator);
     }
@@ -76,40 +76,40 @@ class Storage extends ContainerAwareClass
 
     public function select($query)
     {
-    	$mediatorName = $query->provider->getMediator();
+        $mediatorName = $query->provider->getMediator();
 
-    	$mediator = $this->getMediator($mediatorName);
+        $mediator = $this->getMediator($mediatorName);
 
-    	return $mediator->select($query);
+        return $mediator->select($query);
     }
 
     public function insert($query)
     {
-    	$provider = $query->provider;
+        $provider = $query->provider;
 
-    	$mediatorName = $provider->getMediator();
+        $mediatorName = $provider->getMediator();
 
-    	$mediator = $this->getMediator($mediatorName);
+        $mediator = $this->getMediator($mediatorName);
 
-    	if (($id = $mediator->insert($query)) !== false) {
-    		return $this->select($provider->find($id));
-    	}
+        if (($id = $mediator->insert($query)) !== false) {
+            return $this->select($provider->find($id));
+        }
 
-    	return false;
+        return false;
     }
 
     public function update($query)
     {
-    	$provider = $query->provider;
+        $provider = $query->provider;
 
-    	$mediatorName = $provider->getMediator();
+        $mediatorName = $provider->getMediator();
 
-    	$mediator = $this->getMediator($mediatorName);
+        $mediator = $this->getMediator($mediatorName);
 
-    	if ($mediator->update($query)) {
-    		return true;
-    	}
+        if ($mediator->update($query)) {
+            return true;
+        }
 
-    	return false;
+        return false;
     }
 }

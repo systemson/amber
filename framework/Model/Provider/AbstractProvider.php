@@ -4,6 +4,9 @@ namespace Amber\Model\Provider;
 
 use Amber\Model\Contracts\Mediator;
 use Aura\SqlQuery\QueryFactory;
+use Amber\Model\QueryBuilder\QueryBuilder;
+use Amber\Model\Resource\Resource;
+use Psr\Log\LoggerInterface;
 
 abstract class AbstractProvider
 {
@@ -19,7 +22,21 @@ abstract class AbstractProvider
 
     public function __construct()
     {
-    	$this->mediator = getenv('DB_DRIVER');
+        $this->mediator = getenv('DB_DRIVER');
+    }
+
+    public function resource(): Resource
+    {
+        return $this->bootResource(new Resource());
+    }
+
+    public function bootResource(Resource $resource)
+    {
+        return $resource
+            ->setName($this->getName())
+            ->setId($this->getId())
+            ->setAttributes($this->getAttributes())
+        ;
     }
 
     public function setName(string $name): self
@@ -81,12 +98,21 @@ abstract class AbstractProvider
 
     public function query()
     {
-        return new QueryFactory(getenv('DB_DRIVER', 'pgsql'));
+        $factory = new QueryBuilder(getenv('DB_DRIVER', 'pgsql'));
+
+        $factory->setLastInsertIdNames([
+            $this->getName() . '.' . $this->getId() => $this->getName() . '_' . $this->getId() . '_seq',
+        ]);
+
+        return $factory;
     }
 
     public function select(array $columns = [])
     {
-        $query = $this->query()->newSelect()->from($this->getName());
+        $query = $this->query()
+            ->newSelect()
+            ->from($this->getName())
+        ;
 
         $query->provider = $this;
 
@@ -111,16 +137,33 @@ abstract class AbstractProvider
 
     public function find($id)
     {
-    	return $this->first()->where("$this->id = ?", $id);
+        return $this->first()->where("$this->id = ?", $id);
     }
 
     public function insert(array $columns)
+    {
+        $query = $this->query()
+            ->newInsert()
+            ->into($this->getName())
+        ;
+
+        $query->provider = $this;
+        $query->id = $this->getId();
+
+        $query->cols($columns);
+
+        return $query;
+    }
+
+    public function insertAll(array $items)
     {
         $query = $this->query()->newInsert()->into($this->getName());
 
         $query->provider = $this;
 
-        $query->cols($columns);
+        foreach ($items as $columns) {
+            $query->addRow($columns);
+        }
 
         return $query;
     }

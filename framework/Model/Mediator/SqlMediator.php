@@ -4,8 +4,12 @@ namespace Amber\Model\Mediator;
 
 use PDO;
 use Amber\Collection\Collection;
+use Amber\Model\Resource\Resource;
+use Aura\Sql\ExtendedPdo;
+use Aura\Sql\Profiler\Profiler;
+use Psr\Log\LoggerInterface;
 
-class PgsqlMediator
+class SqlMediator
 {
     protected $pdo;
 
@@ -26,18 +30,30 @@ class PgsqlMediator
 
         $dsn = "{$driver}:dbname={$name};host={$host};port={$port}";
 
-        $this->pdo = new PDO($dsn, $user, $pass, $options);
+        $this->pdo = new ExtendedPdo($dsn, $user, $pass, $options);
+        $this->pdo->setProfiler(new Profiler());
+    }
+
+    public function setLogger(LoggerInterface $logger): self
+    {
+        $this->logger = $logger;
+
+        $this->pdo->setProfiler(new Profiler($logger));
+
+        return $this;
+    }
+
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 
     protected function execute($query)
     {
-        $sth = $this->pdo->prepare($query->getStatement());
-
-        // bind the values and execute
-        $sth->execute($query->getBindValues());
-
-        return $sth;
-
+        return $this->pdo->perform(
+            $query->getStatement(),
+            $query->getBindValues()
+        );
     }
 
     public function select($query)
@@ -45,7 +61,10 @@ class PgsqlMediator
         $sth = $this->execute($query);
 
         // get the results back as an associative array
-        $sth->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Collection::class);
+        $sth->setFetchMode(
+            PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE,
+            Resource::class
+        );
 
         if ($query->getLimit() === 1) {
             return $sth->fetch();
@@ -58,14 +77,21 @@ class PgsqlMediator
     {
         $result = $this->execute($query);
 
+        $seq = $query->getLastInsertIdName('id');
+
         if ($result) {
-            return $this->pdo->lastInsertId();
+            return $this->pdo->lastInsertId($seq);
         }
 
         return false;
     }
 
     public function update($query)
+    {
+        return $this->execute($query);
+    }
+
+    public function delete($query)
     {
         return $this->execute($query);
     }
