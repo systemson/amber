@@ -8,19 +8,32 @@ class Resource extends Collection
 {
     private $_metadata = [];
 
-    public function setId($id = null): self
+    public function __construct(
+        array $array = [],
+        string $id = '',
+        string $name = '',
+        array $attributes = []
+    ) {
+        parent::__construct($array);
+
+        $this->setId($id);
+        $this->setName($name);
+        $this->setAttributes($attributes);
+    }
+
+    public function setId(string $id = ''): self
     {
         $this->_metadata['id'] = $id;
 
         return $this;
     }
 
-    public function getId()
+    public function getId(): string
     {
-        return $this->_metadata['id'] ;
+        return $this->_metadata['id'];
     }
 
-    public function setName(string $name = null): self
+    public function setName(string $name = ''): self
     {
         $this->_metadata['name']  = $name;
 
@@ -29,10 +42,10 @@ class Resource extends Collection
 
     public function getName(): string
     {
-        return $this->_metadata['name'] ;
+        return $this->_metadata['name'];
     }
 
-    public function setAttributes(array $attributes): self
+    public function setAttributes(array $attributes = []): self
     {
         $this->_metadata['attributes'] = $attributes;
 

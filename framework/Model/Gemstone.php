@@ -12,7 +12,8 @@ use Psr\Log\LoggerInterface;
 
 class Gemstone extends ContainerAwareClass
 {
-    protected $providers = [];
+    use ConnectionManager;
+
     protected $mediators = [];
     protected $logger;
 

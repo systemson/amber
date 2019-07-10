@@ -17,13 +17,11 @@ class LocalizationServiceProvider extends ServiceProvider
                 'fallback' => config('app.fallback_locale', 'en'),
             ])
         ;
-
         $lang = $this->getContainer()->get(Lang::class);
 
         // This validator must change to instance.
-        Validator::setMessages([
-            'email' => $lang->translate('validations.email'),
-            'length' => $lang->translate('validations.length'),
-        ]);
+        Validator::setMessages($lang->translate('validations.messages'));
+
+        Validator::setAttributes($lang->translate('validations.attributes'));
     }
 }

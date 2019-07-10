@@ -13,7 +13,7 @@ use Amber\Container\Facades\Session;
 use Amber\Helpers\Hash;
 use Psr\Http\Message\ServerRequestInterface;
 use Amber\Validator\Validator;
-use Amber\Helpers\Localization\Lang;
+use Amber\Container\Facades\Lang;
 
 class AuthController extends Controller
 {
@@ -23,6 +23,10 @@ class AuthController extends Controller
         'password' => 'password',
     ];
 
+    protected $redirectAfterLogin = '/';
+
+    protected $redirectAfterLogout = 'login';
+
     public function loginForm(ServerRequestInterface $request)
     {
         View::view($this->getView())
@@ -31,7 +35,7 @@ class AuthController extends Controller
         return View::toHtml();
     }
 
-    public function login(ServerRequestInterface $request, ContainerInterface $container)
+    public function login(ServerRequestInterface $request, UserProvider $provider)
     {
         /*
          * Validates the request
@@ -48,19 +52,17 @@ class AuthController extends Controller
 
         $credentials = $this->getCredentialsFromRequest($request);
 
-        $user = $container->get(UserProvider::class)
-            ->getUserByEmail($credentials['email'])
-        ;
+        $user = $provider->getUserByEmail($credentials['email']);
 
         if (!$this->validateCredentials($credentials, $user)) {
             return $this->failedLoginResponse(
-                $this->getFailLoginMessage($container)
+                $this->getFailLoginMessage()
             );
         }
 
 
         /*
-         * Returns a response after the user is successfully logged in.
+         * * Logs in the user an sends and returns a response after the user is successfully logged in.
          */
 
         return $this->successfulLoginResponse($user);
@@ -89,20 +91,20 @@ class AuthController extends Controller
 
     protected function redirectToLoginResponse()
     {
-        return Response::redirect('/login');
+        return Response::redirect($this->redirectAfterLogout);
     }
 
     protected function successfulLoginResponse($user)
     {
         $this->setRememberToken($user);
 
-        return Response::redirect('/');
+        return Response::redirect($this->redirectAfterLogin);
     }
 
-    protected function getFailLoginMessage($container): array
+    protected function getFailLoginMessage(): array
     {
         return [
-            'email' => $container->get(Lang::class)->translate('validations.fail-login'),
+            'email' => Lang::translate('validations.fail-login'),
         ];
     }
 
@@ -112,7 +114,7 @@ class AuthController extends Controller
             Session::flash()->set('errors', $errors);
         }
 
-        return Response::redirectBack('/');
+        return Response::redirectBack();
     }
 
     protected function setRememberToken($user): void
@@ -159,7 +161,16 @@ class AuthController extends Controller
     {
         $validations = $this->getRequestValidations();
 
-        return Validator::assert($validations, (object) $request->getParsedBody()->toArray());
+        $input = $request
+            ->getParsedBody()
+            ->only(['email', 'password'])
+            ->toArray()
+        ;
+
+        return Validator::assert(
+            $validations,
+            $input,
+        );
     }
 
     protected function getRequestValidations(): array

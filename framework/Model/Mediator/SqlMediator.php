@@ -30,22 +30,7 @@ class SqlMediator
 
         $dsn = "{$driver}:dbname={$name};host={$host};port={$port}";
 
-        $this->pdo = new ExtendedPdo($dsn, $user, $pass, $options);
-        $this->pdo->setProfiler(new Profiler());
-    }
-
-    public function setLogger(LoggerInterface $logger): self
-    {
-        $this->logger = $logger;
-
-        $this->pdo->setProfiler(new Profiler($logger));
-
-        return $this;
-    }
-
-    public function getLogger(): LoggerInterface
-    {
-        return $this->logger;
+        $this->pdo = new ExtendedPdo($dsn, $user, $pass, $options, [], new Profiler());
     }
 
     protected function execute($query)

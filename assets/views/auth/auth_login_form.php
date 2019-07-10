@@ -5,11 +5,9 @@
     			<span aria-hidden="true">&times;</span>
   			</button>
         	<h4 class="alert-heading"><skTranslate>auth.errors</skTranslate>:</h4>
-			<ul>
 				<skShowErrors>
-					<li><skEcho>ucfirst($input)</skEcho>: <skEcho>$error</skEcho></li>
+					<p><b><skEcho>ucfirst($input)</skEcho></b>:<br><skRaw>implode('.<br>', $error)</skRaw>.</p>
 				</skShowErrors>
-			</ul>
 		</div>
 	</div>
 </skHasErrors>
