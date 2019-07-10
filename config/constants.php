@@ -32,6 +32,19 @@ if (!function_exists('config')) {
     }
 }
 
+if (!function_exists('env')) {
+    function env(string $var, $default = null)
+    {
+        static $collection;
+
+        if ($value = getenv($var)) {
+            return $value;
+        }
+
+        return $default;
+    }
+}
+
 if (!function_exists('lang')) {
     function lang(string $slug)
     {

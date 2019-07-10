@@ -21,6 +21,13 @@ class Resource extends Collection
         $this->setAttributes($attributes);
     }
 
+    public function init(): self
+    {
+        $this->_metadata['stored'] = $this->all();
+
+        return $this;
+    }
+
     public function setId(string $id = ''): self
     {
         $this->_metadata['id'] = $id;
@@ -55,5 +62,20 @@ class Resource extends Collection
     public function getAttributes(): array
     {
         return $this->_metadata['attributes'];
+    }
+
+    public function validate()
+    {
+        return [];
+    }
+
+    public function isValid()
+    {
+        return empty($this->validate());
+    }
+
+    public function updatable()
+    {
+        return array_diff($this->toArray(), $this->_metadata['stored']);
     }
 }

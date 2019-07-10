@@ -17,6 +17,8 @@ class HomeController extends Controller
     {
         //$this->testQueryBuilder();
 
+        //$this->testProvider();
+
         View::view($this->getView())
             ->setLayout('layouts/app.php')
             ->setVar('name', 'World')
@@ -58,7 +60,44 @@ class HomeController extends Controller
             Gemstone::execute($update->where('id = ?', $id)),
             Gemstone::execute($select->where('id = ?', $id)),
             Gemstone::execute($delete->where('id = ?', $id)),
-            Gemstone::execute($select->where('id = ?', $id)),
+            Gemstone::execute($select->where('id = ?', $id))
+        );
+    }
+
+    public function testProvider()
+    {
+        $provider = new UsersProvider();
+
+        d(
+            'All',
+            $provider->all(),
+            'Insert',
+            $user = $provider->insert([
+                'name' => 'Nombre',
+                'email' => Hash::token(5) . '@' . Hash::token(8) . '.com',
+                'password' => 'secret',
+            ])
+            //$provider->find($user->id)
+        );
+
+        $user->name = 'Nombre de pruebas';
+
+        dd(
+            'Validate',
+            $user->validate(),
+            $user->isValid(),
+            'User',
+            $user,
+            'Diff',
+            $user->updatable(),
+            'Update',
+            $provider->update($user),
+            $provider->find($user->id),
+            'Delete',
+            $provider->delete($user),
+            $provider->find($user->id),
+            'All',
+            $provider->all()
         );
     }
 }

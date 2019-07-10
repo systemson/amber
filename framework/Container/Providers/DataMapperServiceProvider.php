@@ -15,13 +15,15 @@ class DataMapperServiceProvider extends ServiceProvider
     {
         $container = static::getContainer();
 
+        $connection = config('database.default');
+
         $container->bind(Schema::class, function () {
             return Manager::schema();
         });
 
         $container->register(QueryBuilder::class)
-            ->setArgument('db', function () {
-                return getenv('DB_DRIVER', 'pgsql');
+            ->setArgument('db', function () use ($connection) {
+                return $connection;
             })
         ;
 

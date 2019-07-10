@@ -8,9 +8,13 @@ class ModelServiceProvider extends ServiceProvider
 {
     public static function boot(): void
     {
+        $connection = config('database.default');
+
+        $configs = config("database.connections.{$connection}");
+
         $eloquent = new Eloquent();
 
-        $eloquent->addConnection(config('database.pgsql'));
+        $eloquent->addConnection($configs);
         $eloquent->setAsGlobal();
         $eloquent->bootEloquent();
     }

@@ -6,7 +6,9 @@ use Amber\Model\Contracts\Mediator;
 use Aura\SqlQuery\QueryFactory;
 use Amber\Model\QueryBuilder\QueryBuilder;
 use Amber\Model\Resource\Resource;
-use Psr\Log\LoggerInterface;
+use Aura\SqlQuery\AbstractQuery;
+use Amber\Container\Facades\Gemstone;
+use Amber\Collection\Contracts\CollectionInterface;
 
 abstract class AbstractProvider
 {
@@ -20,6 +22,8 @@ abstract class AbstractProvider
 
     protected $mediator;
 
+    protected $query;
+
     public function __construct()
     {
         $this->mediator = getenv('DB_DRIVER');
@@ -30,9 +34,14 @@ abstract class AbstractProvider
         return $this->bootResource(new Resource());
     }
 
-    public function bootResource(Resource $resource)
+    public function bootResource(Resource $resource = null): ?Resource
     {
+        if (is_null($resource)) {
+            return null;
+        }
+
         return $resource
+            ->init()
             ->setName($this->getName())
             ->setId($this->getId())
             ->setAttributes($this->getAttributes())
@@ -96,7 +105,7 @@ abstract class AbstractProvider
         return $this->attributes[$name] ?? null;
     }
 
-    public function query()
+    protected function query()
     {
         $factory = new QueryBuilder(getenv('DB_DRIVER', 'pgsql'));
 
@@ -109,35 +118,41 @@ abstract class AbstractProvider
 
     public function select(array $columns = [])
     {
-        $query = $this->query()
+        $this->query = $this->query()
             ->newSelect()
             ->from($this->getName())
         ;
 
-        $query->provider = $this;
-
         if (!empty($columns)) {
-            $query->cols($columns);
+            $this->query->cols($columns);
         } else {
-            $query->cols(['*']);
+            $this->query->cols(['*']);
         }
 
-        return $query;
+        return $this;
     }
 
     public function all()
     {
-        return $this->select();
+        return $this->select()
+            ->get()
+        ;
     }
 
     public function first()
     {
-        return $this->select()->limit(1);
+        return $this->select()
+            ->limit(1)
+            ->get()
+        ;
     }
 
     public function find($id)
     {
-        return $this->first()->where("$this->id = ?", $id);
+        return $this->bootResource($this->select()
+            ->where("$this->id = ?", $id)
+            ->limit(1)
+            ->get());
     }
 
     public function insert(array $columns)
@@ -147,24 +162,79 @@ abstract class AbstractProvider
             ->into($this->getName())
         ;
 
-        $query->provider = $this;
-        $query->id = $this->getId();
-
         $query->cols($columns);
 
-        return $query;
+        $id = Gemstone::execute($query);
+
+        return $this->find($id);
     }
 
-    public function insertAll(array $items)
+    public function update(Resource $resource)
     {
-        $query = $this->query()->newInsert()->into($this->getName());
+        $values = $resource->updatable();
 
-        $query->provider = $this;
+        if (!empty($values)) {
+            $query = $this->query()
+                ->newUpdate()
+                ->table($this->getName())
+                ->cols($values)
+                ->where($this->getId() . ' = ?', $resource->{$this->getId()})
+            ;
 
-        foreach ($items as $columns) {
-            $query->addRow($columns);
+            $resource->init();
+            return Gemstone::execute($query);
         }
 
-        return $query;
+        return false;
+    }
+
+    public function delete(Resource $resource)
+    {
+        $values = $resource->updatable();
+
+        if (!empty($values)) {
+            $query = $this->query()
+                ->newDelete()
+                ->from($this->getName())
+                ->where($this->getId() . ' = ?', $resource->{$this->getId()})
+            ;
+
+            return Gemstone::execute($query);
+        }
+
+        return false;
+    }
+
+    public function get()
+    {
+        $query = $this->query;
+        $this->query = null;
+
+        $result = Gemstone::execute($query);
+
+        if ($result instanceof Resource) {
+            return $this->bootResource($result);
+        } elseif ($result instanceof CollectionInterface && $result->isNotEmpty()) {
+            return $result->map(function ($resource) {
+                return $this->bootResource($resource);
+            });
+        }
+
+        return $result;
+    }
+
+    public function __call($method, $args = [])
+    {
+        if (!$this->query instanceof AbstractQuery) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
+        if (!in_array($method, get_class_methods($this->query))) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
+        $this->query = call_user_func_array([$this->query, $method], $args);
+
+        return $this;
     }
 }
