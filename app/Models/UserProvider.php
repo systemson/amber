@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Providers;
+namespace App\Models;
 
 use Amber\Model\Provider\AbstractProvider;
 
-class UsersProvider extends AbstractProvider
+class UserProvider extends AbstractProvider
 {
     protected $name = 'users';
 

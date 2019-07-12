@@ -2,7 +2,7 @@
 
 return [
 
-    'default' => 'mysql',
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     'connections' => [
 
@@ -22,6 +22,11 @@ return [
             'database' => env('DB_DATABASE', 'amber'),
             'username' => env('DB_USERNAME', 'postgres'),
             'password' => env('DB_PASSWORD', 'postgres'),
+        ],
+
+        'sqlite' => [
+            'driver'   => 'sqlite',
+            'database' => APP_DIR . env('DB_DATABASE', 'database/sqlite.db'),
         ],
     ]
 

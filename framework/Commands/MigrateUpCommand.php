@@ -22,15 +22,34 @@ class MigrateUpCommand extends Command
         $migrations = Filesystem::listContents('database/migrations');
 
         foreach ($migrations as $migration) {
-            $fullname = preg_replace("/[0-9]/", '', $migration['basename']);
-            $fullname = str_replace('.php', '', $fullname);
-            $class = Phraser::fromSnakeCase($fullname)->toCamelCase();
+            $class = $this->getClassName($migration['basename']);
 
-            $message = $class->fromCamelCase()->toSnakeCase()->replace('_', ' ')->upperCaseFirst();
+            $message = $this->getMessage($class)
+                ->upperCaseFirst()
+            ;
 
             $output->writeln("{$message} in process.");
             Application::make($class)->up(Application::get(Schema::class));
             $output->writeln("<info>{$message} done.</info>");
         }
+    }
+
+    protected function getClassName($path)
+    {
+        return Phraser::make($path)
+            ->pregReplace("/[0-9]/", '')
+            ->remove('.php')
+            ->fromSnakeCase()
+            ->toCamelCase()
+        ;
+    }
+
+    protected function getMessage($class)
+    {
+        return $class
+            ->fromCamelCase()
+            ->toSnakeCase()
+            ->replace('_', ' ')
+        ;
     }
 }

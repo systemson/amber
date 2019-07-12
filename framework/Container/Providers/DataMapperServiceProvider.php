@@ -15,15 +15,15 @@ class DataMapperServiceProvider extends ServiceProvider
     {
         $container = static::getContainer();
 
-        $connection = config('database.default');
+        $default = config('database.default');
 
         $container->bind(Schema::class, function () {
             return Manager::schema();
         });
 
         $container->register(QueryBuilder::class)
-            ->setArgument('db', function () use ($connection) {
-                return $connection;
+            ->setArgument('db', function () use ($default) {
+                return $default;
             })
         ;
 
@@ -31,7 +31,8 @@ class DataMapperServiceProvider extends ServiceProvider
             ->afterConstruct('setMediators', [
             'pgsql' => SqlMediator::class,
             'array' => ArrayMediator::class,
-            ])
+            ])->afterConstruct('addConnection', 'default', config("database.connections.{$default}"))
+            ->afterConstruct('addConnections', config('database.connections'))
         ;
     }
 

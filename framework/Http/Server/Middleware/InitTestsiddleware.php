@@ -34,6 +34,7 @@ class InitTestsiddleware extends RequestMiddleware
         //$this->testSession();
         //$this->loader();
         //$this->testUri();
+        //$this->testSqlite();
 
         return $handler->handle($request);
     }
@@ -85,5 +86,14 @@ class InitTestsiddleware extends RequestMiddleware
             (string) $uri2,
             (string) $uri3
         );
+    }
+
+    protected function testSqlite()
+    {
+        $path = APP_DIR . 'database/sqlite.db';
+
+        $pdo = new \PDO('sqlite:dbname:{$path}');
+
+        dd($pdo);
     }
 }

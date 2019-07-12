@@ -26,7 +26,7 @@ abstract class AbstractProvider
 
     public function __construct()
     {
-        $this->mediator = getenv('DB_DRIVER');
+        $this->mediator = env('DB_DRIVER', 'pgsql');
     }
 
     public function resource(): Resource
@@ -145,6 +145,19 @@ abstract class AbstractProvider
             ->limit(1)
             ->get()
         ;
+    }
+
+    public function where(string $column, string $operator, $value)
+    {
+        if (is_null($this->query)) {
+            $this->select();
+        }
+        
+        $this->query
+            ->where("{$column} {$operator} ?", $value)
+        ;
+
+        return $this;
     }
 
     public function find($id)

@@ -65,7 +65,7 @@ class AuthController extends Controller
          * * Logs in the user an sends and returns a response after the user is successfully logged in.
          */
 
-        return $this->successfulLoginResponse($user);
+        return $this->successfulLoginResponse($user, $provider);
     }
 
     public function logout(UserProvider $provider)
@@ -77,7 +77,7 @@ class AuthController extends Controller
 
             if (!is_null($user)) {
                 $user->remember_token = null;
-                $user->save();
+                $provider->update($user);
             }
 
             // Deletes the session cache
@@ -94,9 +94,9 @@ class AuthController extends Controller
         return Response::redirect($this->redirectAfterLogout);
     }
 
-    protected function successfulLoginResponse($user)
+    protected function successfulLoginResponse($user, $provider)
     {
-        $this->setRememberToken($user);
+        $this->setRememberToken($user, $provider);
 
         return Response::redirect($this->redirectAfterLogin);
     }
@@ -117,12 +117,13 @@ class AuthController extends Controller
         return Response::redirectBack();
     }
 
-    protected function setRememberToken($user): void
+    protected function setRememberToken($user, $provider): void
     {
         $newToken = $this->newToken($user);
 
         $user->remember_token = $newToken;
-        $user->save();
+
+        $provider->update($user);
 
         Session::set('_token', $newToken);
         Session::cache()->set($newToken, $user, 15);

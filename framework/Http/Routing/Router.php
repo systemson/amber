@@ -69,7 +69,7 @@ class Router implements RequestMethodInterface
 
         $route = $this->routeFactory($method, $url, $defaults);
 
-        $name = $this->getName($defaults);
+        $name = $this->getName($url, $defaults);
 
         $this->collection->add($name, $route);
 
@@ -117,12 +117,32 @@ class Router implements RequestMethodInterface
     /**
      * Return the default name of the route.
      */
-    protected function getName(array $defaults)
+    protected function getName(string $url, array $defaults): string
     {
+        $url = $this->getUrlName($url);
         $resource = $this->getResource($defaults['_controller'] ?? Phraser::make());
         $action = $this->getAction($defaults['_action'] ?? Phraser::make());
 
-        return "{$resource}_{$action}";
+        return Phraser::make()
+            ->explode('.')
+            ->append((string) $url)
+            ->append((string) $resource)
+            ->append((string) $action)
+            ->trim()
+            ->toString()
+        ;
+    }
+
+    /**
+     * Return the controller resource name.
+     */
+    private function getUrlName(string $url): Str
+    {
+        return Phraser::make($url)
+            ->explode('/')
+            ->trim()
+            ->toSnakeCase()
+        ;
     }
 
     /**
@@ -130,7 +150,13 @@ class Router implements RequestMethodInterface
      */
     private function getResource(Str $defaults): Str
     {
-        return $defaults->removeAll(['App\Controllers\\' , 'Controller'])
+        if ($defaults->isEmpty()) {
+            return $defaults;
+        }
+
+        return $defaults->explode('\\')
+            ->last()
+            ->remove('Controller')
             ->fromCamelCase()
             ->toSnakeCase()
         ;

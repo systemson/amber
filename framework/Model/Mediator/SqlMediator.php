@@ -8,6 +8,7 @@ use Amber\Model\Resource\Resource;
 use Aura\Sql\ExtendedPdo;
 use Aura\Sql\Profiler\Profiler;
 use Psr\Log\LoggerInterface;
+use Amber\Phraser\Phraser;
 
 class SqlMediator
 {
@@ -15,12 +16,14 @@ class SqlMediator
 
     public function __construct(array $options = [])
     {
-        $driver = getenv('DB_DRIVER');
-        $name = getenv('DB_DATABASE');
-        $host = getenv('DB_HOST');
-        $port = getenv('DB_PORT');
-        $user = getenv('DB_USERNAME');
-        $pass = getenv('DB_PASSWORD');
+        $driver = $options['driver'];
+
+        $dbname = $options['database'] ?? null;
+        $host = $options['host'] ?? null;
+        $port = $options['port'] ?? null;
+
+        $user = $options['username'];
+        $pass = $options['password'];
 
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -28,9 +31,13 @@ class SqlMediator
             PDO::ATTR_EMULATE_PREPARES   => false,
         ];
 
-        $dsn = "{$driver}:dbname={$name};host={$host};port={$port}";
+        $dsn = Phraser::make("{$driver}:")
+            ->append("dbname={$dbname};", $dbname)
+            ->append("host={$host};", $host)
+            ->append("port={$port};", $port)
+        ;
 
-        $this->pdo = new ExtendedPdo($dsn, $user, $pass, $options, [], new Profiler());
+        $this->pdo = new ExtendedPdo((string) $dsn, $user, $pass, $options, [], new Profiler());
     }
 
     protected function execute($query)

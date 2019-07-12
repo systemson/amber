@@ -9,9 +9,9 @@ trait ConnectionManager
 {
     protected $connections;
 
-    public function addConnection(string $name, array $config = []): self
+    public function addConnection(string $name, array $configs = []): self
     {
-        $this->connections[$name] = $config;
+        $this->connections[$name] = $configs;
 
         return $this;
     }
@@ -30,6 +30,15 @@ trait ConnectionManager
         return $this->connections[$name];
     }
 
+    public function addConnections(array $connections): self
+    {
+        foreach ($connections as $name => $configs) {
+            $this->addConnection($name, $configs);
+        }
+
+        return $this;
+    }
+
     public function connection(string $name = null): PDO
     {
         if (!is_null($name) && $this->hasConnection($name)) {
@@ -44,7 +53,7 @@ trait ConnectionManager
     protected function getDsnFromArray(array $configs = []): string
     {
         $driver = $configs['driver'];
-        $dbname = $configs['dbname'];
+        $dbname = $configs['database'];
         $host = $configs['host'];
         $port = $configs['port'];
 

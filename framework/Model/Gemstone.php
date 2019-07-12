@@ -42,8 +42,9 @@ class Gemstone extends ContainerAwareClass
             return $mediator;
         }
 
-        return $this->mediators[$name] = $this->getContainer()->make($mediator)
-            ->setLogger($this->getLogger())
+        return $this->getContainer()
+            ->register($mediator)
+            ->getInstance([$this->getConnection(env('DB_DRIVER', 'pgsql'))])
         ;
     }
 

@@ -2,23 +2,24 @@
 
 namespace Amber\Auth;
 
-use App\Models\User;
+use App\Models\UserProvider as ParentProvider;
 
-class UserProvider extends User implements UserProviderContract
+class UserProvider extends ParentProvider implements UserProviderContract
 {
-    protected $table = 'users';
-
-    public function hasUserBy(string $key, $value)
+    public function hasUserBy(string $key, $value): bool
     {
-        return $this->where($key, $value)->count() > 0;
+        return $this->where($key, '=', $value)->count() > 0;
     }
 
     public function getUserBy(string $key, $value)
     {
-        return $this->where($key, $value)->first();
+        return $this->where($key, '=', $value)
+            ->get()
+            ->first()
+        ;
     }
 
-    public function hasUserById(int $value)
+    public function hasUserById(int $value): bool
     {
         return $this->hasUserBy('id', $value)->count() > 0;
     }
@@ -28,9 +29,9 @@ class UserProvider extends User implements UserProviderContract
         return $this->getUserBy('id', $id);
     }
 
-    public function hasUserByEmail(string $email)
+    public function hasUserByEmail(string $email): bool
     {
-        return $this->hasUserBy('email', $email)->count() > 0;
+        return $this->hasUserBy('email', $email);
     }
 
     public function getUserByEmail(string $email)
@@ -38,7 +39,7 @@ class UserProvider extends User implements UserProviderContract
         return $this->getUserBy('email', $email);
     }
 
-    public function hasUserByToken(string $token)
+    public function hasUserByToken(string $token): bool
     {
         return $this->hasUserBy('remember_token', $token);
     }
