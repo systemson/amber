@@ -3,6 +3,7 @@
 namespace Amber\Model\Resource;
 
 use Amber\Collection\Collection;
+use Amber\Validator\Validator;
 
 class Resource extends Collection
 {
@@ -64,14 +65,35 @@ class Resource extends Collection
         return $this->_metadata['attributes'];
     }
 
-    public function validate()
+    public function setErrors(array $errors = []): self
     {
-        return [];
+        $this->_metadata['errors'] = $errors;
+
+        return $this;
     }
 
-    public function isValid()
+    public function getErrors(): array
     {
-        return empty($this->validate());
+        return $this->_metadata['errors'] ?? [];
+    }
+
+    public function validate()
+    {
+        $errors = Validator::assert(
+            $this->getAttributes(),
+            $this->all(),
+        );
+
+        $this->setErrors($errors->toArray());
+
+        return $errors;
+    }
+
+    public function isValid(): bool
+    {
+        if (!empty($this->validate())) {
+            return false;
+        }
     }
 
     public function updatable()

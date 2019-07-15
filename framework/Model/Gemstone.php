@@ -64,7 +64,7 @@ class Gemstone extends ContainerAwareClass
 
     public function select($query)
     {
-        $result = $this->getMediator(getenv('DB_DRIVER', 'pgsql'))
+        $result = $this->getMediator(env('DB_DRIVER', 'pgsql'))
             ->select($query)
         ;
 
@@ -77,7 +77,7 @@ class Gemstone extends ContainerAwareClass
 
     public function insert($query)
     {
-        $mediator = $this->getMediator(getenv('DB_DRIVER', 'pgsql'));
+        $mediator = $this->getMediator(env('DB_DRIVER', 'pgsql'));
 
         if (($id = $mediator->insert($query)) !== false) {
             return $id;
@@ -88,7 +88,7 @@ class Gemstone extends ContainerAwareClass
 
     public function update($query)
     {
-        $mediator = $this->getMediator(getenv('DB_DRIVER', 'pgsql'));
+        $mediator = $this->getMediator(env('DB_DRIVER', 'pgsql'));
 
         if ($mediator->update($query)) {
             return true;
@@ -99,13 +99,21 @@ class Gemstone extends ContainerAwareClass
 
     public function delete($query)
     {
-        $mediator = $this->getMediator(getenv('DB_DRIVER', 'pgsql'));
+        $mediator = $this->getMediator(env('DB_DRIVER', 'pgsql'));
 
         if ($mediator->update($query)) {
             return true;
         }
 
         return false;
+    }
+
+    protected function quote($values)
+    {
+        return $this->getMediator('default')
+            ->pdo
+            ->quote($values)
+        ;
     }
 
     public function execute($query)

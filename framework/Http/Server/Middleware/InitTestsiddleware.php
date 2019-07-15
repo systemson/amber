@@ -11,6 +11,10 @@ use Amber\Helpers\ClassMaker\Maker;
 use Amber\Http\Session\Session;
 use Amber\Helpers\Assets\Loader;
 use Amber\Http\Message\Uri;
+use Amber\Container\Facades\Gemstone;
+use App\Models\UserProvider;
+use Amber\Phraser\Phraser;
+use Amber\Helpers\Hash;
 
 /**
  * Participant in processing a server request and response.
@@ -35,6 +39,7 @@ class InitTestsiddleware extends RequestMiddleware
         //$this->loader();
         //$this->testUri();
         //$this->testSqlite();
+        //$this->testGemstone();
 
         return $handler->handle($request);
     }
@@ -95,5 +100,28 @@ class InitTestsiddleware extends RequestMiddleware
         $pdo = new \PDO('sqlite:dbname:{$path}');
 
         dd($pdo);
+    }
+
+    protected function testGemstone()
+    {
+        $provider = new UserProvider();
+
+        $new = $provider->new();
+
+        $new->name = Phraser::faker()->name;
+        $new->email = Phraser::faker()->email;
+
+        $password = Phraser::faker()->password();
+
+        $new->password = Hash::make($password);
+        $new->raw_password = $password;
+
+        if (!$new->isValid()) {
+            $errors = $new->getErrors();
+        }
+
+        $inserted = $provider->insert($new);
+
+        dd($inserted);
     }
 }

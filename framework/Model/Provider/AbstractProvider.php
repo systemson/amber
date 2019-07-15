@@ -12,6 +12,8 @@ use Amber\Collection\Contracts\CollectionInterface;
 
 abstract class AbstractProvider
 {
+    use Insertable, Selectable, Updatable, Deletable;
+
     protected $id = 'id';
 
     protected $name;
@@ -24,12 +26,19 @@ abstract class AbstractProvider
 
     protected $query;
 
+    const QUERY_CLASSES = [
+        'insert' => 'Aura\SqlQuery\Pgsql\Insert',
+        'select' => 'Aura\SqlQuery\Pgsql\Select',
+        'update' => 'Aura\SqlQuery\Pgsql\Update',
+        'delete' => 'Aura\SqlQuery\Pgsql\Delete',
+    ];
+
     public function __construct()
     {
         $this->mediator = env('DB_DRIVER', 'pgsql');
     }
 
-    public function resource(): Resource
+    public function new(): Resource
     {
         return $this->bootResource(new Resource());
     }
@@ -87,7 +96,6 @@ abstract class AbstractProvider
     public function setAttributes(array $attributes): self
     {
         $this->attributes = $attributes;
-        ;
     }
 
     public function getAttributes(): array
@@ -105,117 +113,42 @@ abstract class AbstractProvider
         return $this->attributes[$name] ?? null;
     }
 
-    protected function query()
+    protected function query(string $type = 'select')
     {
-        $factory = new QueryBuilder(getenv('DB_DRIVER', 'pgsql'));
+        $class = self::QUERY_CLASSES[$type];
+
+        if (!is_null($this->query) && $this->query instanceof $class) {
+            return $this->query;
+        }
+
+        $factory = new QueryBuilder(env('DB_DRIVER', 'pgsql'));
 
         $factory->setLastInsertIdNames([
             $this->getName() . '.' . $this->getId() => $this->getName() . '_' . $this->getId() . '_seq',
         ]);
 
-        return $factory;
-    }
+        switch ($type) {
+            case 'select':
+                return $this->query = $factory->newSelect();
+                break;
 
-    public function select(array $columns = [])
-    {
-        $this->query = $this->query()
-            ->newSelect()
-            ->from($this->getName())
-        ;
+            case 'insert':
+                return $this->query = $factory->newInsert();
+                break;
 
-        if (!empty($columns)) {
-            $this->query->cols($columns);
-        } else {
-            $this->query->cols(['*']);
+            case 'update':
+                return $this->query = $factory->newUpdate();
+                break;
+
+            case 'delete':
+                return $this->query = $factory->newDelete();
+                break;
+            
+            default:
+                throw new Exception("Wrong statement type.");
+                
+                break;
         }
-
-        return $this;
-    }
-
-    public function all()
-    {
-        return $this->select()
-            ->get()
-        ;
-    }
-
-    public function first()
-    {
-        return $this->select()
-            ->limit(1)
-            ->get()
-        ;
-    }
-
-    public function where(string $column, string $operator, $value)
-    {
-        if (is_null($this->query)) {
-            $this->select();
-        }
-        
-        $this->query
-            ->where("{$column} {$operator} ?", $value)
-        ;
-
-        return $this;
-    }
-
-    public function find($id)
-    {
-        return $this->bootResource($this->select()
-            ->where("$this->id = ?", $id)
-            ->limit(1)
-            ->get());
-    }
-
-    public function insert(array $columns)
-    {
-        $query = $this->query()
-            ->newInsert()
-            ->into($this->getName())
-        ;
-
-        $query->cols($columns);
-
-        $id = Gemstone::execute($query);
-
-        return $this->find($id);
-    }
-
-    public function update(Resource $resource)
-    {
-        $values = $resource->updatable();
-
-        if (!empty($values)) {
-            $query = $this->query()
-                ->newUpdate()
-                ->table($this->getName())
-                ->cols($values)
-                ->where($this->getId() . ' = ?', $resource->{$this->getId()})
-            ;
-
-            $resource->init();
-            return Gemstone::execute($query);
-        }
-
-        return false;
-    }
-
-    public function delete(Resource $resource)
-    {
-        $values = $resource->updatable();
-
-        if (!empty($values)) {
-            $query = $this->query()
-                ->newDelete()
-                ->from($this->getName())
-                ->where($this->getId() . ' = ?', $resource->{$this->getId()})
-            ;
-
-            return Gemstone::execute($query);
-        }
-
-        return false;
     }
 
     public function get()

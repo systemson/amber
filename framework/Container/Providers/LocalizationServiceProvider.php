@@ -5,6 +5,7 @@ namespace Amber\Container\Providers;
 use Illuminate\Database\Capsule\Manager as Eloquent;
 use Amber\Helpers\Localization\Lang;
 use Amber\Validator\Validator;
+use Amber\Phraser\Phraser;
 
 class LocalizationServiceProvider extends ServiceProvider
 {
@@ -23,5 +24,14 @@ class LocalizationServiceProvider extends ServiceProvider
         Validator::setMessages($lang->translate('validations.messages'));
 
         Validator::setAttributes($lang->translate('validations.attributes'));
+
+        /*Phraser::setMacro('faker', function (string $locale = null) {
+
+            if (is_null($locale)) {
+                $locale = config('app.faker_locale');
+            }
+
+            return \Faker\Factory::create($locale);
+        });*/
     }
 }

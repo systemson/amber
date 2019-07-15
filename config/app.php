@@ -6,6 +6,8 @@ return [
 
     'fallback_locale' => 'en',
 
+    'faker_locale' => 'es_ES',
+
     /*
      * Registers the dependency injection container services.
      *

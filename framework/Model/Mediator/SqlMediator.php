@@ -12,7 +12,7 @@ use Amber\Phraser\Phraser;
 
 class SqlMediator
 {
-    protected $pdo;
+    public $pdo;
 
     public function __construct(array $options = [])
     {

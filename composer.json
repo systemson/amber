@@ -36,6 +36,7 @@
         "aura/sql": "^3.0",
         "aura/sqlquery": "^2.7",
         "aura/sqlschema": "^2.0",
+        "fzaninotto/faker": "^1.8",
         "illuminate/database": "^5.8",
         "monolog/monolog": "^1.24",
         "psr/event-dispatcher": "^1.0",
