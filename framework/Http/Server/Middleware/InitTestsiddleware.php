@@ -15,6 +15,7 @@ use Amber\Container\Facades\Gemstone;
 use App\Models\UserProvider;
 use Amber\Phraser\Phraser;
 use Amber\Helpers\Hash;
+use Amber\Container\Facades\Str;
 
 /**
  * Participant in processing a server request and response.
@@ -108,10 +109,10 @@ class InitTestsiddleware extends RequestMiddleware
 
         $new = $provider->new();
 
-        $new->name = Phraser::faker()->name;
-        $new->email = Phraser::faker()->email;
+        $new->name = Str::faker()->name;
+        $new->email = Str::faker()->email;
 
-        $password = Phraser::faker()->password();
+        $password = Str::faker()->password();
 
         $new->password = Hash::make($password);
         $new->raw_password = $password;
@@ -122,6 +123,17 @@ class InitTestsiddleware extends RequestMiddleware
 
         $inserted = $provider->insert($new);
 
-        dd($inserted);
+        d($inserted);
+
+        $inserted->name = 'Deivi Peña';
+        
+        $provider->update($inserted);
+
+        dd(
+            $inserted,
+            $provider->find($inserted->id),
+        );
+
+
     }
 }

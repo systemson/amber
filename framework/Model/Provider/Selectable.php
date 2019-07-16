@@ -6,17 +6,10 @@ use Amber\Container\Facades\Gemstone;
 
 trait Selectable
 {
-    public function select(array $columns = [])
+    public function select(array $columns = ['*'])
     {
         $this->query('select')
             ->from($this->getName())
-        ;
-
-        if (empty($columns)) {
-            $columns = ['*'];
-        }
-        
-        $this->query()
             ->cols($columns)
         ;
 
@@ -40,11 +33,11 @@ trait Selectable
 
     public function find($id)
     {
-        return $this->bootResource($this->select()
+        return $this->bootResource($this
             ->where($this->id, '=', $id)
             ->limit(1)
-            ->get())
-        ;
+            ->get()
+        );
     }
 
     public function where(string $column, string $operator, $value)

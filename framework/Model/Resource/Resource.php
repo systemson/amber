@@ -100,4 +100,49 @@ class Resource extends Collection
     {
         return array_diff($this->toArray(), $this->_metadata['stored']);
     }
+
+    public function hasDefault(string $attribute)
+    {
+        $ruleSet = $this->getAttributes()[$attribute] ?? null;
+
+        if (!is_null($ruleSet)) {
+            return strpos($ruleSet, 'default') !== false;
+        }
+
+        return false;
+    }
+
+    public function getDefault(string $attribute)
+    {
+        if (!$this->hasDefault($attribute)) {
+            return null;
+        }
+
+        $ruleSet = $this->getAttributes()[$attribute] ?? null;
+
+        $array1 = explode('|', $ruleSet);
+
+        foreach ($array1 as $value) {
+            $set = explode(':', $value);
+
+            if ($set[0] == 'default') {
+                return $set[1];
+            }
+        }
+
+        return null;
+    }
+
+    public function insertable()
+    {
+        foreach ($this->getAttributes() as $attr => $ruleSet) {
+            if ($this->has($attr)) {
+                $array[$attr] = $this->get($attr);
+            } elseif ($this->hasDefault($attr)) {
+                $array[$attr] = $this->getDefault($attr);
+            }
+        }
+
+        return $array;
+    }
 }

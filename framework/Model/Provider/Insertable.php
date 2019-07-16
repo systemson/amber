@@ -4,12 +4,15 @@ namespace Amber\Model\Provider;
 
 use Amber\Container\Facades\Gemstone;
 use Amber\Model\Resource\Resource;
+use Carbon\Carbon;
 
 trait Insertable
 {
     public function insert(Resource $resource)
     {
-        $values = $resource->all();
+        $resource->created_at = (string) Carbon::now();
+
+        $values = $resource->insertable();
 
         if (empty($values)) {
             return false;
