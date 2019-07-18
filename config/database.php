@@ -28,6 +28,15 @@ return [
             'driver'   => 'sqlite',
             'database' => APP_DIR . env('DB_DATABASE', 'database/sqlite.db'),
         ],
+
+        'oracle' => [
+            'driver'   => 'oracle',
+            'host'     => env('DB_HOST', '127.0.0.1'),
+            'port'     => env('DB_PORT', '1521'),
+            'database' => env('DB_DATABASE', 'amber'),
+            'username' => env('DB_USERNAME', 'admin'),
+            'password' => env('DB_PASSWORD', 'secret'),
+        ],
     ]
 
 ];

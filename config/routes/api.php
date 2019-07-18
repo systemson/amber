@@ -7,3 +7,12 @@ $routes->get('/api', function () {
         'message' => $version,
     ]);
 });
+
+$routes->get('/api/users' , function () {
+
+	$provider = new App\Models\UserProvider();
+
+	 return Amber\Container\Facades\Response::json([
+        $provider->all()
+    ]);
+});

@@ -25,6 +25,7 @@ class DataMapperServiceProvider extends ServiceProvider
             ->setArgument('db', function () use ($default) {
                 return $default;
             })
+            ->setArgument('common', QueryBuilder::COMMON)
         ;
 
         $container->register(Gemstone::class)

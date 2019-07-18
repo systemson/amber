@@ -14,7 +14,6 @@ class UserProvider extends ParentProvider implements UserProviderContract
     public function getUserBy(string $key, $value)
     {
         return $this->where($key, '=', $value)
-            ->get()
             ->first()
         ;
     }

@@ -18,7 +18,7 @@ trait Selectable
 
     public function all()
     {
-        return $this->select()
+        return dd($this->select())
             ->get()
         ;
     }

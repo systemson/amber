@@ -62,7 +62,7 @@ class AuthController extends Controller
 
 
         /*
-         * * Logs in the user an sends and returns a response after the user is successfully logged in.
+         * * Logs in the user and returns a response after the user is successfully logged in.
          */
 
         return $this->successfulLoginResponse($user, $provider);

@@ -6,7 +6,7 @@
   			</button>
         	<h4 class="alert-heading"><skTranslate>auth.errors</skTranslate>:</h4>
 				<skShowErrors>
-					<!--<p><b><skEcho>ucfirst($input)</skEcho></b>:<br><skRaw>implode('.<br>', (array) $error)</skRaw>.</p>-->
+					<p><b><skEcho>ucfirst($input)</skEcho></b>:<br><skRaw>implode('.<br>', (array) $error)</skRaw>.</p>
 				</skShowErrors>
 		</div>
 	</div>
