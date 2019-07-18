@@ -131,7 +131,7 @@ class InitTestsiddleware extends RequestMiddleware
 
         dd(
             $inserted,
-            $provider->find($inserted->id),
+            $provider->find($inserted->id)
         );
 
 

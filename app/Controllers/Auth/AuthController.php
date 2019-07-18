@@ -170,7 +170,7 @@ class AuthController extends Controller
 
         return Validator::assert(
             $validations,
-            $input,
+            $input
         );
     }
 

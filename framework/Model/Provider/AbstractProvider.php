@@ -10,6 +10,10 @@ use Aura\SqlQuery\AbstractQuery;
 use Amber\Container\Facades\Gemstone;
 use Amber\Collection\Contracts\CollectionInterface;
 
+/**
+ * @todo MUST implement method save(), it should decide to insert or update the resource in the storage.
+ * @todo Method save must accept a single resource or an Array/Collection of resources.
+ */
 abstract class AbstractProvider
 {
     use Insertable, Selectable, Updatable, Deletable;
