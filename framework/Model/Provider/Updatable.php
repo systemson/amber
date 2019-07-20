@@ -27,7 +27,7 @@ trait Updatable
         $result = Gemstone::execute($query);
 
         if ($result === true) {
-            $resource->init();
+            $resource->boot();
         }
 
         return $result;

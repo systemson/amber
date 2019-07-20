@@ -6,7 +6,7 @@ use Amber\Container\Facades\Gemstone;
 
 trait Selectable
 {
-    public function select(array $columns = ['*'])
+    public function select(array $columns = [])
     {
         $this->query('select')
             ->from($this->getName())
@@ -18,7 +18,7 @@ trait Selectable
 
     public function all()
     {
-        return dd($this->select())
+        return $this->select()
             ->get()
         ;
     }

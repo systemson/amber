@@ -54,7 +54,7 @@ abstract class AbstractProvider
         }
 
         return $resource
-            ->init()
+            ->boot()
             ->setName($this->getName())
             ->setId($this->getId())
             ->setAttributes($this->getAttributes())
@@ -117,7 +117,7 @@ abstract class AbstractProvider
         return $this->attributes[$name] ?? null;
     }
 
-    protected function query(string $type = 'select')
+    public function query(string $type = 'select')
     {
         $class = self::QUERY_CLASSES[$type];
 
@@ -149,8 +149,7 @@ abstract class AbstractProvider
                 break;
             
             default:
-                throw new Exception("Wrong statement type.");
-                
+                throw new \Exception("Wrong statement type.");
                 break;
         }
     }

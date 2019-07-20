@@ -7,6 +7,7 @@ use Amber\Model\Mediator\SqlMediator;
 use Amber\Model\Resource\Resource;
 use Amber\Collection\Collection;
 use Psr\Log\LoggerInterface;
+use Amber\Phraser\Phraser;
 
 class Gemstone extends ContainerAwareClass
 {
@@ -118,27 +119,29 @@ class Gemstone extends ContainerAwareClass
 
     public function execute($query)
     {
-        $class = get_class($query);
+        $type = Phraser::explode(get_class($query), '\\')
+            ->last()
+        ;
 
-        switch ($class) {
-            case 'Aura\SqlQuery\Pgsql\Insert':
+        switch ($type) {
+            case 'Insert':
                 return $this->insert($query);
                 break;
 
-            case 'Aura\SqlQuery\Pgsql\Select':
+            case 'Select':
                 return $this->select($query);
                 break;
 
-            case 'Aura\SqlQuery\Pgsql\Update':
+            case 'Update':
                 return $this->update($query);
                 break;
 
-            case 'Aura\SqlQuery\Pgsql\Delete':
+            case 'Delete':
                 return $this->delete($query);
                 break;
             
             default:
-                # code...
+                return $this->select($query);
                 break;
         }
     }

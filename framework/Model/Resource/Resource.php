@@ -22,7 +22,7 @@ class Resource extends Collection
         $this->setAttributes($attributes);
     }
 
-    public function init(): self
+    public function boot(): self
     {
         $this->_metadata['stored'] = $this->all();
 
