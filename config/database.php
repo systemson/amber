@@ -26,7 +26,7 @@ return [
 
         'sqlite' => [
             'driver'   => 'sqlite',
-            'database' => APP_DIR . env('DB_DATABASE', 'database/sqlite.db'),
+            'database' => realpath(APP_DIR . env('DB_DATABASE', 'database/sqlite.db')),
         ],
 
         'oracle' => [

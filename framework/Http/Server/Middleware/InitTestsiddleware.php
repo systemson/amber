@@ -96,11 +96,17 @@ class InitTestsiddleware extends RequestMiddleware
 
     protected function testSqlite()
     {
-        $path = APP_DIR . 'database/sqlite.db';
+        $path = realpath(config('database.connections.sqlite.database'));
 
-        $pdo = new \PDO('sqlite:dbname:{$path}');
+        $pdo1 = new \Aura\Sql\ExtendedPdo('sqlite:dbname={$path}', null, null, []);
+        $pdo2 = new \Aura\Sql\ExtendedPdo('sqlite:dbname={$path}');
+        $pdo3 = new \Aura\Sql\ExtendedPdo('sqlite:dbname={$path}');
 
-        dd($pdo);
+        dd(
+            $pdo1,
+            $pdo2,
+            $pdo3
+        );
     }
 
     protected function testGemstone()
@@ -133,7 +139,5 @@ class InitTestsiddleware extends RequestMiddleware
             $inserted,
             $provider->find($inserted->id)
         );
-
-
     }
 }

@@ -175,11 +175,11 @@ abstract class AbstractProvider
     public function __call($method, $args = [])
     {
         if (!$this->query instanceof AbstractQuery) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Error Processing Request");
         }
 
         if (!in_array($method, get_class_methods($this->query))) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Error Processing Request");
         }
 
         $this->query = call_user_func_array([$this->query, $method], $args);

@@ -9,20 +9,19 @@ class UserTableSeeder
     public function run()
     {
         $provider = new UserProvider();
-        $user = $provider->new();
 
-        $user->name = 'Administrator';
-        $user->email = 'admin@admin.com';
-        $user->password = Hash::make('secret');
-
-        $provider->insert($user);
+        $admin = $provider->new();
+        $admin->name = 'Administrator';
+        $admin->email = 'admin@admin.com';
+        $admin->password = Hash::make('secret');
 
         $user = $provider->new();
-
         $user->name = 'Test';
         $user->email = 'test@test.com';
         $user->password = Hash::make('secret');
 
+
+        $provider->insert($admin);
         $provider->insert($user);
     }
 }

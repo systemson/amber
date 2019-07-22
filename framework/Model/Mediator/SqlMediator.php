@@ -19,11 +19,17 @@ class SqlMediator
         $driver = $options['driver'];
 
         $dbname = $options['database'] ?? null;
+
+        if ($driver == 'sqlite') {
+            $this->pdo = new ExtendedPdo("sqlite:{$dbname}");
+            return;
+        }
+
         $host = $options['host'] ?? null;
         $port = $options['port'] ?? null;
 
-        $user = $options['username'];
-        $pass = $options['password'];
+        $user = $options['username'] ?? null;
+        $pass = $options['password'] ?? null;
 
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -37,7 +43,7 @@ class SqlMediator
             ->append("port={$port};", $port)
         ;
 
-        $this->pdo = new ExtendedPdo((string) $dsn, $user, $pass, $options, [], new Profiler());
+        $this->pdo = new ExtendedPdo((string) $dsn, $user, $pass, $options);
     }
 
     protected function execute($query)

@@ -8,6 +8,7 @@ use Amber\Model\Gemstone;
 use Amber\Model\Mediator\SqlMediator;
 use Amber\Model\Mediator\ArrayMediator;
 use Amber\Model\QueryBuilder\QueryBuilder;
+use Aura\Sql\ExtendedPdo;
 
 class DataMapperServiceProvider extends ServiceProvider
 {
@@ -30,7 +31,7 @@ class DataMapperServiceProvider extends ServiceProvider
 
         $container->register(Gemstone::class)
             ->afterConstruct('setMediators', [
-            'pgsql' => SqlMediator::class,
+            'sql' => SqlMediator::class,
             'array' => ArrayMediator::class,
             ])->afterConstruct('addConnection', 'default', config("database.connections.{$default}"))
             ->afterConstruct('addConnections', config('database.connections'))

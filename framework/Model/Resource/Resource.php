@@ -24,9 +24,14 @@ class Resource extends Collection
 
     public function boot(): self
     {
-        $this->_metadata['stored'] = $this->all();
+        $this->setStoredValues($this->all());
 
         return $this;
+    }
+
+    public function isNew()
+    {
+        return empty($this->getStoredValues());
     }
 
     public function setId(string $id = ''): self
@@ -51,6 +56,18 @@ class Resource extends Collection
     public function getName(): string
     {
         return $this->_metadata['name'];
+    }
+
+    public function getStoredValues(): array
+    {
+        return $this->_metadata['stored'] ?? [];
+    }
+
+    public function setStoredValues(array $stored): self
+    {
+        $this->_metadata['stored'] = $stored;
+
+        return $this;
     }
 
     public function setAttributes(array $attributes = []): self
@@ -81,7 +98,7 @@ class Resource extends Collection
     {
         $errors = Validator::assert(
             $this->getAttributes(),
-            $this->all(),
+            $this->all()
         );
 
         $this->setErrors($errors->toArray());

@@ -39,7 +39,7 @@ trait ConnectionManager
         return $this;
     }
 
-    public function connection(string $name = null): PDO
+    public function connect(string $name = null): PDO
     {
         if (!is_null($name) && $this->hasConnection($name)) {
             $configs = $this->getConnection($name);
