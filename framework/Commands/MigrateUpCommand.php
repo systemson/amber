@@ -10,6 +10,7 @@ use Amber\Container\Application;
 use Amber\Container\Facades\Filesystem;
 use Amber\Phraser\Phraser;
 use Illuminate\Database\Schema\Builder as Schema;
+use Amber\Collection\Collection;
 
 class MigrateUpCommand extends Command
 {
@@ -19,7 +20,12 @@ class MigrateUpCommand extends Command
     {
         $output->writeln('<comment>Running migrations up.</comment>');
 
-        $migrations = Filesystem::listContents('database/migrations');
+        $migrations = Collection::make(
+                Filesystem::listContents('database/migrations')
+            )->sort(function ($a, $b) {
+                return $a['filename'] <=> $b['filename'];
+            })
+        ;
 
         foreach ($migrations as $migration) {
             $class = $this->getClassName($migration['basename']);

@@ -8,7 +8,10 @@ class UserProvider extends ParentProvider implements UserProviderContract
 {
     public function hasUserBy(string $key, $value): bool
     {
-        return $this->where($key, '=', $value)->count() > 0;
+        return $this->where($key, '=', $value)
+            ->count()
+            ->get()
+            > 0;
     }
 
     public function getUserBy(string $key, $value)

@@ -30,6 +30,7 @@ return [
         Amber\Http\Server\Middleware\ApiTokenMiddleware::class,
         Amber\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
         Amber\Http\Server\Middleware\ThrottleRequestMiddleware::class,
+        Amber\Http\Server\Middleware\ParseBodyContentMiddleware::class,
     ],
 
     /*
@@ -60,6 +61,7 @@ return [
         Amber\Http\Server\Middleware\ErrorHandlerMiddleware::class,
         Amber\Http\Server\Middleware\InitTestsiddleware::class,
         Amber\Http\Server\Middleware\RequestMethodHandlerMiddleware::class,
+        Amber\Http\Server\Middleware\ParseBodyContentMiddleware::class,
         Amber\Http\Server\Middleware\RouteHandlerMiddleware::class,
         Amber\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
     ],

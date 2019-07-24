@@ -95,3 +95,11 @@ if (!function_exists('carbon')) {
         ]);
     }
 }
+
+
+if (!function_exists('path')) {
+    function path(string $path)
+    {
+        return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
+    }
+}

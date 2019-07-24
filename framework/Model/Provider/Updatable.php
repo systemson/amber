@@ -18,16 +18,18 @@ trait Updatable
             return false;
         }
 
+        $id = $resource->{$this->getId()};
+
         $query = $this->query('update')
             ->table($this->getName())
             ->cols($values)
-            ->where($this->getId() . ' = ?', $resource->{$this->getId()})
+            ->where($this->getId() . ' = ?', $id)
         ;
 
         $result = Gemstone::execute($query);
 
         if ($result === true) {
-            $resource->boot();
+            return $this->find($id);
         }
 
         return $result;

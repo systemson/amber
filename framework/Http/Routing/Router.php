@@ -63,11 +63,11 @@ class Router implements RequestMethodInterface
     /**
      * Adds a new route to the route collection.
      */
-    private function addRoute(string $method, string $url, $defaults): Route
+    private function addRoute(array $methods, string $url, $defaults): Route
     {
         $defaults = $this->handleDefaults($defaults);
 
-        $route = $this->routeFactory($method, $url, $defaults);
+        $route = $this->routeFactory($methods, $url, $defaults);
 
         $name = $this->getName($url, $defaults);
 
@@ -95,7 +95,7 @@ class Router implements RequestMethodInterface
     }
 
     /**
-     * Retuns an array with the controller and the action names.
+     * Returns an array with the controller and the action names.
      */
     private function getControllerToActionArray($defaults)
     {
@@ -104,18 +104,20 @@ class Router implements RequestMethodInterface
     }
 
     /**
-     * Return a new Route Instance.
+     * Returns a new Route Instance.
      */
-    protected function routeFactory(string $method, string $url, array $defaults): Route
+    protected function routeFactory(array $methods, string $url, array $defaults): Route
     {
+        $methods = array_map('strtoupper', $methods);
+
         return (new Route($url))
-            ->setMethods(strtoupper($method))
+            ->setMethods($methods)
             ->setDefaults($defaults)
         ;
     }
 
     /**
-     * Return the default name of the route.
+     * Returns the default name of the route.
      */
     protected function getName(string $url, array $defaults): string
     {
@@ -134,7 +136,7 @@ class Router implements RequestMethodInterface
     }
 
     /**
-     * Return the controller resource name.
+     * Returns the controller resource name.
      */
     private function getUrlName(string $url): Str
     {
@@ -146,7 +148,7 @@ class Router implements RequestMethodInterface
     }
 
     /**
-     * Return the controller resource name.
+     * Returns the controller resource name.
      */
     private function getResource(Str $defaults): Str
     {
@@ -163,7 +165,7 @@ class Router implements RequestMethodInterface
     }
 
     /**
-     * Return the controller action name.
+     * Returns the controller action name.
      */
     private function getAction(Str $defaults): Str
     {
@@ -174,27 +176,32 @@ class Router implements RequestMethodInterface
 
     public function get(string $url, $defaults)
     {
-        return $this->addRoute(self::METHOD_GET, $url, $defaults);
+        return $this->addRoute([self::METHOD_GET], $url, $defaults);
     }
 
     public function post(string $url, $defaults)
     {
-        return $this->addRoute(self::METHOD_POST, $url, $defaults);
+        return $this->addRoute([self::METHOD_POST], $url, $defaults);
     }
 
     public function patch(string $url, $defaults)
     {
-        return $this->addRoute(self::METHOD_PATCH, $url, $defaults);
+        return $this->addRoute([self::METHOD_PATCH], $url, $defaults);
     }
 
     public function put(string $url, $defaults)
     {
-        return $this->addRoute(self::METHOD_PUT, $url, $defaults);
+        return $this->addRoute([self::METHOD_PUT], $url, $defaults);
     }
 
     public function delete(string $url, $defaults)
     {
-        return $this->addRoute(self::METHOD_DELETE, $url, $defaults);
+        return $this->addRoute([self::METHOD_DELETE], $url, $defaults);
+    }
+
+    public function update(string $url, $defaults)
+    {
+        return $this->addRoute([self::METHOD_PUT, self::METHOD_PATCH], $url, $defaults);
     }
 
     public function group(\Closure $callback, array $options = [])

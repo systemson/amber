@@ -117,6 +117,8 @@ class RequestHandler implements RequestHandlerInterface
         /* Check if the request wants a json response */
         if (strpos($request->getHeader('Accept'), 'application/json') !== false) {
             $body = json_encode(['message' => $reason]);
+
+            $response = $response->withHeader('Content-type', 'application/json');
         } else {
             $body = $reason;
         }

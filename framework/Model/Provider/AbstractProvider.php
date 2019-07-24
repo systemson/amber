@@ -9,6 +9,9 @@ use Amber\Model\Resource\Resource;
 use Aura\SqlQuery\AbstractQuery;
 use Amber\Container\Facades\Gemstone;
 use Amber\Collection\Contracts\CollectionInterface;
+use Amber\Phraser\Phraser;
+
+use Amber\Model\Traits\AttributesTrait;
 
 /**
  * @todo MUST implement method save(), it should decide to insert or update the resource in the storage.
@@ -16,7 +19,7 @@ use Amber\Collection\Contracts\CollectionInterface;
  */
 abstract class AbstractProvider
 {
-    use Insertable, Selectable, Updatable, Deletable;
+    use AttributesTrait, Insertable, Selectable, Updatable, Deletable;
 
     protected $id = 'id';
 
@@ -31,10 +34,10 @@ abstract class AbstractProvider
     protected $query;
 
     const QUERY_CLASSES = [
-        'insert' => 'Aura\SqlQuery\Pgsql\Insert',
-        'select' => 'Aura\SqlQuery\Pgsql\Select',
-        'update' => 'Aura\SqlQuery\Pgsql\Update',
-        'delete' => 'Aura\SqlQuery\Pgsql\Delete',
+        'insert' => 'Aura\SqlQuery\Common\Insert',
+        'select' => 'Aura\SqlQuery\Common\Select',
+        'update' => 'Aura\SqlQuery\Common\Update',
+        'delete' => 'Aura\SqlQuery\Common\Delete',
     ];
 
     public function __construct()
@@ -42,9 +45,13 @@ abstract class AbstractProvider
         $this->mediator = env('DB_DRIVER', 'pgsql');
     }
 
-    public function new(): Resource
+    public function new(array $values = []): Resource
     {
-        return $this->bootResource(new Resource());
+        return (new Resource($values))
+            ->setName($this->getName())
+            ->setId($this->getId())
+            ->setAttributes($this->getAttributes())
+        ;
     }
 
     public function bootResource(Resource $resource = null): ?Resource
@@ -97,35 +104,22 @@ abstract class AbstractProvider
         return $this->mediator;
     }
 
-    public function setAttributes(array $attributes): self
-    {
-        $this->attributes = $attributes;
-    }
-
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    public function setAttribute(string $name, array $options = []): self
-    {
-        $this->attributes[$name] = implode('|', $options);
-    }
-
-    public function getAttribute(string $name): ?string
-    {
-        return $this->attributes[$name] ?? null;
-    }
-
     public function query(string $type = 'select')
     {
-        $class = self::QUERY_CLASSES[$type];
 
-        if (!is_null($this->query) && $this->query instanceof $class) {
-            return $this->query;
+        if (!is_null($this->query)) {
+
+            $class = (string) Phraser::make(get_class($this->query))
+                ->explode('\\')
+                ->last()
+                ->toLowerCase()
+            ;
+            if ($class == $type) {
+                return $this->query;
+            }
         }
 
-        $factory = new QueryBuilder(env('DB_DRIVER', 'pgsql'));
+        $factory = new QueryBuilder($this->getMediator());
 
         $factory->setLastInsertIdNames([
             $this->getName() . '.' . $this->getId() => $this->getName() . '_' . $this->getId() . '_seq',
@@ -133,7 +127,9 @@ abstract class AbstractProvider
 
         switch ($type) {
             case 'select':
-                return $this->query = $factory->newSelect();
+                return $this->query = $factory->newSelect()
+                    ->from($this->getName())
+                ;
                 break;
 
             case 'insert':

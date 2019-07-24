@@ -15,7 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Amber\Validator\Validator;
 use Amber\Container\Facades\Lang;
 
-class AuthController extends Controller
+class AccessController extends Controller
 {
     protected $required = [
         // Name    => DB Column

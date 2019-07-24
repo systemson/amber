@@ -112,6 +112,6 @@ abstract class Controller
         ->fromCamelCase()
         ->toSnakeCase();
 
-        return "{$path}{$name}_{$action}.php";
+        return path("{$path}{$name}/{$action}.php");
     }
 }

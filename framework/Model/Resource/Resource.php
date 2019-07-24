@@ -4,9 +4,12 @@ namespace Amber\Model\Resource;
 
 use Amber\Collection\Collection;
 use Amber\Validator\Validator;
+use Amber\Model\Traits\AttributesTrait;
 
 class Resource extends Collection
 {
+    use AttributesTrait;
+
     private $_metadata = [];
 
     public function __construct(
@@ -19,6 +22,8 @@ class Resource extends Collection
 
         $this->setId($id);
         $this->setName($name);
+
+        $this->attributes = new Collection();
         $this->setAttributes($attributes);
     }
 
@@ -70,16 +75,9 @@ class Resource extends Collection
         return $this;
     }
 
-    public function setAttributes(array $attributes = []): self
+    public function getAttributesNames(): array
     {
-        $this->_metadata['attributes'] = $attributes;
-
-        return $this;
-    }
-
-    public function getAttributes(): array
-    {
-        return $this->_metadata['attributes'];
+        return $this->attributes->keys();
     }
 
     public function setErrors(array $errors = []): self
@@ -96,67 +94,99 @@ class Resource extends Collection
 
     public function validate()
     {
-        $errors = Validator::assert(
-            $this->getAttributes(),
-            $this->all()
+        if ($this->isNew()) {
+            $ruleSet = $this->getAttributes()->map(function ($value) {
+                return implode('|', $value->getRules());
+            });
+
+            $values = $this->insertable();
+        } else {
+            $ruleSet = $this->getAttributes()
+                ->only(array_keys($this->updatable()))
+                ->map(function ($value) {
+                return implode('|', $value->getRules());
+                })
+            ;
+
+            $values = $this->updatable();
+        }
+
+        $validation = Validator::assert(
+            $ruleSet->toArray(),
+            $values
         );
 
-        $this->setErrors($errors->toArray());
+        if ($validation !== true) {
+            $errors = $validation->toArray();
 
-        return $errors;
+            $this->setErrors($errors);
+
+            return $errors;
+        }
+
+        return [];
     }
 
     public function isValid(): bool
     {
-        if (!empty($this->validate())) {
-            return false;
+        return empty($this->validate());
+    }
+
+    public function sync(array $values)
+    {
+        foreach ($values as $key => $value) {
+            if ($this->get($key) !== $value) {
+                $this->set($key, $value);
+            }
         }
     }
 
     public function updatable()
     {
-        return array_diff($this->toArray(), $this->_metadata['stored']);
+        return array_diff($this->all(), $this->getStoredValues());
     }
 
     public function hasDefault(string $attribute)
     {
-        $ruleSet = $this->getAttributes()[$attribute] ?? null;
-
-        if (!is_null($ruleSet)) {
-            return strpos($ruleSet, 'default') !== false;
-        }
-
-        return false;
+        return $this->getAttributes()[$attribute]->hasDefault();
     }
 
-    public function getDefault(string $attribute)
+    public function getDefault(string $name)
     {
-        if (!$this->hasDefault($attribute)) {
+        $attribute = $this->getAttribute($name);
+
+        if (is_null($attribute) || !$attribute->hasDefault()) {
             return null;
         }
 
-        $ruleSet = $this->getAttributes()[$attribute] ?? null;
+        $value = $attribute->getDefault();
 
-        $array1 = explode('|', $ruleSet);
+        switch ($value) {
+            case 'null':
+                return null;
+                break;
 
-        foreach ($array1 as $value) {
-            $set = explode(':', $value);
+            case 'true':
+                return true;
+                break;
 
-            if ($set[0] == 'default') {
-                return $set[1];
-            }
+            case 'false':
+                return false;
+                break;
+            
+            default:
+                return $value;
+                break;
         }
-
-        return null;
     }
 
     public function insertable()
     {
-        foreach ($this->getAttributes() as $attr => $ruleSet) {
-            if ($this->has($attr)) {
-                $array[$attr] = $this->get($attr);
-            } elseif ($this->hasDefault($attr)) {
-                $array[$attr] = $this->getDefault($attr);
+        foreach ($this->getAttributes() as $name => $attr) {
+            if ($this->has($name)) {
+                $array[$name] = $this->get($name);
+            } elseif ($attr->hasDefault()) {
+                $array[$name] = $attr->getDefault();
             }
         }
 

@@ -8,8 +8,7 @@ trait Selectable
 {
     public function select(array $columns = [])
     {
-        $this->query('select')
-            ->from($this->getName())
+        $this->query()
             ->cols($columns)
         ;
 
@@ -19,32 +18,41 @@ trait Selectable
     public function all()
     {
         return $this->select()
+            ->orderBy($this->getId(), 'ASC')
             ->get()
         ;
     }
 
     public function first()
     {
-        return $this->select()
+        $this->query()
             ->limit(1)
-            ->get()
         ;
+
+        return $this->get();
+    }
+
+    public function last()
+    {
+        $this->query()
+            ->orderBy([$this->getId(), 'DESC'])
+            ->limit(1)
+        ;
+
+        return $this->get();
     }
 
     public function find($id)
     {
         return $this->bootResource($this
             ->where($this->id, '=', $id)
-            ->limit(1)
-            ->get()
+            ->first(1)
         );
     }
 
     public function where(string $column, string $operator, $value)
     {
-        $this->select();
-
-        $this->query
+        $this->query()
             ->where("{$column} {$operator} ?", $value)
         ;
 
@@ -53,7 +61,7 @@ trait Selectable
 
     public function whereNot(string $column, $value)
     {
-        $this->select()
+        $this->query()
             ->where($column, '<>', $value)
         ;
 
@@ -62,11 +70,7 @@ trait Selectable
 
     public function whereIn(string $column, $values)
     {
-        $this->select();
-
-        $pdo = '';
-
-        $this->query
+        $this->query()
             ->where("{$column} IN (?)", Gemstone::quote($array))
         ;
 
@@ -75,10 +79,17 @@ trait Selectable
 
     public function whereNotIn(string $column, $values)
     {
-        $this->select();
-
-        $this->query
+        $this->query()
             ->where("{$column} NOT IN (?)", Gemstone::quote($array))
+        ;
+
+        return $this;
+    }
+
+    public function orderBy(string $column, string $order = 'ASC')
+    {
+        $this->query()
+            ->orderBy(["{$column} $order"])
         ;
 
         return $this;
