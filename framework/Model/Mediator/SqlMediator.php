@@ -9,6 +9,7 @@ use Aura\Sql\ExtendedPdo;
 use Aura\Sql\Profiler\Profiler;
 use Psr\Log\LoggerInterface;
 use Amber\Phraser\Phraser;
+use Amber\Model\Resource\ResourceCollection;
 
 class SqlMediator
 {
@@ -68,7 +69,7 @@ class SqlMediator
             return $sth->fetch();
         }
 
-        return new Collection($sth->fetchAll());
+        return new ResourceCollection($sth->fetchAll());
     }
 
     public function insert($query)
