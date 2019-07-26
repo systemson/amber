@@ -3,6 +3,7 @@
 namespace Amber\Model\Traits;
 
 use Amber\Model\Attribute\Attribute;
+use Amber\Model\Attribute\NullableAttribute;
 use Amber\Model\Resource\ResourceInterface;
 use Amber\Collection\Collection;
 
@@ -60,6 +61,6 @@ trait AttributesTrait
     {
         $this->initAttributes();
 
-        return $this->attributes->get($name);
+        return $this->attributes->get($name) ?? new NullableAttribute();
     }
 }

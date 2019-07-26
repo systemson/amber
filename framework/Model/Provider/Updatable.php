@@ -10,12 +10,18 @@ trait Updatable
 {
     public function update(Resource $resource)
     {
-        $resource->updated_at = (string) Carbon::now();
+        if ($resource->isNew()) {
+            return false;
+        }
 
         $values = $resource->updatable();
 
         if ($values->isEmpty()) {
             return false;
+        }
+
+        if ($this->timestamps() && $this->editedAt()) {
+            $resource->{static::EDITED_AT} = (string) Carbon::now();
         }
 
         $id = $resource->{$this->getId()};
@@ -29,7 +35,7 @@ trait Updatable
         $result = Gemstone::execute($query);
 
         if ($result === true) {
-            return $this->find($id);
+            return $resource->sync($this->find($id));
         }
 
         return $result;

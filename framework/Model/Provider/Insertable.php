@@ -10,23 +10,29 @@ trait Insertable
 {
     public function insert(Resource $resource)
     {
-        $resource->created_at = (string) Carbon::now();
+        if (!$resource->isNew()) {
+            return false;
+        }
 
         $values = $resource->insertable();
 
-        if (empty($values)) {
+        if ($values->isEmpty()) {
             return false;
+        }
+
+        if ($this->timestamps() && $this->createdAt()) {
+            $resource->{static::CREATED_AT} = (string) Carbon::now();
         }
 
         $query = $this->query('insert')
             ->into($this->getName())
-            ->cols($values)
+            ->cols($values->toArray())
         ;
 
         $id = Gemstone::execute($query);
 
         if ($id !== false) {
-            return $this->find($id);
+            return $resource->sync($this->find($id));
         }
 
         return false;

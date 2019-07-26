@@ -31,7 +31,7 @@ interface ResourceInterface extends
 
     public function getAttribute(string $name);
 
-    public function setErrors(array $errors = []): ResourceInterface;
+    public function setErrors(Collection $errors): ResourceInterface;
 
     public function getErrors(): Collection;
 
@@ -39,7 +39,7 @@ interface ResourceInterface extends
 
     public function isValid(): bool;
 
-    public function sync(array $values): ResourceInterface;
+    public function sync(ResourceInterface $values): ResourceInterface;
 
     public function updatable(): Collection;
 

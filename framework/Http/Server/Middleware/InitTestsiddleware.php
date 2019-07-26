@@ -40,7 +40,8 @@ class InitTestsiddleware extends RequestMiddleware
         //$this->loader();
         //$this->testUri();
         //$this->testSqlite();
-        //$this->testGemstone();
+        //$this->testUpdateModel();
+        //$this->testModelProvider();
 
         return $handler->handle($request);
     }
@@ -109,36 +110,55 @@ class InitTestsiddleware extends RequestMiddleware
         );
     }
 
-    protected function testGemstone()
+    public function testUpdateModel()
     {
         $provider = new UserProvider();
 
-        dd($provider->all()->first());
-
-        $new = $provider->new();
-
-        $new->name = Str::faker()->name;
-        $new->email = Str::faker()->email;
-
-        $password = Str::faker()->password();
-
-        $new->password = Hash::make($password);
-        $new->raw_password = $password;
-
-        if (!$new->isValid()) {
-            $errors = $new->getErrors();
-        }
-
-        $inserted = $provider->insert($new);
-
-        d($inserted);
-
-        $inserted->name = 'Deivi Peña';
-        
-        $provider->update($inserted);
+        $user = $provider->find(2);
 
         dd(
-            $inserted,
+            $user->updatable(),
+            $user->name = 'Davidson Jose Peña Gonzalez',
+            $user->updatable(),
+            $provider->update($user),
+            $provider->find(2),
+        );
+    }
+
+    protected function testModelProvider()
+    {
+        $provider = new UserProvider();
+
+        $user = $provider->new();
+
+        $user->name = Str::faker()->name;
+        $user->email = Str::faker()->email;
+
+        $password = Str::faker()->password();
+        $user->password = Hash::make($password);
+        $user->raw_password = $password;
+
+        if (!$user->isValid()) {
+            $errors = $user->getErrors();
+        }
+
+        d('new', $user);
+
+        $inserted = $provider->insert($user);
+
+        d('inserted', $user, $inserted);
+
+        $user->name = 'Deivi Peña';
+
+        d('edited', $user, $inserted);
+        
+        $updated = $provider->update($user);
+
+        dd(
+            'updated',
+            $user,
+            $updated,
+            'found',
             $provider->find($inserted->id)
         );
     }

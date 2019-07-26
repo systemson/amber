@@ -33,6 +33,13 @@ abstract class AbstractProvider
 
     protected $query;
 
+    protected $timestamps = true;
+    protected $created_at = true;
+    protected $edited_at = true;
+
+    const CREATED_AT = 'created_at';
+    const EDITED_AT = 'updated_at';
+
     const QUERY_CLASSES = [
         'insert' => 'Aura\SqlQuery\Common\Insert',
         'select' => 'Aura\SqlQuery\Common\Select',
@@ -45,13 +52,14 @@ abstract class AbstractProvider
         $this->mediator = env('DB_DRIVER', 'pgsql');
     }
 
-    public function new(array $values = []): Resource
+    public function new(array $values = [], bool $isStored = false): Resource
     {
         return new Resource(
             $values,
             $this->getId(),
             $this->getName(),
-            $this->getAttributes()
+            $this->getAttributes(),
+            $isStored
         );
     }
 
@@ -89,6 +97,21 @@ abstract class AbstractProvider
     public function getMediator(): string
     {
         return $this->mediator;
+    }
+
+    public function timestamps()
+    {
+        return $this->timestamps;
+    }
+
+    public function createdAt()
+    {
+        return $this->created_at;
+    }
+
+    public function editedAt()
+    {
+        return $this->edited_at;
     }
 
     public function getAttributes(): array
@@ -150,10 +173,10 @@ abstract class AbstractProvider
 
         if ($result instanceof CollectionInterface && $result->isNotEmpty()) {
             return $result->map(function ($values) {
-                return $this->new($values);
+                return $this->new($values, true);
             });
         } elseif (is_array($result)) {
-            return $this->new($result);
+            return $this->new($result, true);
         }
 
         return $result;

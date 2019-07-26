@@ -55,16 +55,16 @@
         },
         {
             "name": "amber/collection",
-            "version": "v0.6.6-beta",
+            "version": "v0.6.7-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/collection.git",
-                "reference": "a76ec7854e968181a11bfb00dd371027b25446cd"
+                "reference": "65864d424aa4658ebd46db4518eb963376c3fb64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/collection/zipball/a76ec7854e968181a11bfb00dd371027b25446cd",
-                "reference": "a76ec7854e968181a11bfb00dd371027b25446cd",
+                "url": "https://api.github.com/repos/systemson/collection/zipball/65864d424aa4658ebd46db4518eb963376c3fb64",
+                "reference": "65864d424aa4658ebd46db4518eb963376c3fb64",
                 "shasum": ""
             },
             "require": {
@@ -98,7 +98,7 @@
                 }
             ],
             "description": "Wrapper class for working with arrays.",
-            "time": "2019-07-18T17:12:19+00:00"
+            "time": "2019-07-26T13:51:55+00:00"
         },
         {
             "name": "amber/common",
@@ -199,12 +199,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/phraser.git",
-                "reference": "0371ab3d1d33a4fd9920d9eb8c852609074d5447"
+                "reference": "fd2e00ca8e6d871e285fb983511fd99652817b5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/phraser/zipball/0371ab3d1d33a4fd9920d9eb8c852609074d5447",
-                "reference": "0371ab3d1d33a4fd9920d9eb8c852609074d5447",
+                "url": "https://api.github.com/repos/systemson/phraser/zipball/fd2e00ca8e6d871e285fb983511fd99652817b5f",
+                "reference": "fd2e00ca8e6d871e285fb983511fd99652817b5f",
                 "shasum": ""
             },
             "require": {
@@ -237,7 +237,7 @@
                 }
             ],
             "description": "Wrapper class for working with strings.",
-            "time": "2019-07-16T15:15:38+00:00"
+            "time": "2019-07-26T02:19:34+00:00"
         },
         {
             "name": "amber/sketch",

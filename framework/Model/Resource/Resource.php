@@ -5,13 +5,11 @@ namespace Amber\Model\Resource;
 use Amber\Collection\Collection;
 use Amber\Validator\Validator;
 use Amber\Model\Traits\AttributesTrait;
-use Amber\Collection\Implementations\{
-    IteratorAggregateTrait,
-    ArrayAccessTrait,
-    PropertyAccessTrait,
-    SerializableTrait,
-    CountableTrait
-};
+use Amber\Collection\Implementations\IteratorAggregateTrait;
+use Amber\Collection\Implementations\ArrayAccessTrait;
+use Amber\Collection\Implementations\PropertyAccessTrait;
+use Amber\Collection\Implementations\SerializableTrait;
+use Amber\Collection\Implementations\CountableTrait;
 
 class Resource implements ResourceInterface
 {
@@ -22,13 +20,16 @@ class Resource implements ResourceInterface
         CountableTrait
     ;
 
+    private $_name;
+    private $_id;
     private $_metadata = [];
 
     public function __construct(
         array $values = [],
         string $id = '',
         string $name = '',
-        array $attributes = []
+        array $attributes = [],
+        bool $isStored = false
     ) {
         $this->setAttributes($attributes);
 
@@ -36,67 +37,70 @@ class Resource implements ResourceInterface
         $this->setName($name);
         
         $this->setValues($values);
+        if ($isStored) {
+            $this->setStoredValues($values);
+        }
     }
 
     public function isNew(): bool
     {
-        return empty($this->getStoredValues());
+        return $this->getStoredValues()->isEmpty();
     }
 
     public function setValues(iterable $values = []): ResourceInterface
     {
         foreach ($values as $name => $value) {
-            if ($this->hasAttribute($name)) {
-                $this->getAttribute($name)->setValue($value);
-            }
+            $this->getAttribute($name)->setValue($value);
         }
 
         return $this;
     }
 
-    public function getValues(iterable $values = []): Collection
+    public function getValues(): Collection
     {
-        return $this->getAttributes()->map(function($attr) {
+        return $this->getAttributes()->map(function ($attr) {
             return $attr->getValue();
         });
     }
 
-    public function setStoredValues(array $stored): ResourceInterface
+    public function setStoredValues(array $values): ResourceInterface
     {
-        $this->_metadata['stored'] = $stored;
+        foreach ($values as $name => $value) {
+            $this->getAttribute($name)->setStoredValue($value);
+        }
 
         return $this;
     }
 
     public function getStoredValues(): Collection
     {
-        return $this->getAttributes()->map(function($attr) {
+        return $this->getAttributes()->map(function ($attr) {
             return $attr->getStoredValue();
         });
     }
 
     public function setId(string $id): ResourceInterface
     {
-        $this->id = $id;
+        $this->_id = $id;
 
         return $this;
     }
 
     public function getId(): string
     {
-        return $this->id;
+        return $this->_id;
     }
 
     public function setName(string $name = ''): ResourceInterface
     {
-        $this->name  = $name;
+        $this->_name  = $name;
 
         return $this;
     }
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->_name;
     }
 
     public function getAttributesNames(): Collection
@@ -104,7 +108,7 @@ class Resource implements ResourceInterface
         return $this->attributes->keys();
     }
 
-    public function setErrors(array $errors = []): ResourceInterface
+    public function setErrors(Collection $errors): ResourceInterface
     {
         $this->errors = $errors;
 
@@ -113,7 +117,7 @@ class Resource implements ResourceInterface
 
     public function getErrors(): Collection
     {
-        return $this->errors ?? [];
+        return $this->errors ?? new Collection();
     }
 
     public function validate(): Collection
@@ -126,7 +130,7 @@ class Resource implements ResourceInterface
             $values = $this->insertable();
         } else {
             $ruleSet = $this->getAttributes()
-                ->only(array_keys($this->updatable()))
+                ->only($this->updatable()->keys())
                 ->map(function ($value) {
                     return implode('|', $value->getRules());
                 })
@@ -136,19 +140,19 @@ class Resource implements ResourceInterface
         }
 
         $validation = Validator::assert(
-            $ruleSet->toArray(),
+            $ruleSet->filter(function ($value) {
+                return isset($value) && !empty($value);
+            })->toArray(),
             $values
         );
 
         if ($validation !== true) {
-            $errors = $validation->toArray();
+            $errors = new Collection($validation->toArray());
 
             $this->setErrors($errors);
-
-            return $errors;
         }
 
-        return [];
+        return $errors ?? new Collection();
     }
 
     public function isValid(): bool
@@ -156,15 +160,16 @@ class Resource implements ResourceInterface
         return empty($this->validate());
     }
 
-    public function sync(array $values): ResourceInterface
+    public function sync(ResourceInterface $resource): ResourceInterface
     {
-        foreach ($values as $key => $value) {
-            if ($this->get($key) !== $value) {
-                $this->set($key, $value);
-            }
+        foreach ($resource->getAttributes() as $name => $attr) {
+            $attribute = $this->getAttribute($name);
 
-            return $this;
+            $attribute->setValue($attr->getValue());
+            $attribute->setStoredValue($attr->getStoredValue());
         }
+ 
+        return $this;
     }
 
     public function updatable(): Collection
@@ -208,15 +213,9 @@ class Resource implements ResourceInterface
 
     public function insertable(): Collection
     {
-        foreach ($this->getAttributes() as $name => $attr) {
-            if ($this->has($name)) {
-                $array[$name] = $this->get($name);
-            } elseif ($attr->hasDefault()) {
-                $array[$name] = $attr->getDefault();
-            }
-        }
-
-        return $array;
+        return $this->getValues()->filter(function ($value) {
+            return isset($value) && !empty($value);
+        });
     }
 
     public function offsetSet($offset, $value)
