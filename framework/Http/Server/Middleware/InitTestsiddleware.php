@@ -40,7 +40,7 @@ class InitTestsiddleware extends RequestMiddleware
         //$this->loader();
         //$this->testUri();
         //$this->testSqlite();
-        $this->testGemstone();
+        //$this->testGemstone();
 
         return $handler->handle($request);
     }

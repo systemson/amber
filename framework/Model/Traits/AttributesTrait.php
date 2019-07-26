@@ -3,6 +3,7 @@
 namespace Amber\Model\Traits;
 
 use Amber\Model\Attribute\Attribute;
+use Amber\Model\Resource\ResourceInterface;
 use Amber\Collection\Collection;
 
 trait AttributesTrait
@@ -16,7 +17,7 @@ trait AttributesTrait
         }
     }
 
-    public function setAttributes(iterable $attributes): self
+    public function setAttributes(array $attributes): ResourceInterface
     {
         $this->initAttributes();
 
@@ -32,14 +33,14 @@ trait AttributesTrait
         return $this;
     }
 
-    public function getAttributes(): iterable
+    public function getAttributes(): Collection
     {
         $this->initAttributes();
 
         return $this->attributes;
     }
 
-    public function setAttribute(string $name, $options = null): self
+    public function setAttribute(string $name, $options = null): ResourceInterface
     {
         $this->initAttributes();
 
@@ -48,11 +49,11 @@ trait AttributesTrait
         return $this;
     }
 
-    public function hasAttribute(string $name): bool
+    public function hasAttribute(string $name = null): bool
     {
         $this->initAttributes();
 
-        return $this->attributes->has($name);
+        return $name !== null && $this->attributes->has($name);
     }
 
     public function getAttribute(string $name)

@@ -55,20 +55,6 @@ abstract class AbstractProvider
         );
     }
 
-    public function bootResource(Resource $resource = null): ?Resource
-    {
-        if (is_null($resource)) {
-            return null;
-        }
-
-        return $resource
-            ->boot()
-            ->setName($this->getName())
-            ->setId($this->getId())
-            ->setAttributes($this->getAttributes())
-        ;
-    }
-
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -164,7 +150,6 @@ abstract class AbstractProvider
 
         if ($result instanceof CollectionInterface && $result->isNotEmpty()) {
             return $result->map(function ($values) {
-                d($values);
                 return $this->new($values);
             });
         } elseif (is_array($result)) {

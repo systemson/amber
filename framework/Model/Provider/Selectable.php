@@ -44,9 +44,10 @@ trait Selectable
 
     public function find($id)
     {
-        return $this->bootResource($this
+        return $this
             ->where($this->id, '=', $id)
-            ->first(1));
+            ->first(1)
+        ;
     }
 
     public function where(string $column, string $operator, $value)

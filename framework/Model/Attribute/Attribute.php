@@ -14,7 +14,7 @@ class Attribute
     private $rules = [];
 
     private $value;
-    private $stored_value;
+    private $stored;
 
     public function __construct(string $name, string $options = null)
     {
@@ -163,13 +163,13 @@ class Attribute
 
     public function setStoredValue($value): self
     {
-        $this->stored_value = $value;
+        $this->stored = $value;
 
         return $this;
     }
 
     public function getStoredValue()
     {
-        return $this->stored_value;
+        return $this->stored;
     }
 }

@@ -14,7 +14,7 @@ trait Updatable
 
         $values = $resource->updatable();
 
-        if (empty($values)) {
+        if ($values->isEmpty()) {
             return false;
         }
 
@@ -22,7 +22,7 @@ trait Updatable
 
         $query = $this->query('update')
             ->table($this->getName())
-            ->cols($values)
+            ->cols($values->toArray())
             ->where($this->getId() . ' = ?', $id)
         ;
 

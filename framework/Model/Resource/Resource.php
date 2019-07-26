@@ -5,10 +5,22 @@ namespace Amber\Model\Resource;
 use Amber\Collection\Collection;
 use Amber\Validator\Validator;
 use Amber\Model\Traits\AttributesTrait;
+use Amber\Collection\Implementations\{
+    IteratorAggregateTrait,
+    ArrayAccessTrait,
+    PropertyAccessTrait,
+    SerializableTrait,
+    CountableTrait
+};
 
-class Resource //extends Collection //implements ResourceInterface
+class Resource implements ResourceInterface
 {
-    use AttributesTrait;
+    use IteratorAggregateTrait,
+        PropertyAccessTrait,
+        SerializableTrait,
+        AttributesTrait,
+        CountableTrait
+    ;
 
     private $_metadata = [];
 
@@ -26,12 +38,12 @@ class Resource //extends Collection //implements ResourceInterface
         $this->setValues($values);
     }
 
-    public function isNew()
+    public function isNew(): bool
     {
         return empty($this->getStoredValues());
     }
 
-    public function setValues(iterable $values = []): self
+    public function setValues(iterable $values = []): ResourceInterface
     {
         foreach ($values as $name => $value) {
             if ($this->hasAttribute($name)) {
@@ -42,7 +54,28 @@ class Resource //extends Collection //implements ResourceInterface
         return $this;
     }
 
-    public function setId(string $id): self
+    public function getValues(iterable $values = []): Collection
+    {
+        return $this->getAttributes()->map(function($attr) {
+            return $attr->getValue();
+        });
+    }
+
+    public function setStoredValues(array $stored): ResourceInterface
+    {
+        $this->_metadata['stored'] = $stored;
+
+        return $this;
+    }
+
+    public function getStoredValues(): Collection
+    {
+        return $this->getAttributes()->map(function($attr) {
+            return $attr->getStoredValue();
+        });
+    }
+
+    public function setId(string $id): ResourceInterface
     {
         $this->id = $id;
 
@@ -54,7 +87,7 @@ class Resource //extends Collection //implements ResourceInterface
         return $this->id;
     }
 
-    public function setName(string $name = ''): self
+    public function setName(string $name = ''): ResourceInterface
     {
         $this->name  = $name;
 
@@ -66,36 +99,24 @@ class Resource //extends Collection //implements ResourceInterface
         return $this->name;
     }
 
-    public function getStoredValues(): array
-    {
-        return $this->_metadata['stored'] ?? [];
-    }
-
-    public function setStoredValues(array $stored): self
-    {
-        $this->_metadata['stored'] = $stored;
-
-        return $this;
-    }
-
-    public function getAttributesNames(): array
+    public function getAttributesNames(): Collection
     {
         return $this->attributes->keys();
     }
 
-    public function setErrors(array $errors = []): self
+    public function setErrors(array $errors = []): ResourceInterface
     {
         $this->errors = $errors;
 
         return $this;
     }
 
-    public function getErrors(): array
+    public function getErrors(): Collection
     {
         return $this->errors ?? [];
     }
 
-    public function validate(): array
+    public function validate(): Collection
     {
         if ($this->isNew()) {
             $ruleSet = $this->getAttributes()->map(function ($value) {
@@ -135,7 +156,7 @@ class Resource //extends Collection //implements ResourceInterface
         return empty($this->validate());
     }
 
-    public function sync(array $values): self
+    public function sync(array $values): ResourceInterface
     {
         foreach ($values as $key => $value) {
             if ($this->get($key) !== $value) {
@@ -146,9 +167,9 @@ class Resource //extends Collection //implements ResourceInterface
         }
     }
 
-    public function updatable()
+    public function updatable(): Collection
     {
-        return array_diff($this->all(), $this->getStoredValues());
+        return $this->getValues()->diff($this->getStoredValues()->toArray());
     }
 
     public function hasDefault(string $attribute)
@@ -185,7 +206,7 @@ class Resource //extends Collection //implements ResourceInterface
         }
     }
 
-    public function insertable()
+    public function insertable(): Collection
     {
         foreach ($this->getAttributes() as $name => $attr) {
             if ($this->has($name)) {
@@ -198,37 +219,47 @@ class Resource //extends Collection //implements ResourceInterface
         return $array;
     }
 
-    public function __set($name, $value)
+    public function offsetSet($offset, $value)
     {
-        if (!$this->hasAttribute($name)) {
+        if (!$this->hasAttribute($offset)) {
             return;
         }
 
-        $this->getAttribute($name)->setValue($value);
+        $this->getAttribute($offset)->setValue($value);
     }
 
-    public function __isset($name)
+    public function offsetExists($offset)
     {
-        return $this->hasAttribute($name)
-            && $this->getAttribute($name)->getValue() !== null
+        return $this->hasAttribute($offset)
+            && $this->getAttribute($offset)->getValue() !== null
         ;
     }
 
-    public function __unset($name)
+    public function offsetUnset($offset)
     {
-        if (!$this->hasAttribute($name)) {
+        if (!$this->hasAttribute($offset)) {
             return;
         }
 
-        $this->getAttribute($name)->setValue(null);
+        $this->getAttribute($offset)->setValue(null);
     }
 
-    public function __get($name)
+    public function &offsetGet($offset)
     {
-        if (!$this->hasAttribute($name)) {
-            return;
+        $value = null;
+
+        if ($this->hasAttribute($offset)) {
+            $value = $this->getAttribute($offset)->getValue();
+            $ret =& $value;
+
+            return $ret;
         }
 
-        return $this->getAttribute($name)->getValue();
+        return $value;
+    }
+
+    public function toArray(): array
+    {
+        return $this->getValues()->toArray();
     }
 }
