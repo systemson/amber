@@ -8,11 +8,11 @@ $routes->get('/api', function () {
     ]);
 });
 
-$routes->get('/api/users' , function () {
+$routes->get('/api/users', function () {
 
-	$provider = new App\Models\UserProvider();
+    $provider = new App\Models\UserProvider();
 
-	 return Amber\Container\Facades\Response::json(
-        $provider->all()
-    );
+     return Amber\Container\Facades\Response::json(
+         $provider->all()
+     );
 });

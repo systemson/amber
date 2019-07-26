@@ -9,6 +9,7 @@ class UserProvider extends AbstractProvider
     protected $name = 'users';
 
     protected $attributes = [
+        'id',
         'name' => 'alpha',
         'email' => 'email|length:null,64',
         'password' => 'alnum|length:null,64',

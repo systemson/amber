@@ -6,32 +6,24 @@ use Amber\Collection\Collection;
 use Amber\Validator\Validator;
 use Amber\Model\Traits\AttributesTrait;
 
-class Resource extends Collection
+class Resource //extends Collection //implements ResourceInterface
 {
     use AttributesTrait;
 
     private $_metadata = [];
 
     public function __construct(
-        array $array = [],
+        array $values = [],
         string $id = '',
         string $name = '',
         array $attributes = []
     ) {
-        parent::__construct($array);
+        $this->setAttributes($attributes);
 
         $this->setId($id);
         $this->setName($name);
-
-        $this->attributes = new Collection();
-        $this->setAttributes($attributes);
-    }
-
-    public function boot(): self
-    {
-        $this->setStoredValues($this->all());
-
-        return $this;
+        
+        $this->setValues($values);
     }
 
     public function isNew()
@@ -39,28 +31,39 @@ class Resource extends Collection
         return empty($this->getStoredValues());
     }
 
-    public function setId(string $id = ''): self
+    public function setValues(iterable $values = []): self
     {
-        $this->_metadata['id'] = $id;
+        foreach ($values as $name => $value) {
+            if ($this->hasAttribute($name)) {
+                $this->getAttribute($name)->setValue($value);
+            }
+        }
+
+        return $this;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
 
         return $this;
     }
 
     public function getId(): string
     {
-        return $this->_metadata['id'];
+        return $this->id;
     }
 
     public function setName(string $name = ''): self
     {
-        $this->_metadata['name']  = $name;
+        $this->name  = $name;
 
         return $this;
     }
 
     public function getName(): string
     {
-        return $this->_metadata['name'];
+        return $this->name;
     }
 
     public function getStoredValues(): array
@@ -82,17 +85,17 @@ class Resource extends Collection
 
     public function setErrors(array $errors = []): self
     {
-        $this->_metadata['errors'] = $errors;
+        $this->errors = $errors;
 
         return $this;
     }
 
     public function getErrors(): array
     {
-        return $this->_metadata['errors'] ?? [];
+        return $this->errors ?? [];
     }
 
-    public function validate()
+    public function validate(): array
     {
         if ($this->isNew()) {
             $ruleSet = $this->getAttributes()->map(function ($value) {
@@ -104,7 +107,7 @@ class Resource extends Collection
             $ruleSet = $this->getAttributes()
                 ->only(array_keys($this->updatable()))
                 ->map(function ($value) {
-                return implode('|', $value->getRules());
+                    return implode('|', $value->getRules());
                 })
             ;
 
@@ -132,12 +135,14 @@ class Resource extends Collection
         return empty($this->validate());
     }
 
-    public function sync(array $values)
+    public function sync(array $values): self
     {
         foreach ($values as $key => $value) {
             if ($this->get($key) !== $value) {
                 $this->set($key, $value);
             }
+
+            return $this;
         }
     }
 
@@ -191,5 +196,39 @@ class Resource extends Collection
         }
 
         return $array;
+    }
+
+    public function __set($name, $value)
+    {
+        if (!$this->hasAttribute($name)) {
+            return;
+        }
+
+        $this->getAttribute($name)->setValue($value);
+    }
+
+    public function __isset($name)
+    {
+        return $this->hasAttribute($name)
+            && $this->getAttribute($name)->getValue() !== null
+        ;
+    }
+
+    public function __unset($name)
+    {
+        if (!$this->hasAttribute($name)) {
+            return;
+        }
+
+        $this->getAttribute($name)->setValue(null);
+    }
+
+    public function __get($name)
+    {
+        if (!$this->hasAttribute($name)) {
+            return;
+        }
+
+        return $this->getAttribute($name)->getValue();
     }
 }

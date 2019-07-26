@@ -21,10 +21,10 @@ class MigrateUpCommand extends Command
         $output->writeln('<comment>Running migrations up.</comment>');
 
         $migrations = Collection::make(
-                Filesystem::listContents('database/migrations')
-            )->sort(function ($a, $b) {
+            Filesystem::listContents('database/migrations')
+        )->sort(function ($a, $b) {
                 return $a['filename'] <=> $b['filename'];
-            })
+        })
         ;
 
         foreach ($migrations as $migration) {

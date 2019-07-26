@@ -8,11 +8,12 @@ class Attribute
 {
     private $name;
     private $type;
+    private $size;
     private $default;
     private $nullable = false;
     private $rules = [];
 
-    private $current_value;
+    private $value;
     private $stored_value;
 
     public function __construct(string $name, string $options = null)
@@ -24,6 +25,7 @@ class Attribute
         $this->setType($type);
 
         $this->setDefault($default ?? null);
+        $this->nullable = $nullable;
         $this->setRules($rules ?? null);
     }
 
@@ -32,7 +34,6 @@ class Attribute
         $options = explode('|', $options);
 
         foreach ($options as $option) {
-
             if (starts_with($option, 'default')) {
                 $default = (string) Phraser::explode($option, ':')
                     ->last()
@@ -145,19 +146,19 @@ class Attribute
 
     public function isNullable(): bool
     {
-        return $this->nullable; 
+        return $this->nullable;
     }
 
     public function setValue($value): self
     {
-        $this->current_value = $value;
+        $this->value = $value;
 
         return $this;
     }
 
     public function getValue()
     {
-        return $this->current_value ?? $this->getDefault();
+        return $this->value ?? $this->getDefault();
     }
 
     public function setStoredValue($value): self

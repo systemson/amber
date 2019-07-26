@@ -59,12 +59,6 @@ class SqlMediator
     {
         $sth = $this->execute($query);
 
-        // get the results back as an associative array
-        $sth->setFetchMode(
-            PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE,
-            Resource::class
-        );
-
         if ($query->getLimit() === 1) {
             return $sth->fetch();
         }

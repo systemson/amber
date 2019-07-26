@@ -40,7 +40,7 @@ class InitTestsiddleware extends RequestMiddleware
         //$this->loader();
         //$this->testUri();
         //$this->testSqlite();
-        //$this->testGemstone();
+        $this->testGemstone();
 
         return $handler->handle($request);
     }
@@ -112,6 +112,8 @@ class InitTestsiddleware extends RequestMiddleware
     protected function testGemstone()
     {
         $provider = new UserProvider();
+
+        dd($provider->all()->first());
 
         $new = $provider->new();
 

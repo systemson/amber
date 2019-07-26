@@ -4,6 +4,9 @@ namespace Amber\Model\Resource;
 
 use Amber\Collection\Collection;
 
-class ResourceCollection extends Collection implements ResourceCollectionContract
+/**
+ * @todo MUST extend from Typed Collection when available.
+ */
+class ResourceCollection extends Collection implements ResourceCollectionInterface
 {
 }

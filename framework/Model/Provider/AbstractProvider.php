@@ -19,7 +19,7 @@ use Amber\Model\Traits\AttributesTrait;
  */
 abstract class AbstractProvider
 {
-    use AttributesTrait, Insertable, Selectable, Updatable, Deletable;
+    use Insertable, Selectable, Updatable, Deletable;
 
     protected $id = 'id';
 
@@ -47,11 +47,12 @@ abstract class AbstractProvider
 
     public function new(array $values = []): Resource
     {
-        return (new Resource($values))
-            ->setName($this->getName())
-            ->setId($this->getId())
-            ->setAttributes($this->getAttributes())
-        ;
+        return new Resource(
+            $values,
+            $this->getId(),
+            $this->getName(),
+            $this->getAttributes()
+        );
     }
 
     public function bootResource(Resource $resource = null): ?Resource
@@ -104,11 +105,15 @@ abstract class AbstractProvider
         return $this->mediator;
     }
 
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
     public function query(string $type = 'select')
     {
 
         if (!is_null($this->query)) {
-
             $class = (string) Phraser::make(get_class($this->query))
                 ->explode('\\')
                 ->last()
@@ -157,12 +162,13 @@ abstract class AbstractProvider
 
         $result = Gemstone::execute($query);
 
-        if ($result instanceof Resource) {
-            return $this->bootResource($result);
-        } elseif ($result instanceof CollectionInterface && $result->isNotEmpty()) {
-            return $result->map(function ($resource) {
-                return $this->bootResource($resource);
+        if ($result instanceof CollectionInterface && $result->isNotEmpty()) {
+            return $result->map(function ($values) {
+                d($values);
+                return $this->new($values);
             });
+        } elseif (is_array($result)) {
+            return $this->new($result);
         }
 
         return $result;
@@ -171,7 +177,11 @@ abstract class AbstractProvider
     public function __call($method, $args = [])
     {
         if (!$this->query instanceof AbstractQuery) {
-            throw new \Exception("Error Processing Request");
+            throw new \Exception(sprintf(
+                "Class %s doesn't have a method %s",
+                get_called_class(),
+                $method
+            ));
         }
 
         if (!in_array($method, get_class_methods($this->query))) {
