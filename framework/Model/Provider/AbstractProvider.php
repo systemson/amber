@@ -182,6 +182,19 @@ abstract class AbstractProvider
         return $result;
     }
 
+    public function save(Resource $resource): bool
+    {
+        if ($resource->isNew()) {
+            return $this->insert($resource) !== false;
+        }
+
+        if ($resource->isDeleted()) {
+            return $this->delete($resource) !== false;
+        }
+
+        return $this->update($resource) !== false;
+    }
+
     public function __call($method, $args = [])
     {
         if (!$this->query instanceof AbstractQuery) {

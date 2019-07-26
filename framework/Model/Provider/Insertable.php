@@ -2,9 +2,10 @@
 
 namespace Amber\Model\Provider;
 
-use Amber\Container\Facades\Gemstone;
 use Amber\Model\Resource\Resource;
+use Amber\Container\Facades\Gemstone;
 use Carbon\Carbon;
+use Amber\Collection\Collection;
 
 trait Insertable
 {
@@ -17,11 +18,12 @@ trait Insertable
         $values = $resource->insertable();
 
         if ($values->isEmpty()) {
+            $resource->setErrors(new Collection(['Nothing to insert.']));
             return false;
         }
 
         if ($this->timestamps() && $this->createdAt()) {
-            $resource->{static::CREATED_AT} = (string) Carbon::now();
+            $values->set(static::CREATED_AT,(string) Carbon::now());
         }
 
         $query = $this->query('insert')
@@ -32,7 +34,7 @@ trait Insertable
         $id = Gemstone::execute($query);
 
         if ($id !== false) {
-            return $resource->sync($this->find($id));
+            return $resource->update($this->find($id)->toArray());
         }
 
         return false;

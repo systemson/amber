@@ -42,6 +42,7 @@ class InitTestsiddleware extends RequestMiddleware
         //$this->testSqlite();
         //$this->testUpdateModel();
         //$this->testModelProvider();
+        //$this->testModelSave();
 
         return $handler->handle($request);
     }
@@ -118,9 +119,10 @@ class InitTestsiddleware extends RequestMiddleware
 
         dd(
             $user->updatable(),
-            $user->name = 'Davidson Jose Peña Gonzalez',
+            $user->name = Str::faker()->firstName . ' ' . Str::faker()->lastName,
             $user->updatable(),
             $provider->update($user),
+            $user->getErrors(),
             $provider->find(2),
         );
     }
@@ -131,20 +133,21 @@ class InitTestsiddleware extends RequestMiddleware
 
         $user = $provider->new();
 
-        $user->name = Str::faker()->name;
+        $user->name = Str::faker()->firstName . ' ' . Str::faker()->lastName;
         $user->email = Str::faker()->email;
-
-        $password = Str::faker()->password();
-        $user->password = Hash::make($password);
-        $user->raw_password = $password;
+        $user->password = 'secret';
 
         if (!$user->isValid()) {
-            $errors = $user->getErrors();
+            dd($user->getErrors(), $user);
         }
+
+        $user->password = Hash::make($user->password);
 
         d('new', $user);
 
-        $inserted = $provider->insert($user);
+        if (($inserted = $provider->insert($user)) === false) {
+            die;
+        }
 
         d('inserted', $user, $inserted);
 
@@ -154,12 +157,75 @@ class InitTestsiddleware extends RequestMiddleware
         
         $updated = $provider->update($user);
 
-        dd(
+        d(
             'updated',
             $user,
             $updated,
             'found',
-            $provider->find($inserted->id)
+            $provider->find($user->id)
         );
+
+        $id = $user->id;
+
+        dd(
+            'delete',
+            $provider->delete($user),
+            $user,
+            $provider->find($id),
+        );
+    }
+
+    public function testModelSave()
+    {
+        $provider = new UserProvider();
+
+        $user = $provider->new();
+
+        $user->name = Str::faker()->firstName . ' ' . Str::faker()->lastName;
+        $user->email = Str::faker()->email;
+        $user->password = 'secret';
+
+        if (!$user->isValid()) {
+            dd($user->getErrors(), $user);
+        }
+
+        $user->password = Hash::make($user->password);
+
+        d(
+            'edited',
+            $user,
+        );
+
+        if (!$provider->save($user)) {
+            dd('Not inserted');
+        }
+
+        d(
+            'inserted',
+            $user,
+        );
+
+        $user->name = 'Deivi Peña';
+
+        if (!$provider->save($user)) {
+            dd('Not updated');
+        }
+
+        d(
+            'updated',
+            $user,
+        );
+
+        $user->delete();
+
+        if (!$provider->save($user)) {
+            dd('Not deleted');
+        }
+
+        dd(
+            'deleted',
+            $user,
+        );
+
     }
 }

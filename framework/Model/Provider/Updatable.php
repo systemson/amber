@@ -5,6 +5,7 @@ namespace Amber\Model\Provider;
 use Amber\Model\Resource\Resource;
 use Amber\Container\Facades\Gemstone;
 use Carbon\Carbon;
+use Amber\Collection\Collection;
 
 trait Updatable
 {
@@ -17,11 +18,12 @@ trait Updatable
         $values = $resource->updatable();
 
         if ($values->isEmpty()) {
+            $resource->setErrors(new Collection(['Nothing to update.']));
             return false;
         }
 
-        if ($this->timestamps() && $this->editedAt()) {
-            $resource->{static::EDITED_AT} = (string) Carbon::now();
+        if ($this->timestamps() && $this->createdAt()) {
+            $values->set(static::EDITED_AT,(string) Carbon::now());
         }
 
         $id = $resource->{$this->getId()};
@@ -35,7 +37,7 @@ trait Updatable
         $result = Gemstone::execute($query);
 
         if ($result === true) {
-            return $resource->sync($this->find($id));
+            return $resource->update($this->find($id)->toArray());
         }
 
         return $result;

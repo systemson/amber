@@ -28,7 +28,13 @@ class ControllerHandlerMiddleware extends RequestMiddleware
     {
         $defaults = $request->getAttribute('defaults');
 
-        $callback = $this->getControllerCallback($defaults['_controller'], $defaults['_action']);
+        $args = array_filter($defaults, function ($key) {
+            return substr($key, 0, 1) != "_";
+        }, ARRAY_FILTER_USE_KEY);
+
+        $args[Request::class] = $request;
+
+        $callback = $this->getControllerCallback($defaults['_controller'], $defaults['_action'], $args);
 
         $ret = $callback->__invoke();
 
@@ -47,8 +53,8 @@ class ControllerHandlerMiddleware extends RequestMiddleware
         return $handler->handle($request);
     }
 
-    protected function getControllerCallback(string $contoller, string $action = '__invoke')
+    protected function getControllerCallback(string $contoller, string $action = '__invoke', array $args = [])
     {
-        return static::getContainer()->getClosureFor($contoller, $action);
+        return static::getContainer()->getClosureFor($contoller, $action, $args);
     }
 }

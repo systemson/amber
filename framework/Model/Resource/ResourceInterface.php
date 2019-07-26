@@ -39,7 +39,7 @@ interface ResourceInterface extends
 
     public function isValid(): bool;
 
-    public function sync(ResourceInterface $values): ResourceInterface;
+    public function update(array $values): ResourceInterface;
 
     public function updatable(): Collection;
 

@@ -22,6 +22,7 @@ class Resource implements ResourceInterface
 
     private $_name;
     private $_id;
+    private $_errors = [];
     private $_metadata = [];
 
     public function __construct(
@@ -103,21 +104,25 @@ class Resource implements ResourceInterface
         return $this->_name;
     }
 
-    public function getAttributesNames(): Collection
+    public function getAttributesNames(): array
     {
         return $this->attributes->keys();
     }
 
     public function setErrors(Collection $errors): ResourceInterface
     {
-        $this->errors = $errors;
+        $this->_errors = $errors;
 
         return $this;
     }
 
     public function getErrors(): Collection
     {
-        return $this->errors ?? new Collection();
+        if (is_array($this->_errors)) {
+            return new Collection();
+        }
+
+        return $this->_errors;
     }
 
     public function validate(): Collection
@@ -143,7 +148,7 @@ class Resource implements ResourceInterface
             $ruleSet->filter(function ($value) {
                 return isset($value) && !empty($value);
             })->toArray(),
-            $values
+            $values->toArray()
         );
 
         if ($validation !== true) {
@@ -157,16 +162,27 @@ class Resource implements ResourceInterface
 
     public function isValid(): bool
     {
-        return empty($this->validate());
+        return $this->validate()->isEmpty();
     }
 
-    public function sync(ResourceInterface $resource): ResourceInterface
+    public function fill(array $values): ResourceInterface
     {
-        foreach ($resource->getAttributes() as $name => $attr) {
+        foreach ($values as $name => $value) {
             $attribute = $this->getAttribute($name);
 
-            $attribute->setValue($attr->getValue());
-            $attribute->setStoredValue($attr->getStoredValue());
+            $attribute->setValue($value);
+        }
+ 
+        return $this;        
+    }
+
+    public function update(array $values): ResourceInterface
+    {
+        foreach ($values as $name => $value) {
+            $attribute = $this->getAttribute($name);
+
+            $attribute->setValue($value);
+            $attribute->setStoredValue($value);
         }
  
         return $this;
@@ -216,6 +232,25 @@ class Resource implements ResourceInterface
         return $this->getValues()->filter(function ($value) {
             return isset($value) && !empty($value);
         });
+    }
+
+    public function delete()
+    {
+        $this->_metadata['delete'] = true;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->_metadata['delete'] ?? false;
+    }
+
+    public function clear()
+    {
+        unset($this->attributes);
+        unset($this->_name);
+        unset($this->_id);
+        unset($this->_errors);
+        unset($this->_metadata);
     }
 
     public function offsetSet($offset, $value)

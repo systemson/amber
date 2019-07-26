@@ -100,9 +100,9 @@ class Gemstone extends ContainerAwareClass
 
     public function delete($query)
     {
-        $mediator = $this->getMediator($this->getConnection('default'));
+        $mediator = $this->getMediator('sql');
 
-        if ($mediator->update($query)) {
+        if ($mediator->delete($query)) {
             return true;
         }
 
