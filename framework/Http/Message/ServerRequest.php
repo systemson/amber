@@ -65,8 +65,10 @@ class ServerRequest implements ServerRequestInterface
     public $files;
     public $attributes;
 
+    const PROTOCOL_VERSION = '1.1';
+
     public function __construct(
-        string $version = null,
+        string $version = self::PROTOCOL_VERSION,
         string $method = null,
         string $uri = null,
         array $headers = null,

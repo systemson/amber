@@ -43,6 +43,7 @@ class InitTestsiddleware extends RequestMiddleware
         //$this->testUpdateModel();
         //$this->testModelProvider();
         //$this->testModelSave();
+        //$this->testHttpClient();
 
         return $handler->handle($request);
     }
@@ -226,6 +227,31 @@ class InitTestsiddleware extends RequestMiddleware
             'deleted',
             $user,
         );
+    }
 
+    public function testHttpClient()
+    {
+        $client = new \Amber\Http\Client\Client();
+
+        $request = new \Amber\Http\Message\Request(
+            'http://localhost:3000/api/users',
+            'GET'
+        );
+
+        $curl = curl_init();
+
+        // Set some options - we are passing in a useragent too here
+        curl_setopt_array($curl, [
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => (string) $request->getUri(),
+            CURLOPT_USERAGENT => 'Amber Http Client'
+        ]);
+
+        // Send the request & save response to $resp
+        $resp = curl_exec($curl);
+
+        dd($request, $resp, curl_getinfo($curl));
+        // Close request to clear up some resources
+        curl_close($curl);
     }
 }

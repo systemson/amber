@@ -173,7 +173,7 @@ class Resource implements ResourceInterface
             $attribute->setValue($value);
         }
  
-        return $this;        
+        return $this;
     }
 
     public function update(array $values): ResourceInterface

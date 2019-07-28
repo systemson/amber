@@ -23,7 +23,7 @@ trait Updatable
         }
 
         if ($this->timestamps() && $this->createdAt()) {
-            $values->set(static::EDITED_AT,(string) Carbon::now());
+            $values->set(static::EDITED_AT, (string) Carbon::now());
         }
 
         $id = $resource->{$this->getId()};

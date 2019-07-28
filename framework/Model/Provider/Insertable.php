@@ -23,7 +23,7 @@ trait Insertable
         }
 
         if ($this->timestamps() && $this->createdAt()) {
-            $values->set(static::CREATED_AT,(string) Carbon::now());
+            $values->set(static::CREATED_AT, (string) Carbon::now());
         }
 
         $query = $this->query('insert')
