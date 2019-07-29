@@ -17,7 +17,7 @@ class ResponseFactory implements ResponseFactoryInterface, StatusCodeInterface
      *
      * @param ContainerInterface $container An instance of a PSR Container.
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container = null)
     {
         $this->container = $container;
     }

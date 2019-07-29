@@ -6,7 +6,6 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Amber\Http\Message\Traits\MessageTrait;
 use Amber\Http\Message\Utils\StatusCodeInterface;
-use Amber\Http\Message\Utils\RequestMethodInterface;
 use Amber\Collection\Collection;
 
 /**
@@ -24,7 +23,7 @@ use Amber\Collection\Collection;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-class Response implements ResponseInterface
+class Response implements ResponseInterface, StatusCodeInterface
 {
     use MessageTrait;
 
@@ -36,13 +35,13 @@ class Response implements ResponseInterface
     public $headers;
 
     public function __construct(
-        $code = StatusCodeInterface::STATUS_OK,
-        $reasonPhrase = '',
-        $headers = [],
-        StreamInterface $body = null
+        int $code = self::STATUS_OK,
+        string $reasonPhrase = null,
+        StreamInterface $body = null,
+        $headers = []
     ) {
         $this->code = $code;
-        $this->reasonPhrase = $reasonPhrase == '' ? StatusCodeInterface::REASON_PHRASE[$code] : $reasonPhrase;
+        $this->reasonPhrase = $reasonPhrase ?? self::REASON_PHRASE[$code];
         $this->headers = new Collection($headers);
         $this->body = $body;
     }
@@ -85,7 +84,7 @@ class Response implements ResponseInterface
         $new = $this->clone();
 
         $new->code = $code;
-        $new->reasonPhrase = $reasonPhrase == '' ? StatusCodeInterface::REASON_PHRASE[$code] : $reasonPhrase;
+        $new->reasonPhrase = $reasonPhrase == '' ? self::REASON_PHRASE[$code] : $reasonPhrase;
 
         return $new;
     }

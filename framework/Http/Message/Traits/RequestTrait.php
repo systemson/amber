@@ -124,7 +124,7 @@ trait RequestTrait
      */
     public function getUri()
     {
-        return $this->uri;
+        return $this->uri ?? new Uri();
     }
 
     /**

@@ -43,7 +43,7 @@ class InitTestsiddleware extends RequestMiddleware
         //$this->testUpdateModel();
         //$this->testModelProvider();
         //$this->testModelSave();
-        //$this->testHttpClient();
+        //$this->testHttpClient($request);
 
         return $handler->handle($request);
     }
@@ -229,29 +229,25 @@ class InitTestsiddleware extends RequestMiddleware
         );
     }
 
-    public function testHttpClient()
+    public function testHttpClient($request)
     {
         $client = new \Amber\Http\Client\Client();
 
         $request = new \Amber\Http\Message\Request(
             'http://localhost:3000/api/users',
-            'GET'
+            'GET',
+            null,
+            [
+                'Accept' => 'application/json',
+                'Header' => 'lol',
+            ]
         );
 
-        $curl = curl_init();
+        $response = $client->sendRequest($request);
 
-        // Set some options - we are passing in a useragent too here
-        curl_setopt_array($curl, [
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_URL => (string) $request->getUri(),
-            CURLOPT_USERAGENT => 'Amber Http Client'
-        ]);
-
-        // Send the request & save response to $resp
-        $resp = curl_exec($curl);
-
-        dd($request, $resp, curl_getinfo($curl));
-        // Close request to clear up some resources
-        curl_close($curl);
+        dd(
+            $response,
+            (string) $response->getBody()
+        );
     }
 }
