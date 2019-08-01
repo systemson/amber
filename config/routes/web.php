@@ -1,14 +1,16 @@
 <?php
 
-$routes->get('/', 'App\Controllers\HomeController::index');
+$routes->get('/', 'HomeController::index');
 
 $routes->group(function ($routes) {
-    $routes->get('/login', 'App\Controllers\Auth\AccessController::loginForm');
-    $routes->post('/login', 'App\Controllers\Auth\AccessController::login');
+
+    $routes->get('/login', 'Auth\AccessController::loginForm');
+    $routes->post('/login', 'Auth\AccessController::login');
+
 }, [
     'middlewares' => [
         'Amber\Http\Server\Middleware\AuthenticatedMiddleware',
     ]
 ]);
 
-$routes->post('/logout', 'App\Controllers\Auth\AccessController::logout');
+$routes->post('/logout', 'Auth\AccessController::logout');

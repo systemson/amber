@@ -30,6 +30,7 @@ class Router extends ContainerFacade
         },
         [
             'middlewares' => config('routes.routes.web.middlewares'),
+            'namespace' => 'App\Controllers\\',
         ]);
     }
 
