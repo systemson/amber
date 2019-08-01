@@ -15,14 +15,19 @@ use Amber\Http\Message\Utils\RequestMethodInterface;
  */
 class Router implements RequestMethodInterface
 {
+    use MiddlewareTrait,
+        PrefixTrait,
+        NamespaceTrait
+    ;
+
     protected $collection;
+    protected $options;
 
-    protected $middlewares = [];
-
-    public function __construct(array $routes = [])
+    public function __construct(array $routes = [], array $middlewares = [], array $options = [])
     {
         $this->collection = new Collection($routes);
-        $this->middlewares = new Collection();
+        $this->middlewares = new Collection($middlewares);
+        $this->options = new Collection($options);
     }
 
     public function toSymfonyCollection()
@@ -67,9 +72,11 @@ class Router implements RequestMethodInterface
     {
         $defaults = $this->handleDefaults($defaults);
 
-        $route = $this->routeFactory($methods, $url, $defaults);
+        $realUrl = $this->getRealUrl($url);
 
-        $name = $this->getName($url, $defaults);
+        $route = $this->routeFactory($methods, $realUrl, $defaults);
+
+        $name = $this->getName($realUrl, $defaults);
 
         $this->collection->add($name, $route);
 
@@ -100,6 +107,7 @@ class Router implements RequestMethodInterface
     private function getControllerToActionArray($defaults)
     {
         return  Phraser::make($defaults)
+            ->prepend($this->getNamespace() . '\\', $this->getNamespace())
             ->explode('::');
     }
 
@@ -206,9 +214,18 @@ class Router implements RequestMethodInterface
 
     public function group(\Closure $callback, array $options = [])
     {
-        $routes = new static();
+        $routes = new static(
+            [],
+            $this->middlewares->toArray(),
+            $this->options->toArray()
+        );
 
+        $routes->options = $this->options;
         $middlewares = $this->middlewares->merge($options['middlewares'] ?? []);
+
+        $routes->setPrefix($options['prefix'] ?? '');
+
+        $routes->setNamespace($options['namespace'] ?? '');
 
         $routes->middlewares($middlewares);
 

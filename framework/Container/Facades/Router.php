@@ -8,7 +8,6 @@ use Amber\Utils\Traits\SingletonTrait;
 
 class Router extends ContainerFacade
 {
-
     use SingletonTrait;
 
     /**
@@ -41,6 +40,8 @@ class Router extends ContainerFacade
         },
         [
             'middlewares' => config('routes.routes.api.middlewares'),
+            'prefix' => '/api',
+            'namespace' => 'App\Controllers\Api\\',
         ]);
     }
 }
