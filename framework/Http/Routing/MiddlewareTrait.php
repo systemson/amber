@@ -9,25 +9,23 @@ use Psr\Http\Server\MiddlewareInterface;
  */
 trait MiddlewareTrait
 {
-    protected $middlewares = [];
-
     public function setMiddleware(string $alias, string $middleware = null)
     {
-        if (!$this->isMiddleware($middleware)) {
+        if (!$this->isMiddleware($middleware ?? $alias)) {
             throw new \Exception("Class [{$middleware}] is not a valid middleware.");
         }
 
-        $this->middlewares->add($alias, $middleware ?? $alias);
+        $this->options['middlewares'][$alias] = $middleware ?? $alias;
     }
 
     public function getMiddleware(string $alias)
     {
-        return $this->middlewares->get($alias);
+        return $this->options['middlewares'][$alias] ?? null;
     }
 
     public function getMiddlewares()
     {
-        return $this->middlewares;
+        return $this->options->get('middlewares');
     }
 
     public function setMiddlewares(array $middlewares)
@@ -41,8 +39,11 @@ trait MiddlewareTrait
         }
     }
 
+    /**
+     * @todo SHOULD be replace with a Typed Collection.
+     */
     protected function isMiddleware(string $middleware): bool
     {
-        return is_a($middleware, MiddlewareInterface::class);
+        return in_array(MiddlewareInterface::class, class_implements($middleware));
     }
 }

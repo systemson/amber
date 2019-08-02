@@ -23,10 +23,9 @@ class Router implements RequestMethodInterface
     protected $collection;
     protected $options;
 
-    public function __construct(array $routes = [], array $middlewares = [], array $options = [])
+    public function __construct(array $routes = [], array $options = [])
     {
         $this->collection = new Collection($routes);
-        $this->middlewares = new Collection($middlewares);
         $this->options = new Collection($options);
     }
 
@@ -88,15 +87,19 @@ class Router implements RequestMethodInterface
         if (is_string($defaults)) {
             $defaultArray = $this->getControllerToActionArray($defaults);
 
+            $middlewares = $this->getMiddlewares();
+
             return [
                 '_controller'  => $defaultArray->first(),
                 '_action'      => $defaultArray->last(),
-                '_middlewares' => $this->middlewares->append(ControllerHandlerMiddleware::class),
+                '_middlewares' => array_merge($middlewares, [ControllerHandlerMiddleware::class]),
             ];
         } elseif ($defaults instanceof \Closure) {
+            $middlewares = $this->getMiddlewares();
+
             return [
                 '_callback' => $defaults,
-                '_middlewares' => $this->middlewares->append(ClosureHandlerMiddleware::class),
+                '_middlewares' => array_merge($middlewares, [ClosureHandlerMiddleware::class]),
             ];
         }
     }
@@ -150,6 +153,9 @@ class Router implements RequestMethodInterface
     {
         return Phraser::make($url)
             ->explode('/')
+            ->filter(function ($value) {
+                return substr($value, 0, 1) !== "{";
+            })
             ->trim()
             ->toSnakeCase()
         ;
@@ -216,18 +222,14 @@ class Router implements RequestMethodInterface
     {
         $routes = new static(
             [],
-            $this->middlewares->toArray(),
             $this->options->toArray()
         );
-
-        $routes->options = $this->options;
-        $middlewares = $this->middlewares->merge($options['middlewares'] ?? []);
 
         $routes->setPrefix($options['prefix'] ?? '');
 
         $routes->setNamespace($options['namespace'] ?? '');
 
-        $routes->middlewares($middlewares);
+        $routes->setMiddlewares($options['middlewares'] ?? []);
 
         $callback->__invoke($routes);
 
