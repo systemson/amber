@@ -30,13 +30,15 @@ class UsersController extends Controller
             $resource->password = Hash::make($resource->password);
 
             if ($provider->save($resource)) {
-                return Response::json($resource);
+                return Response::created()->json($resource);
             }
         }
 
-        return Response::json([
-            'errors' => $resource->getErrors(),
-        ]);
+        return Response::unprocessableEntity()
+            ->json([
+                'errors' => $resource->getErrors(),
+            ])
+        ;
     }
 
     public function read(int $id)
@@ -73,9 +75,11 @@ class UsersController extends Controller
             return Response::json($resource);
         }
 
-        return Response::json([
-            'errors' => $resource->getErrors(),
-        ]);
+        return Response::unprocessableEntity()
+            ->json([
+                'errors' => $resource->getErrors(),
+            ])
+        ;
     }
 
     public function delete(int $id)

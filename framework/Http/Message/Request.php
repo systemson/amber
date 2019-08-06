@@ -30,7 +30,9 @@ use Amber\Http\Message\Utils\RequestMethodInterface;
  */
 class Request implements RequestInterface, RequestMethodInterface
 {
-    use RequestTrait, RequestUtilsTrait;
+    use RequestTrait,
+        RequestUtilsTrait
+    ;
 
     protected $version;
     protected $method;

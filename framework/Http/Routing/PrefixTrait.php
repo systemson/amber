@@ -39,4 +39,11 @@ trait PrefixTrait
 
         return '/';
     }
+
+    /*public function prefix(string $prefix)
+    {
+        return $this->group()
+            ->setPrefix($prefix)
+        ;
+    }*/
 }

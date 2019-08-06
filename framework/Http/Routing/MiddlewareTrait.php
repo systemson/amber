@@ -9,13 +9,15 @@ use Psr\Http\Server\MiddlewareInterface;
  */
 trait MiddlewareTrait
 {
-    public function setMiddleware(string $alias, string $middleware = null)
+    public function setMiddleware(string $alias, string $middleware = null): self
     {
         if (!$this->isMiddleware($middleware ?? $alias)) {
             throw new \Exception("Class [{$middleware}] is not a valid middleware.");
         }
 
         $this->options['middlewares'][$alias] = $middleware ?? $alias;
+
+        return $this;
     }
 
     public function getMiddleware(string $alias)
@@ -28,7 +30,7 @@ trait MiddlewareTrait
         return $this->options->get('middlewares');
     }
 
-    public function setMiddlewares(array $middlewares)
+    public function setMiddlewares(array $middlewares): self
     {
         foreach ($middlewares as $alias => $class) {
             if (is_numeric($alias)) {
@@ -37,6 +39,8 @@ trait MiddlewareTrait
 
             $this->setMiddleware($alias, $class);
         }
+
+        return $this;
     }
 
     /**

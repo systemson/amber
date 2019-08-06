@@ -52,13 +52,6 @@ class Router implements RequestMethodInterface
         return new Collection();
     }
 
-    public function middlewares($middlewares)
-    {
-        $this->middlewares = $middlewares;
-
-        return $this;
-    }
-
     public function merge(self $router)
     {
         $this->collection = $this->collection->merge($router->toArray());
@@ -218,21 +211,39 @@ class Router implements RequestMethodInterface
         return $this->addRoute([self::METHOD_PUT, self::METHOD_PATCH], $url, $defaults);
     }
 
-    public function group(\Closure $callback, array $options = [])
+    public function any(string $url, $defaults)
+    {
+        return $this->addRoute(
+            [
+                self::METHOD_HEAD,
+                self::METHOD_GET,
+                self::METHOD_POST,
+                self::METHOD_PATCH,
+                self::METHOD_PUT,
+                self::METHOD_DELETE,
+                self::METHOD_OPTIONS,
+            ],
+            $url,
+            $defaults
+        );
+    }
+
+    public function group(\Closure $callback, array $options = []): self
     {
         $routes = new static(
             [],
             $this->options->toArray()
         );
 
-        $routes->setPrefix($options['prefix'] ?? '');
+        if (!empty($options)) {
+            $routes->setPrefix($options['prefix'] ?? '');
 
-        $routes->setNamespace($options['namespace'] ?? '');
+            $routes->setNamespace($options['namespace'] ?? '');
 
-        $routes->setMiddlewares($options['middlewares'] ?? []);
+            $routes->setMiddlewares($options['middlewares'] ?? []);
+        }
 
         $callback->__invoke($routes);
-
         $this->merge($routes);
 
         return $this;

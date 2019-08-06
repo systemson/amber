@@ -38,6 +38,7 @@ class Resource implements ResourceInterface
         $this->setName($name);
         
         $this->setValues($values);
+
         if ($isStored) {
             $this->setStoredValues($values);
         }

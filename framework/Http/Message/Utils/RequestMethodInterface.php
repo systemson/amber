@@ -3,21 +3,7 @@
 namespace Amber\Http\Message\Utils;
 
 /**
- * Defines constants for common HTTP request methods.
- *
- * Usage:
- *
- * <code>
- * class RequestFactory implements RequestMethodInterface
- * {
- *     public static function factory(
- *         $uri = '/',
- *         $method = self::METHOD_GET,
- *         $data = []
- *     ) {
- *     }
- * }
- * </code>
+ * Defines constants for most common HTTP request methods.
  */
 interface RequestMethodInterface
 {

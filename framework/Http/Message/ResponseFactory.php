@@ -189,6 +189,19 @@ class ResponseFactory implements ResponseFactoryInterface, StatusCodeInterface
     }
 
     /**
+     * The 422 status code, or a Unprocessable Entity error, the server understands the content type of the request entity
+     * and the syntax of the request entity is correct but was unable to process the contained instructions.
+     *
+     * @param string $reasonPhrase Reason phrase to associate with status code.
+     *
+     * @return ResponseInterface
+     */
+    public function unprocessableEntity(string $reasonPhrase = ''): ResponseInterface
+    {
+        return $this->createResponse(self::STATUS_UNPROCESSABLE_ENTITY, $reasonPhrase);
+    }
+
+    /**
      * The 429 status code, or a Too Many Requests response status code indicates the user has sent too many requests in
      * a given amount of time ("rate limiting").
      *

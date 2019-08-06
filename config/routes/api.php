@@ -9,11 +9,11 @@ $routes->get('/', function () {
 });
 
 $routes->group(function ($routes) {
-	$routes->get('/', 'UsersController::list');
-	$routes->post('/', 'UsersController::create');
-	$routes->get('/{id}', 'UsersController::read');
-	$routes->update('/{id}', 'UsersController::update');
-	$routes->delete('/{id}', 'UsersController::delete');
+    $routes->get('/', 'UsersController::list');
+    $routes->post('/', 'UsersController::create');
+    $routes->get('/{id}', 'UsersController::read');
+    $routes->update('/{id}', 'UsersController::update');
+    $routes->delete('/{id}', 'UsersController::delete');
 }, [
     'prefix' => '/users',
 ]);
