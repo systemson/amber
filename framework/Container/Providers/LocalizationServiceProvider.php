@@ -7,7 +7,8 @@ use Amber\Helpers\Localization\Lang;
 use Amber\Validator\Validator;
 use Amber\Phraser\Phraser;
 use Amber\Phraser\Str;
-use Amber\Container\Facades\Str as FacadeStr;
+use Amber\Container\Facades\Str as StrFacade;
+use Symfony\Component\Inflector\Inflector;
 
 class LocalizationServiceProvider extends ServiceProvider
 {
@@ -35,12 +36,20 @@ class LocalizationServiceProvider extends ServiceProvider
             ->setArgument('string', '')
         ;
 
-        FacadeStr::setMacro('faker', function (string $locale = null) {
+        StrFacade::setMacro('faker', function (string $locale = null) {
             if (is_null($locale)) {
                 $locale = config('app.faker_locale');
             }
 
             return \Faker\Factory::create($locale);
+        });
+
+        StrFacade::setMacro('plural', function (string $singular) {
+            return Inflector::pluralize($singular);
+        });
+
+        StrFacade::setMacro('singular', function (string $plural) {
+            return Inflector::singularize($plural);
         });
     }
 }

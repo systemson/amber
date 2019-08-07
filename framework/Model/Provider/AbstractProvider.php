@@ -8,6 +8,7 @@ use Amber\Model\QueryBuilder\QueryBuilder;
 use Amber\Model\Resource\Resource;
 use Aura\SqlQuery\AbstractQuery;
 use Amber\Container\Facades\Gemstone;
+use Amber\Container\Facades\Str;
 use Amber\Collection\Contracts\CollectionInterface;
 use Amber\Phraser\Phraser;
 
@@ -19,7 +20,12 @@ use Amber\Model\Traits\AttributesTrait;
  */
 abstract class AbstractProvider
 {
-    use Insertable, Selectable, Updatable, Deletable;
+    use Insertable,
+        Selectable,
+        Updatable,
+        Deletable,
+        Relations
+    ;
 
     protected $id = 'id';
 
@@ -73,6 +79,11 @@ abstract class AbstractProvider
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getResource(): string
+    {
+        return Str::singular($this->name);
     }
 
     public function setId(string $id): self

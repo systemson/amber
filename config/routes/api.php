@@ -10,8 +10,10 @@ $routes->get('/', function () {
 
 $routes->group(function ($routes) {
     $routes->get('/', 'UsersController::list');
+    //$routes->get('/create', 'UsersController::form');
     $routes->post('/', 'UsersController::create');
     $routes->get('/{id}', 'UsersController::read');
+    //$routes->get('/{id}/edit', 'UsersController::form');
     $routes->update('/{id}', 'UsersController::update');
     $routes->delete('/{id}', 'UsersController::delete');
 }, [

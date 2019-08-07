@@ -47,6 +47,7 @@
         "sunrise/stream": "^1.0",
         "symfony/cache": "^4.2",
         "symfony/console": "^4.2",
+        "symfony/inflector": "^4.3",
         "symfony/process": "^4.2",
         "symfony/routing": "^4.2",
         "vlucas/phpdotenv": "^3.3"
