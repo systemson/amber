@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "82dc3a73d03c0ae572a8737880d818e9",
+    "content-hash": "d4e65cb57e1144618e092269a6e5f155",
     "packages": [
         {
             "name": "amber/cache",
@@ -106,24 +106,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/common.git",
-                "reference": "28ca50e6d27ab521855e7415f54a1a8775a303d0"
+                "reference": "161a654ea1f2e6cecdc6c507463f1074b2f4ffe5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/common/zipball/28ca50e6d27ab521855e7415f54a1a8775a303d0",
-                "reference": "28ca50e6d27ab521855e7415f54a1a8775a303d0",
+                "url": "https://api.github.com/repos/systemson/common/zipball/161a654ea1f2e6cecdc6c507463f1074b2f4ffe5",
+                "reference": "161a654ea1f2e6cecdc6c507463f1074b2f4ffe5",
                 "shasum": ""
             },
             "require": {
-                "amber/collection": "0.6.*",
-                "amber/phraser": "0.1.*",
                 "league/flysystem": "^1.0",
                 "nesbot/carbon": "^2.17",
                 "php": "^7.2.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.1",
-                "squizlabs/php_codesniffer": "^3.3",
                 "symfony/var-dumper": "^4.2"
             },
             "type": "library",
@@ -143,7 +139,7 @@
                 }
             ],
             "description": "Common Amber Project files.",
-            "time": "2019-07-24T02:48:20+00:00"
+            "time": "2019-08-13T15:13:37+00:00"
         },
         {
             "name": "amber/container",
@@ -195,20 +191,21 @@
         },
         {
             "name": "amber/phraser",
-            "version": "dev-master",
+            "version": "v0.0.7-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/phraser.git",
-                "reference": "42b249b881a13ba5414a42feb51f80439b95591e"
+                "reference": "02cdcf4e86f4cd98ba8589209042be6958298d7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/phraser/zipball/42b249b881a13ba5414a42feb51f80439b95591e",
-                "reference": "42b249b881a13ba5414a42feb51f80439b95591e",
+                "url": "https://api.github.com/repos/systemson/phraser/zipball/02cdcf4e86f4cd98ba8589209042be6958298d7b",
+                "reference": "02cdcf4e86f4cd98ba8589209042be6958298d7b",
                 "shasum": ""
             },
             "require": {
                 "amber/collection": "0.6.*",
+                "amber/common": "dev-master",
                 "php": ">=7.2.0"
             },
             "require-dev": {
@@ -237,7 +234,7 @@
                 }
             ],
             "description": "Wrapper class for working with strings.",
-            "time": "2019-08-12T16:12:30+00:00"
+            "time": "2019-08-13T15:17:41+00:00"
         },
         {
             "name": "amber/sketch",
@@ -284,6 +281,49 @@
             ],
             "description": "Lightweight PHP templating engine.",
             "time": "2019-06-06T21:23:35+00:00"
+        },
+        {
+            "name": "amber/validator",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/systemson/validator.git",
+                "reference": "ca2e427cf22f989a75d05242051b066a75217889"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/systemson/validator/zipball/ca2e427cf22f989a75d05242051b066a75217889",
+                "reference": "ca2e427cf22f989a75d05242051b066a75217889",
+                "shasum": ""
+            },
+            "require": {
+                "amber/phraser": "^0.0.7@beta",
+                "php": ">=7.3.0",
+                "respect/validation": "^1.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Amber\\Validator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Deivi Peña",
+                    "email": "systemson@gmail.com"
+                }
+            ],
+            "description": "Wrapper class for working with arrays.",
+            "time": "2019-08-13T15:23:47+00:00"
         },
         {
             "name": "aura/sql",
@@ -2805,7 +2845,9 @@
         "amber/cache": 10,
         "amber/common": 20,
         "amber/container": 10,
-        "amber/sketch": 20
+        "amber/phraser": 10,
+        "amber/sketch": 20,
+        "amber/validator": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

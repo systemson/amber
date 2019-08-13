@@ -30,9 +30,12 @@
     "require": {
         "php": "^7.2.0",
         "amber/cache": "^1.0@beta",
+        "amber/collection": "0.6.*",
         "amber/common": "dev-master",
         "amber/container": "^1.1@beta",
+        "amber/phraser": "^0.0.7@beta",
         "amber/sketch": "dev-master",
+        "amber/validator": "^0.1.0@dev",
         "aura/sql": "^3.0",
         "aura/sqlquery": "^2.7",
         "aura/sqlschema": "^2.0",

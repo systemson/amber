@@ -77,7 +77,7 @@ abstract class Controller
         $array->delete($array->count() - 1);
 
         $array = $array->map(
-            function ($value) {
+            function ($value): string {
                 return Phraser::fromCamelCase($value)->toSnakeCase();
             }
         );
