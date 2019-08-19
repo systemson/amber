@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Amber\Model\Provider\AbstractProvider;
 
-class UsersProvider extends AbstractProvider
+class UserProvider extends AbstractProvider
 {
     protected $name = 'users';
 
@@ -20,12 +20,15 @@ class UsersProvider extends AbstractProvider
         'updated_at' => 'date|optional',
     ];
 
-    protected $relations = [
-        UserRolePivot::class
+    /**
+     * @var array Eager loaded relations
+     */
+    public $relations = [
+        'roles'
     ];
 
     public function roles()
     {
-        return $this->hasMany(UserRolePivot::class);
+        return $this->hasAndBelongsToMany(RoleProvider::class, 'users_roles', 'user_id', 'role_id');
     }
 }

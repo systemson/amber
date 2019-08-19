@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Amber\Model\Provider\AbstractProvider;
 
-class RolesProvider extends AbstractProvider
+class RoleProvider extends AbstractProvider
 {
     protected $name = 'roles';
 

@@ -14,7 +14,7 @@ class Hash
         return password_verify($value, $hash);
     }
 
-    public static function token($limit)
+    public static function token($limit): string
     {
         $size = ceil($limit / 2);
 

@@ -18,7 +18,7 @@ trait Selectable
     public function all()
     {
         return $this->select()
-            ->orderBy($this->getId(), 'ASC')
+            ->orderBy($this->getName() . '.' . $this->getId(), 'ASC')
             ->get()
         ;
     }

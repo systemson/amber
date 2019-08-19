@@ -21,6 +21,6 @@ class UserRolePivot extends AbstractProvider
 
     public function role()
     {
-        return $this->belongsTo(UserProvider::class);
+        return $this->belongsTo(RoleProvider::class);
     }
 }

@@ -3,44 +3,78 @@
 namespace Amber\Model\Provider;
 
 use Amber\Container\Facades\Gemstone;
+use Amber\Container\Facades\Str;
 
 trait Relations
 {
-	public function hasMany(string $class, $pk = null, $fk = null)
-	{
-		$provider = new $class;
+    public function with(array $relations = [])
+    {
+        foreach ($relations as $relation) {
+            $callback = [$this, $relation];
 
-		$name = $provider->getName();
-		$pk = $pk ?? $this->getId();
-		$fk = $fk ?? "{$this->getResource()}_{$pk}";
+            $this->eagerLoadedRelations[$relation] = Gemstone::execute(call_user_func($callback));
+            $this->clearQuery();
+        }
 
-		return $this->select()
-			->join('inner', $name, "{$name}.{$fk} = {$this->getName()}.{$pk}")
-			->get()
-		;
-	}
+        return $this;
+    }
 
-	public function hasOne(string $class, $pk = null, $fk = null)
-	{
-		$provider = new $class;
+    public function hasAndBelongsToMany($class, $pivot, string $pk = null, string $fk = null)
+    {
+        $related = new $class;
 
-		$name = $provider->getName();
+        $query = $this->query();
 
-		$pk = $pk ?? $provider->getId();
-		$fk = $fk ?? "{$name}_{$pk}";
+        $pivot_id1 = $pk ?? Str::singular($this->name) . "_{$this->id}";
+        $pivot_id2 = $fk ?? Str::singular($related->name) . "_{$related->id}";
 
-		$this->relations[$provider->getName()] = [$pk => $fk];
-	}
+        $query->removeCol('*');
+        
+        return $query
+            ->cols([
+                $related->getName() . '.*',
+                $pivot . '.*'
+            ])
+            ->join('inner', $pivot, "{$pivot}.{$pivot_id1} = {$this->name}.{$this->id}")
+            ->join('inner', $related->name, "{$pivot}.{$pivot_id2} = {$related->name}.{$related->id}")
+        ;
+    }
 
-	public function belongsTo(string $class, $pk = null, $fk = null)
-	{
-		$provider = new $class;
+    public function hasMany(string $class, $pk = null, $fk = null)
+    {
+        $provider = new $class;
 
-		$name = $provider->getName();
+        $name = $provider->getName();
+        $pk = $pk ?? $this->getId();
+        $fk = $fk ?? "{$this->getResource()}_{$pk}";
 
-		$pk = $pk ?? $provider->getId();
-		$fk = $fk ?? "{$name}_{$pk}";
+        return $this->select()
+            ->join('inner', $name, "{$name}.{$fk} = {$this->getName()}.{$pk}")
+            ->get()
+        ;
+    }
 
-		$this->relations[$provider->getName()] = [$pk => $fk];
-	}
+    public function hasOne(string $class, $pk = null, $fk = null)
+    {
+        $provider = new $class;
+
+        $name = $provider->getName();
+
+        $pk = $pk ?? $provider->getId();
+        $fk = $fk ?? "{$name}_{$pk}";
+
+        $this->relations[$provider->getName()] = [$pk => $fk];
+    }
+
+    public function belongsTo(string $class, $pk = null, $fk = null)
+    {
+        $provider = new $class;
+
+        $name = $provider->getName();
+
+        $pk = $pk ?? $provider->getId();
+        $fk = $fk ?? "{$name}_{$pk}";
+
+        $this->relations[$provider->getName()] = [$pk => $fk];
+    }
 }

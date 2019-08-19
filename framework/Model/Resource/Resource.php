@@ -24,6 +24,7 @@ class Resource implements ResourceInterface
     private $_id;
     private $_errors = [];
     private $_metadata = [];
+    private $_relations = [];
 
     public function __construct(
         array $values = [],
@@ -60,9 +61,19 @@ class Resource implements ResourceInterface
 
     public function getValues(): Collection
     {
-        return $this->getAttributes()->map(function ($attr) {
-            return $attr->getValue();
+        $array = $this->getAttributes()->map(function ($attr) {
+            if ($attr) {
+                return $attr->getValue();
+            }
         });
+
+        if (!empty($this->_relations)) {
+            foreach ($this->_relations as $name => $values) {
+                $array[$name] = $values;
+            }
+        }
+
+        return $array;
     }
 
     public function setStoredValues(array $values): ResourceInterface
@@ -291,6 +302,11 @@ class Resource implements ResourceInterface
         }
 
         return $value;
+    }
+
+    public function setRelation($name, $values)
+    {
+        $this->_relations[$name][] = $values;
     }
 
     public function toArray(): array

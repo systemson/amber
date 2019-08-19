@@ -10,7 +10,8 @@ class DatabaseSeeder
     {
         return [
         	'UserTableSeeder',
-        	//'RolesTableSeeder',
+        	'RolesTableSeeder',
+        	'UsersRolesTableSeeder',
         	//'PermissionsTableSeeder',
         ];
     }

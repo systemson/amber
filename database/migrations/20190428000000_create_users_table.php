@@ -11,6 +11,7 @@ class CreateUsersTable
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->text('description')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->string('remember_token')->nullable();
             $table->timestamps();

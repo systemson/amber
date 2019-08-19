@@ -2,7 +2,7 @@
 
 namespace Amber\Auth;
 
-use App\Models\UsersProvider as ParentProvider;
+use App\Models\UserProvider as ParentProvider;
 
 class UserProvider extends ParentProvider implements UserProviderContract
 {

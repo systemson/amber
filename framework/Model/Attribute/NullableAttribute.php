@@ -4,6 +4,6 @@ namespace Amber\Model\Attribute;
 
 use Amber\Utils\Implementations\AbstractNullObject;
 
-class NullableAttribute
+class NullableAttribute extends AbstractNullObject
 {
 }

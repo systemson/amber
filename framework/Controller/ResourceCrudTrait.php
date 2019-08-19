@@ -9,23 +9,28 @@ use Amber\Container\Facades\View;
 
 trait ResourceCrudTrait
 {
-	public function getProvider(): ProviderInterface
-	{
-		return new $this->provider;
-	}
+    public function getProvider(): ProviderInterface
+    {
+        return new $this->provider;
+    }
 
     public function list(ServerRequestInterface $request)
     {
         $provider = $this->getProvider();
 
-        return Response::json($provider->all());
+        $resources = $provider
+            ->with($provider->relations)
+            ->all()
+        ;
+
+        return Response::json($resources);
     }
 
     public function form(ServerRequestInterface $request, int $id = null)
     {
-    	$provider = $this->getProvider();
+        $provider = $this->getProvider();
 
-    	$resource = $provider->find($id);
+        $resource = $provider->find($id);
 
         View::view($this->getView())
             //->setLayout('layouts/app.php')

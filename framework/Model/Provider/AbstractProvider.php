@@ -34,6 +34,7 @@ abstract class AbstractProvider
     protected $attributes = [];
 
     protected $relations = [];
+    protected $eagerLoadedRelations = [];
 
     protected $mediator;
 
@@ -175,6 +176,13 @@ abstract class AbstractProvider
         }
     }
 
+    protected function clearQuery()
+    {
+        $this->query = null;
+
+        return $this;
+    }
+
     public function get()
     {
         $query = $this->query;
@@ -183,14 +191,25 @@ abstract class AbstractProvider
         $result = Gemstone::execute($query);
 
         if ($result instanceof CollectionInterface && $result->isNotEmpty()) {
-            return $result->map(function ($values) {
+            $new = $result->map(function ($values) {
                 return $this->new($values, true);
             });
         } elseif (is_array($result)) {
-            return $this->new($result, true);
+            $new =  $this->new($result, true);
+        } else {
+            return $result;
         }
 
-        return $result;
+        foreach ($this->eagerLoadedRelations as $name => $value) {
+            $new->join(
+                $value->toArray(),
+                $name,
+                $this->id,
+                Str::singular($this->name) . '_' . $this->id
+            );
+        }
+
+        return $new;
     }
 
     public function save(Resource $resource): bool
