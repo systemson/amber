@@ -3,7 +3,6 @@
 namespace Amber\Model\Provider;
 
 use Amber\Container\Facades\Gemstone;
-use Amber\Container\Facades\Str;
 
 trait Relations
 {
@@ -19,14 +18,14 @@ trait Relations
         return $this;
     }
 
-    public function hasAndBelongsToMany($class, $pivot, string $pk = null, string $fk = null)
+    public function hasAndBelongsToMany($class, $pivot)
     {
         $related = new $class;
 
         $query = $this->query();
 
-        $pivot_id1 = $pk ?? Str::singular($this->name) . "_{$this->id}";
-        $pivot_id2 = $fk ?? Str::singular($related->name) . "_{$related->id}";
+        $pivot_id1 = $this->getResource() . '_' . $this->getId();
+        $pivot_id2 = $related->getResource() . '_' . $related->getId();
 
         $query->removeCol('*');
         

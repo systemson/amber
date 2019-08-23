@@ -30,6 +30,7 @@ abstract class AbstractProvider
     protected $id = 'id';
 
     protected $name;
+    protected $resource;
 
     protected $attributes = [];
 
@@ -84,6 +85,10 @@ abstract class AbstractProvider
 
     public function getResource(): string
     {
+        if (isset($this->resource)) {
+            return $this->resource;
+        }
+
         return Str::singular($this->name);
     }
 
@@ -133,7 +138,6 @@ abstract class AbstractProvider
 
     public function query(string $type = 'select')
     {
-
         if (!is_null($this->query)) {
             $class = (string) Phraser::make(get_class($this->query))
                 ->explode('\\')
@@ -205,7 +209,7 @@ abstract class AbstractProvider
                 $value->toArray(),
                 $name,
                 $this->id,
-                Str::singular($this->name) . '_' . $this->id
+                $this->getResource() . '_' . $this->getId()
             );
         }
 

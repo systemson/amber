@@ -14,6 +14,16 @@ trait ResourceCrudTrait
         return new $this->provider;
     }
 
+    public function find($id)
+    {
+        $provider = $this->getProvider();
+
+        return $provider
+            ->with($provider->relations)
+            ->find($id)
+        ;
+    }
+
     public function list(ServerRequestInterface $request)
     {
         $provider = $this->getProvider();
@@ -28,9 +38,7 @@ trait ResourceCrudTrait
 
     public function form(ServerRequestInterface $request, int $id = null)
     {
-        $provider = $this->getProvider();
-
-        $resource = $provider->find($id);
+        $resource = $this->find($id);
 
         View::view($this->getView())
             //->setLayout('layouts/app.php')
@@ -65,9 +73,7 @@ trait ResourceCrudTrait
 
     public function read(ServerRequestInterface $request, int $id)
     {
-        $provider = $this->getProvider();
-
-        $resource = $provider->find($id);
+        $resource = $this->find($id);
 
         if (is_null($resource)) {
             return Response::notFound();
@@ -78,9 +84,7 @@ trait ResourceCrudTrait
 
     public function update(ServerRequestInterface $request, int $id)
     {
-        $provider = $this->getProvider();
-
-        $resource = $provider->find($id);
+        $resource = $this->find($id);
 
         if (is_null($resource)) {
             return Response::notFound();

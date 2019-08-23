@@ -46,7 +46,7 @@ trait Selectable
     {
         return $this
             ->where($this->id, '=', $id)
-            ->first(1)
+            ->first()
         ;
     }
 

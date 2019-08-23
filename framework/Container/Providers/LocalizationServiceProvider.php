@@ -45,11 +45,23 @@ class LocalizationServiceProvider extends ServiceProvider
         });
 
         StrFacade::setMacro('plural', function (string $singular) {
-            return Inflector::pluralize($singular);
+            $plural = Inflector::pluralize($singular);
+
+            if (is_array($plural)) {
+                return end($plural);
+            }
+
+            return $plural;
         });
 
         StrFacade::setMacro('singular', function (string $plural) {
-            return Inflector::singularize($plural);
+            $singular = Inflector::singularize($plural);
+
+            if (is_array($singular)) {
+                return end($singular);
+            }
+
+            return $singular;
         });
     }
 }

@@ -313,4 +313,15 @@ class Resource implements ResourceInterface
     {
         return $this->getValues()->toArray();
     }
+
+    public function join($array, $name, $pkey, $fkey): self
+    {
+        foreach ($array as $value) {
+            if ($this->{$pkey} === $value[$fkey]) {
+                $this->setRelation($name, $value);
+            }
+        }
+
+        return $this;
+    }
 }
