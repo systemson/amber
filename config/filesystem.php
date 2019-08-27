@@ -3,6 +3,6 @@
 return [
 
     'main' => [
-        'path' => APP_DIR,
+        'path' => path(),
     ],
 ];

@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use Amber\Phraser\Str;
 use Amber\Phraser\Phraser;
 use Amber\Collection\Vector;
 
@@ -78,7 +77,7 @@ abstract class Controller
 
         $array = $array->map(
             function ($value): string {
-                return Phraser::fromCamelCase($value)->toSnakeCase();
+                return Phraser::make($value)->fromCamelCase()->toSnakeCase();
             }
         );
 
@@ -105,13 +104,12 @@ abstract class Controller
     public function getDefaultView()
     {
         $path = $this->getViewPath();
-
         $name = $this->getResourceName();
 
         $action = Phraser::make($this->getCalledAction())
         ->fromCamelCase()
         ->toSnakeCase();
 
-        return path("{$path}{$name}/{$action}.php");
+        return "{$path}{$name}" . DIRECTORY_SEPARATOR .  "{$action}.php";
     }
 }

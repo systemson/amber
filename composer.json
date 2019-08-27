@@ -19,7 +19,7 @@
             "database/seeds"
         ],
         "files": [
-            "config/constants.php"
+            "framework/Helpers/constants.php"
         ]
     },
     "autoload-dev": {
@@ -33,7 +33,7 @@
         "amber/collection": "0.6.*",
         "amber/common": "dev-master",
         "amber/container": "^1.1@beta",
-        "amber/phraser": "^0.0.7@beta",
+        "amber/phraser": "^0.1.0@dev",
         "amber/sketch": "dev-master",
         "amber/validator": "^0.1.0@dev",
         "aura/sql": "^3.0",
@@ -46,7 +46,6 @@
         "psr/http-client": "^1.0",
         "psr/http-factory": "^1.0",
         "psr/http-server-middleware": "^1.0",
-        "respect/validation": "^1.1",
         "sunrise/stream": "^1.0",
         "symfony/cache": "^4.2",
         "symfony/console": "^4.2",

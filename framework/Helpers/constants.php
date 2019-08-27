@@ -1,11 +1,11 @@
 <?php
 
-define('CONFIG_DIR', __DIR__);
-define('APP_DIR', realpath(CONFIG_DIR . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR);
-define('PUBLIC_DIR', APP_DIR . 'public' . DIRECTORY_SEPARATOR);
-define('TMP_DIR', APP_DIR . 'tmp' . DIRECTORY_SEPARATOR);
-define('ASSETS_FOLDER', APP_DIR . 'assets' . DIRECTORY_SEPARATOR);
-
+if (!function_exists('path')) {
+    function path(... $paths)
+    {
+        return realpath(BASE_DIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $paths));
+    }
+}
 
 if (!function_exists('config')) {
     function config(string $slug, $default = null)
@@ -17,15 +17,14 @@ if (!function_exists('config')) {
         }
 
         $name = explode('.', $slug)[0];
-
         if ($collection->hasNot($name)) {
-            $path = CONFIG_DIR . DIRECTORY_SEPARATOR . $name . '.php';
+            $path = path('config', $name . '.php');
 
             if (file_exists($path)) {
                 $configs = include $path;
+                $collection[$name] = $configs;
             }
 
-            $collection[$name] = $configs;
         }
 
         return $collection->get($slug) ?? $default;

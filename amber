@@ -2,6 +2,7 @@
 <?php
 
 define('INIT_TIME', microtime(true));
+define('BASE_DIR', realpath(getcwd()));
 
 require __DIR__.'/vendor/autoload.php';
 

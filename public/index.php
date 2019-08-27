@@ -5,6 +5,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
 define('INIT_TIME', microtime(true));
+define('BASE_DIR', realpath(getcwd() . DIRECTORY_SEPARATOR . '../'));
 
 
 /**

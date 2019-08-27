@@ -4,7 +4,6 @@ namespace Amber\Http\Routing;
 
 use Symfony\Component\Routing\RouteCollection;
 use Amber\Phraser\Phraser;
-use Amber\Phraser\Str;
 use Amber\collection\collection;
 use Amber\Http\Server\Middleware\ControllerHandlerMiddleware;
 use Amber\Http\Server\Middleware\ClosureHandlerMiddleware;
@@ -142,7 +141,7 @@ class Router implements RequestMethodInterface
     /**
      * Returns the controller resource name.
      */
-    private function getUrlName(string $url): Str
+    private function getUrlName(string $url): Phraser
     {
         return Phraser::make($url)
             ->explode('/')
@@ -157,7 +156,7 @@ class Router implements RequestMethodInterface
     /**
      * Returns the controller resource name.
      */
-    private function getResource(Str $defaults): Str
+    private function getResource(Phraser $defaults): Phraser
     {
         if ($defaults->isEmpty()) {
             return $defaults;
@@ -174,7 +173,7 @@ class Router implements RequestMethodInterface
     /**
      * Returns the controller action name.
      */
-    private function getAction(Str $defaults): Str
+    private function getAction(Phraser $defaults): Phraser
     {
         return $defaults->fromCamelCase()
             ->toSnakeCase()

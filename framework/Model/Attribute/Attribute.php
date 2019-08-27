@@ -35,7 +35,8 @@ class Attribute
 
         foreach ($options as $option) {
             if (starts_with($option, 'default')) {
-                $default = (string) Phraser::explode($option, ':')
+                $default = (string) Phraser::make($option)
+                    ->explode(':')
                     ->last()
                 ;
                 break;
@@ -46,7 +47,8 @@ class Attribute
             }
 
             if (ends_with('Type', $options)) {
-                $type = (string) Phraser::fromCamelCase($option)
+                $type = (string) Phraser::make($option)
+                ->fromCamelCase()
                     ->first()
                 ;
             } else {

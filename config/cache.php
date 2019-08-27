@@ -3,12 +3,12 @@
 return [
 
     'default' => [
-        'path' => APP_DIR . 'tmp/cache',
+        'path' => path('tmp', 'cache'),
         'driver' => Amber\Cache\Driver\SimpleCache::class,
     ],
 
     'session' => [
-        'path' => APP_DIR . 'tmp/framework/sessions',
+        'path' => path('tmp', 'framework', 'sessions'),
         'driver' => Amber\Cache\Driver\SimpleCache::class,
     ]
 

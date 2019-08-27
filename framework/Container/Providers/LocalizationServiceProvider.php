@@ -5,8 +5,7 @@ namespace Amber\Container\Providers;
 use Illuminate\Database\Capsule\Manager as Eloquent;
 use Amber\Helpers\Localization\Lang;
 use Amber\Validator\Validator;
-use Amber\Phraser\Phraser;
-use Amber\Phraser\Str;
+use Amber\Phraser\Phraser as Str;
 use Amber\Container\Facades\Str as StrFacade;
 use Symfony\Component\Inflector\Inflector;
 
@@ -18,7 +17,7 @@ class LocalizationServiceProvider extends ServiceProvider
 
         $container->register(Lang::class)
             ->setArguments([
-                'folder' => ASSETS_FOLDER . 'lang',
+                'folder' => path('assets', 'lang'),
                 'default' => config('app.locale', 'es'),
                 'fallback' => config('app.fallback_locale', 'en'),
             ])
