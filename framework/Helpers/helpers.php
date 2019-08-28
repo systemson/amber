@@ -3,7 +3,7 @@
 if (!function_exists('path')) {
     function path(... $paths)
     {
-        return realpath(BASE_DIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $paths));
+        return realpath(BASE_DIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $paths)));
     }
 }
 
@@ -92,13 +92,5 @@ if (!function_exists('carbon')) {
             'timezone' => $tz ?? config('app.timezone', 'America/Caracas'),
             'locale' => config('app.date_locale', 'es_ES'),
         ]);
-    }
-}
-
-
-if (!function_exists('path')) {
-    function path(string $path)
-    {
-        return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
     }
 }

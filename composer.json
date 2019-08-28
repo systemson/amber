@@ -19,7 +19,7 @@
             "database/seeds"
         ],
         "files": [
-            "framework/Helpers/constants.php"
+            "framework/Helpers/helpers.php"
         ]
     },
     "autoload-dev": {
