@@ -9,7 +9,7 @@ $routes->get('/', function () {
 });
 
 $routes->group(function ($routes) {
-    $routes->get('/', 'UsersController::list');
+    $routes->get('/', 'UsersController::index');
     //$routes->get('/create', 'UsersController::form');
     $routes->post('/', 'UsersController::create');
     $routes->get('/{id}', 'UsersController::read');

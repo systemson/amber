@@ -24,7 +24,6 @@ if (!function_exists('config')) {
                 $configs = include $path;
                 $collection[$name] = $configs;
             }
-
         }
 
         return $collection->get($slug) ?? $default;

@@ -143,21 +143,22 @@
         },
         {
             "name": "amber/container",
-            "version": "v1.1.2-beta",
+            "version": "v1.1.3-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/container.git",
-                "reference": "4b4cde5ce2a6de8b3333019dc501233525eb856d"
+                "reference": "bad71152aeda7f89ae5a63e7e91565659175232d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/container/zipball/4b4cde5ce2a6de8b3333019dc501233525eb856d",
-                "reference": "4b4cde5ce2a6de8b3333019dc501233525eb856d",
+                "url": "https://api.github.com/repos/systemson/container/zipball/bad71152aeda7f89ae5a63e7e91565659175232d",
+                "reference": "bad71152aeda7f89ae5a63e7e91565659175232d",
                 "shasum": ""
             },
             "require": {
                 "amber/cache": "^1.0@beta",
-                "amber/common": "dev-master",
+                "amber/collection": "^0.6@beta",
+                "amber/validator": "^0.1@dev",
                 "php": ">=7.2.0",
                 "psr/container": "^1.0"
             },
@@ -187,7 +188,7 @@
                 }
             ],
             "description": "Simple PHP DI Container.",
-            "time": "2019-06-25T18:47:16+00:00"
+            "time": "2019-08-30T19:29:38+00:00"
         },
         {
             "name": "amber/phraser",
@@ -288,12 +289,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/validator.git",
-                "reference": "9dbdec076b283d042d88debb068a6ef07c09d266"
+                "reference": "9a60f5611e6b393736e7c672a6897a474145de6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/validator/zipball/9dbdec076b283d042d88debb068a6ef07c09d266",
-                "reference": "9dbdec076b283d042d88debb068a6ef07c09d266",
+                "url": "https://api.github.com/repos/systemson/validator/zipball/9a60f5611e6b393736e7c672a6897a474145de6f",
+                "reference": "9a60f5611e6b393736e7c672a6897a474145de6f",
                 "shasum": ""
             },
             "require": {
@@ -323,7 +324,7 @@
                 }
             ],
             "description": "Wrapper class for working with arrays.",
-            "time": "2019-08-26T15:24:43+00:00"
+            "time": "2019-08-30T15:56:06+00:00"
         },
         {
             "name": "aura/sql",
