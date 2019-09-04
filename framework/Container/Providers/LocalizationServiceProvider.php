@@ -16,11 +16,14 @@ class LocalizationServiceProvider extends ServiceProvider
         $container = $this->getContainer();
 
         $container->register(Lang::class)
-            ->setArguments([
-                'folder' => path('assets', 'lang'),
-                'default' => config('app.locale', 'es'),
-                'fallback' => config('app.fallback_locale', 'en'),
-            ])
+            ->setArguments(
+                '__construct',
+                [
+                    'folder' => path('assets', 'lang'),
+                    'default' => config('app.locale', 'es'),
+                    'fallback' => config('app.fallback_locale', 'en'),
+                ]
+            )
         ;
 
         $lang = $container->get(Lang::class);
@@ -32,7 +35,7 @@ class LocalizationServiceProvider extends ServiceProvider
         Validator::setAttributes($lang->translate('validations.attributes'));
 
         $container->register(Str::class)
-            ->setArgument('string', '')
+            ->setArgument('__construct', 'string', '')
         ;
 
         StrFacade::setMacro('faker', function (string $locale = null) {

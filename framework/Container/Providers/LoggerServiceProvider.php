@@ -14,7 +14,7 @@ class LoggerServiceProvider extends ServiceProvider
         $container = static::getContainer();
 
         $container->register(LoggerInterface::class, Logger::class)
-        ->setArgument('name', 'AmberFramework')
+        ->setArgument('__construct', 'name', 'AmberFramework')
         ->afterConstruct('pushHandler', function () {
             switch (config('logger.driver')) {
                 case 'simple':

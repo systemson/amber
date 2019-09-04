@@ -15,6 +15,7 @@ class FilesystemServiceProvider extends ServiceProvider
 
         $container->register(FilesystemInterface::class, Filesystem::class)
             ->setArgument(
+                '__construct',
                 AdapterInterface::class,
                 function () {
                     return new Local(config('filesystem.main.path'));
