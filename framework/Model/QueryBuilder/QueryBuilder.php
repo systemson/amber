@@ -6,7 +6,6 @@ use Aura\SqlQuery\QueryFactory;
 
 class QueryBuilder extends QueryFactory
 {
-
     /**
      *
      * Constructor.

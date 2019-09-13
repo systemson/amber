@@ -17,7 +17,7 @@ class Resource implements ResourceInterface
         PropertyAccessTrait,
         SerializableTrait,
         AttributesTrait,
-        CountableTrait
+        CountableTrait // It's not compatible.
     ;
 
     private $_name;

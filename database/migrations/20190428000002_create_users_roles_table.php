@@ -11,6 +11,16 @@ class CreateUsersRolesTable
             $table->integer('user_id');
             $table->integer('role_id');
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+            ;
+
+            $table->foreign('role_id')
+                ->references('id')
+                ->on('roles')
+            ;
         });
     }
 

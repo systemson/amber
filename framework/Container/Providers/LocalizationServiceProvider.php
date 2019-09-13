@@ -65,5 +65,19 @@ class LocalizationServiceProvider extends ServiceProvider
 
             return $singular;
         });
+
+        StrFacade::setMacro('alias', function (string $name, string $alias = null) {
+
+            static $collection = [];
+
+            if ($alias == null) {
+                return $collection[$name] ?? $name;
+            }
+
+            $collection[$name] = $alias;
+        });
+
+
+        StrFacade::alias('alpha', 'alpha:áéíóúÁÉÍÓÚñÑ');
     }
 }

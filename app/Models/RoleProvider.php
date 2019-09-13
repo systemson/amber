@@ -10,7 +10,7 @@ class RoleProvider extends AbstractProvider
 
     protected $attributes = [
         'id',
-        'name' => 'alpha:áéíóúÁÉÍÓÚñÑ',
+        'name' => 'alpha',
         'description' => 'alnum|optional|length:null,256',
         'created_at' => 'date|optional',
         'updated_at' => 'date|optional',

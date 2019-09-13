@@ -3,7 +3,7 @@
 namespace Amber\Container\Facades;
 
 use Amber\Container\ContainerFacade;
-use Amber\Phraser\Str as Accessor;
+use Amber\Phraser\Phraser as Accessor;
 use Amber\Utils\Traits\SingletonTrait;
 
 class Str extends ContainerFacade

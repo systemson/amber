@@ -3,6 +3,7 @@
 namespace Amber\Model\Attribute;
 
 use Amber\Phraser\Phraser;
+use Amber\Container\Facades\Str;
 
 class Attribute
 {
@@ -34,6 +35,12 @@ class Attribute
         $options = explode('|', $options);
 
         foreach ($options as $option) {
+            if ($option == null) {
+                continue;
+            }
+
+            $option = Str::alias($option);
+
             if (starts_with($option, 'default')) {
                 $default = (string) Phraser::make($option)
                     ->explode(':')
