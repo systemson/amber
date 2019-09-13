@@ -15,18 +15,20 @@ git clone https://github.com/systemson/amber.git
 
 ### Running the app
 
-Open a terminal and move to the project folder, then run.
+Open a terminal and move to the project folder, then run the commnand:
 
 ```
 php amber run
 ```
+This will start the PHP dev server on the project folder.
 
-This will run the PHP dev server and open the default browser. You can set the browser manually with the **--explorer**|**-e** param:
+
+Aditionally you can open the project on your default explorer with the option **--explorer|-e"**:
 ```
-php amber run --explorer=chrome
+php amber run -e
 ```
 
-Or:
+Or you could set the browser manually with the option **--explorer**|**-e** and the explorer name as param like:
 ```
-php amber run -e chrome
+php amber run -e firefox
 ```
