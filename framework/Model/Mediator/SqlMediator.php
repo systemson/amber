@@ -47,7 +47,7 @@ class SqlMediator
         $this->pdo = new ExtendedPdo((string) $dsn, $user, $pass, $options);
     }
 
-    protected function execute($query)
+    public function execute($query)
     {
         return $this->pdo->perform(
             $query->getStatement(),

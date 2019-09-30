@@ -72,6 +72,7 @@ return [
     'cli_commands' => [
         Amber\Commands\MigrateUpCommand::class,
         Amber\Commands\MigrateDownCommand::class,
+        Amber\Commands\MigrateDropCommand::class,
         Amber\Commands\MigrateSeedsCommand::class,
         Amber\Commands\MigrateRestartCommand::class,
         Amber\Commands\AppCacheCommand::class,

@@ -13,7 +13,7 @@ class MigrateRestartCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getApplication()->find('migrate:down')->run(new ArrayInput([]), $output);
+        $this->getApplication()->find('migrate:drop')->run(new ArrayInput([]), $output);
 
         $output->writeln('');
 

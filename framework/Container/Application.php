@@ -32,6 +32,8 @@ class Application extends ContainerFacade
         //
     ];
 
+    protected static $macros;
+
     /**
      * @var array The service providers.
      */

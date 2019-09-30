@@ -6,7 +6,7 @@ use Amber\Model\Provider\AbstractProvider;
 
 class UserRolePivot extends AbstractProvider
 {
-    protected $name = 'users_roles';
+    protected $name = 'user_role';
 
     protected $attributes = [
         'id',
