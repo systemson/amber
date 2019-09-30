@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d80c324bb382393d09150a1bd9835b72",
+    "content-hash": "5f3b1b660e47c3fd33596c8d27dd96e5",
     "packages": [
         {
             "name": "amber/cache",
