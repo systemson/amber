@@ -189,8 +189,8 @@ class ResponseFactory implements ResponseFactoryInterface, StatusCodeInterface
     }
 
     /**
-     * The 422 status code, or a Unprocessable Entity error, the server understands the content type of the request entity
-     * and the syntax of the request entity is correct but was unable to process the contained instructions.
+     * The 422 status code, or a Unprocessable Entity error, the server understands the content type of the request
+     * entity and the syntax of the request entity is correct but was unable to process the contained instructions.
      *
      * @param string $reasonPhrase Reason phrase to associate with status code.
      *

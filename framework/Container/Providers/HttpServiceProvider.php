@@ -48,7 +48,8 @@ class HttpServiceProvider extends ServiceProvider
 
         $container->singleton(Session::class);
 
-        $container->register(ServerRequestInterface::class, ServerRequest::class);
+        $container->bind(ServerRequestInterface::class, ServerRequest::fromGlobals());
+
         $container->register(ResponseInterface::class, Response::class);
         $container->register(RequestHandlerInterface::class, RequestHandler::class)
             ->setArgument('__construct', 'middlewares', config('app.middlewares'))

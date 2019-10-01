@@ -1,9 +1,15 @@
 <?php
 
 if (!function_exists('path')) {
-    function path(... $paths)
+    function path(...$paths)
     {
-        return realpath(BASE_DIR . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $paths)));
+        return realpath(
+            BASE_DIR . DIRECTORY_SEPARATOR .
+            implode(
+                DIRECTORY_SEPARATOR,
+                str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $paths)
+            )
+        );
     }
 }
 
@@ -69,14 +75,14 @@ if (!function_exists('lang')) {
 }
 
 if (!function_exists('d')) {
-    function d(... $value)
+    function d(...$value)
     {
         return call_user_func_array('dump', $value);
     }
 }
 
 if (!function_exists('dd')) {
-    function dd(... $value)
+    function dd(...$value)
     {
         call_user_func_array('dump', $value);
         die();

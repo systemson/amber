@@ -49,7 +49,7 @@ class RequestMethodHandlerMiddleware extends RequestMiddleware
             throw new \Exception('Invalid method');
         }
 
-        return $method;
+        return strtoupper($method);
     }
 
     protected function needsMethodChange(Request $request): bool

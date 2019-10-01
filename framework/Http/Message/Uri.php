@@ -157,7 +157,7 @@ class Uri implements UriInterface
     protected static function getComponentsFromServerParams($server): array
     {
         return [
-            'scheme' => strtolower(explode('/', $server->get('SERVER_PROTOCOL'))[0]),
+            'scheme' => strtolower(current(explode('/', $server->get('SERVER_PROTOCOL') ?? 'http'))),
             'host' => $server->get('HTTP_HOST'),
             'port' => $server->get('SERVER_PORT'),
             'path' => explode('?', $server->get('REQUEST_URI'))[0],

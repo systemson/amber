@@ -19,7 +19,7 @@ class Route extends SymfonyRoute
         return $this;
     }
 
-    public function middleware(string ... $middlewares)
+    public function middleware(string ...$middlewares)
     {
         $current = $this->getDefault('_middleware') ?? [];
     

@@ -15,6 +15,8 @@ use Amber\Container\Facades\Response as ResponseFacade;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  *
+ * @deprecated
+ *
  * @todo This parser MUST be moved to the ServerRequest class.
  */
 class ParseBodyContentMiddleware extends RequestMiddleware
@@ -28,22 +30,23 @@ class ParseBodyContentMiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        if (in_array($request->getMethod(), ['PUT', 'PATCH'])) {
-            switch ($request->getServerParams()->get('CONTENT_TYPE')) {
-                case 'application/json':
-                    $data = json_decode(file_get_contents("php://input"), true);
-                    break;
+        if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'])) {
+            if (($input = file_get_contents("php://input")) != null) {
+                switch ($request->getServerParams()->get('CONTENT_TYPE')) {
+                    case 'application/json':
+                        $data = json_decode($input, true);
+                        break;
 
-                case 'application/x-www-form-urlencoded':
-                    parse_str(file_get_contents("php://input"), $data);
-                    break;
-                
-                default:
-                    $data = [];
-                    break;
+                    case 'application/x-www-form-urlencoded':
+                        parse_str($input, $data);
+                        break;
+                    
+                    default:
+                        $data = [];
+                        break;
+                }
+                $request = $request->withParsedBody($data);
             }
-
-            $request = $request->withParsedBody($data);
         }
 
         return $handler->handle($request);

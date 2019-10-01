@@ -71,21 +71,21 @@ class ServerRequest implements ServerRequestInterface
         string $version = self::PROTOCOL_VERSION,
         string $method = null,
         string $uri = null,
-        array $headers = null,
+        array $headers = [],
         StreamInterface $body = null,
         $params = []
     ) {
-        $this->server = new ImmutableCollection($params['server'] ?? $_SERVER);
-        $this->cookies = new Collection($params['cookies'] ?? $_COOKIE);
-        $this->query = new Collection($params['query'] ?? $_GET);
-        $this->files = new FileCollection($params['files'] ?? $_FILES);
-        $this->post = new Collection($params['post'] ?? $_POST);
+        $this->server = new ImmutableCollection($params['server'] ?? []);
+        $this->cookies = new Collection($params['cookies'] ?? []);
+        $this->query = new Collection($params['query'] ?? []);
+        $this->files = new FileCollection($params['files'] ?? []);
+        $this->post = new Collection($params['post'] ?? []);
         $this->attributes = new Collection($params['attributes'] = []);
-        $this->headers = new Collection($headers ?? getallheaders());
+        $this->headers = new Collection($headers);
 
-        $this->version = $version ?? explode('/', $this->server->get('SERVER_PROTOCOL'))[1];
-        $this->method = $method ?? $this->server->get('REQUEST_METHOD');
-        $this->uri = $uri ? Uri::fromString($uri) : Uri::fromGlobals();
+        $this->version = $version;
+        $this->method = $method;
+        $this->uri = Uri::fromString($uri);
         $this->body = $body;
     }
 
@@ -96,7 +96,23 @@ class ServerRequest implements ServerRequestInterface
      */
     public static function fromGlobals()
     {
-        $new = new static();
+        $serverProtocolArray = explode('/', $_SERVER['SERVER_PROTOCOL'] ?? self::PROTOCOL_VERSION);
+
+        $new = new static(
+            end($serverProtocolArray),
+            $_SERVER['REQUEST_METHOD'] ?? null,
+            Uri::fromGlobals(),
+            getallheaders(),
+            null,
+            [
+                'server' => $_SERVER,
+                'cookies' => $_COOKIE,
+                'query' => $_GET,
+                'files' => $_FILES,
+                'post' => $_POST,
+                'attributes' => [],
+            ]
+        );
 
         return $new;
     }
