@@ -102,7 +102,7 @@ class ServerRequest implements ServerRequestInterface
             end($serverProtocolArray),
             $_SERVER['REQUEST_METHOD'] ?? null,
             Uri::fromGlobals(),
-            getallheaders(),
+            self::getGlobalHeaders(),
             null,
             [
                 'server' => $_SERVER,
@@ -115,6 +115,25 @@ class ServerRequest implements ServerRequestInterface
         );
 
         return $new;
+    }
+
+    protected static function getGlobalHeaders(): array
+    {
+        if (function_exists('getallheaders')) {
+            return getallheaders();
+        }
+
+        if (!isset($_SERVER)) {
+            return [];
+        }
+
+        foreach ($_SERVER as $name => $value) {
+            if (substr($name, 0, 5) == 'HTTP_') {
+                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+            }
+        }
+
+        return $headers ?? [];
     }
 
     /**

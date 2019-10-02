@@ -128,7 +128,11 @@ class Uri implements UriInterface
     {
         $components = parse_url($uri);
 
-        return self::fromComponents($components);
+        if (!$components) {
+            $components = [];
+        }
+
+        return self::fromComponents($components ?? []);
     }
 
     /**
@@ -157,7 +161,7 @@ class Uri implements UriInterface
     protected static function getComponentsFromServerParams($server): array
     {
         return [
-            'scheme' => strtolower(current(explode('/', $server->get('SERVER_PROTOCOL') ?? 'http'))),
+            'scheme' => strtolower(current(explode('/', $server->get('SERVER_PROTOCOL') ??  'HTTP/1.1'))),
             'host' => $server->get('HTTP_HOST'),
             'port' => $server->get('SERVER_PORT'),
             'path' => explode('?', $server->get('REQUEST_URI'))[0],
