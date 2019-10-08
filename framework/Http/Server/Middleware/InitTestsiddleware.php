@@ -36,30 +36,6 @@ class InitTestsiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        $this->classMaker();
-
         return $handler->handle($request);
-    }
-
-    public function classMaker()
-    {
-        $class = (new ClassBlueprint())
-            ->setNamespace('Amber\Database')
-            ->setName('Migration')
-            ->setParent('This\Is\A\Namespace\MigrationParent')
-            ->addImplement('Interface\Namespace\MigrationContract')
-            ->addImplement('Interface\Namespace\MigrationContract2')
-            ->addImplement('Interface\Namespace\MigrationContract3')
-            ->addTrait('Trait\Namespace\Trait1')
-            ->addTrait('Trait\Namespace\Trait2')
-            ->addTrait('Trait\Namespace\Trait3')
-            ->addTrait('Trait\Namespace\Trait4')
-            ->addProperty('property1', 'public', 'string')
-            ->addProperty('property2', 'protected', 'array')
-            ->addProperty('property2', 'private', 'mixed')
-            ->addMethod('__construct', ['name', 'id' => ['type' => 'int', 'default' => 1]], 'protected', 'string')
-        ;
-
-        dd($class->toString());
     }
 }
