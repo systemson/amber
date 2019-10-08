@@ -40,7 +40,6 @@ class MakeMigrationCommand extends Command
         } else {
             $this->empty($input, $output);
         }
-
     }
 
     protected function create(InputInterface $input, OutputInterface $output)
@@ -77,8 +76,6 @@ class MakeMigrationCommand extends Command
             ->addMethod('up', ['schema' => ['type' => 'Schema']], 'public', null, $upMethod)
             ->addMethod('down', ['schema' => ['type' => 'Schema']], 'public', null, $downMethod)
         ;
-
-        //dd($class->toString());
 
         Filesystem::write("database/migrations/{$file}", $class->toString());
 
@@ -120,8 +117,6 @@ class MakeMigrationCommand extends Command
             ->addMethod('down', ['schema' => ['type' => 'Schema']], 'public', null, $downMethod)
         ;
 
-        //dd($class->toString());
-
         Filesystem::write("database/migrations/{$file}", $class->toString());
 
         $output->writeln("Alter {$table} table migration done.");
@@ -151,8 +146,6 @@ class MakeMigrationCommand extends Command
             ->addMethod('up', ['schema' => ['type' => 'Schema']], 'public')
             ->addMethod('down', ['schema' => ['type' => 'Schema']], 'public')
         ;
-
-        //dd($class->toString());
 
         Filesystem::write("database/migrations/{$file}", $class->toString());
 

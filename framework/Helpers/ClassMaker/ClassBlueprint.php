@@ -129,8 +129,13 @@ class ClassBlueprint
         return $this->methods;
     }
 
-    public function addMethod(string $name, array $arguments = [], $visibility = 'public', string $returnTypehint = null, string $code = null): self
-    {
+    public function addMethod(
+        string $name,
+        array $arguments = [],
+        $visibility = 'public',
+        string $returnTypehint = null,
+        string $code = null
+    ): self {
         $this->methods[$name] = (object) [
             'name' => $name,
             'arguments' => $this->formatArguments($arguments),
@@ -145,7 +150,6 @@ class ClassBlueprint
     protected function formatArguments(array $arguments): array
     {
         foreach ($arguments as $key => $value) {
-
             $name = is_numeric($key) ? $value : $key;
             $typehint = $value['type'] ?? null;
             $default = $value['default'] ?? null;
