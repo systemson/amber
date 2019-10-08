@@ -77,5 +77,6 @@ return [
         Amber\Commands\MigrateRestartCommand::class,
         Amber\Commands\AppCacheCommand::class,
         Amber\Commands\ServerCommand::class,
+        Amber\Commands\MakeMigrationCommand::class,
     ],
 ];

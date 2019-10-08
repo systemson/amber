@@ -163,4 +163,9 @@ class Maker
 
         return $ret;
     }
+
+    public function blueprint()
+    {
+        return new ClassBlueprint();
+    }
 }

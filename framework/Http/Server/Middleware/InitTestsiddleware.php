@@ -16,6 +16,7 @@ use App\Models\UserProvider;
 use Amber\Phraser\Phraser;
 use Amber\Helpers\Hash;
 use Amber\Container\Facades\Str;
+use Amber\Helpers\ClassMaker\ClassBlueprint;
 
 /**
  * Participant in processing a server request and response.
@@ -35,219 +36,30 @@ class InitTestsiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        //$this->testClassMaker();
-        //$this->testSession();
-        //$this->loader();
-        //$this->testUri();
-        //$this->testSqlite();
-        //$this->testUpdateModel();
-        //$this->testModelProvider();
-        //$this->testModelSave();
-        //$this->testHttpClient($request);
+        $this->classMaker();
 
         return $handler->handle($request);
     }
 
-    public function loader()
+    public function classMaker()
     {
-        $loader = new Loader([
-            'Amber' => 'Assets',
-        ]);
+        $class = (new ClassBlueprint())
+            ->setNamespace('Amber\Database')
+            ->setName('Migration')
+            ->setParent('This\Is\A\Namespace\MigrationParent')
+            ->addImplement('Interface\Namespace\MigrationContract')
+            ->addImplement('Interface\Namespace\MigrationContract2')
+            ->addImplement('Interface\Namespace\MigrationContract3')
+            ->addTrait('Trait\Namespace\Trait1')
+            ->addTrait('Trait\Namespace\Trait2')
+            ->addTrait('Trait\Namespace\Trait3')
+            ->addTrait('Trait\Namespace\Trait4')
+            ->addProperty('property1', 'public', 'string')
+            ->addProperty('property2', 'protected', 'array')
+            ->addProperty('property2', 'private', 'mixed')
+            ->addMethod('__construct', ['name', 'id' => ['type' => 'int', 'default' => 1]], 'protected', 'string')
+        ;
 
-        $loader->js('Amber\Assets\jQuery');
-    }
-
-    protected function testClassMaker()
-    {
-        $maker = new Maker();
-
-        d($maker->getImplementingClass('App\Controllers\UsersController', Handler::class));
-        d($maker->getExtendingClass('App\Http\Middleware\TestMiddleware', RequestMiddleware::class));
-        dd($maker->getExtendingClass(
-            'App\Http\Middleware\TestMiddleware',
-            RequestMiddleware::class,
-            Middleware::class
-        ));
-    }
-
-    protected function testSession()
-    {
-        $session = new Session();
-
-        dd(
-            $session,
-            $session->metadata()->all(),
-            $session->metadata()->created_at,
-            $session->metadata()->updated_at,
-            $session->metadata()->clear(),
-            $_SESSION
-        );
-    }
-
-    protected function testUri()
-    {
-        $uri1 = Uri::fromString('http://username:password@www.example.com:3000/api/users?foo=bar#fragment');
-        $uri2 = Uri::fromString('https://www.example.com/api/users?foo=bar#fragment');
-        $uri3 = Uri::fromString('example.com');
-
-        dd(
-            (string) $uri1,
-            (string) $uri2,
-            (string) $uri3
-        );
-    }
-
-    protected function testSqlite()
-    {
-        $path = realpath(config('database.connections.sqlite.database'));
-
-        $pdo1 = new \Aura\Sql\ExtendedPdo('sqlite:dbname={$path}', null, null, []);
-        $pdo2 = new \Aura\Sql\ExtendedPdo('sqlite:dbname={$path}');
-        $pdo3 = new \Aura\Sql\ExtendedPdo('sqlite:dbname={$path}');
-
-        dd(
-            $pdo1,
-            $pdo2,
-            $pdo3
-        );
-    }
-
-    public function testUpdateModel()
-    {
-        $provider = new UserProvider();
-
-        $user = $provider->find(2);
-
-        dd(
-            $user->updatable(),
-            $user->name = Str::faker()->firstName . ' ' . Str::faker()->lastName,
-            $user->updatable(),
-            $provider->update($user),
-            $user->getErrors(),
-            $provider->find(2),
-        );
-    }
-
-    protected function testModelProvider()
-    {
-        $provider = new UserProvider();
-
-        $user = $provider->new();
-
-        $user->name = Str::faker()->firstName . ' ' . Str::faker()->lastName;
-        $user->email = Str::faker()->email;
-        $user->password = 'secret';
-
-        if (!$user->isValid()) {
-            dd($user->getErrors(), $user);
-        }
-
-        $user->password = Hash::make($user->password);
-
-        d('new', $user);
-
-        if (($inserted = $provider->insert($user)) === false) {
-            die;
-        }
-
-        d('inserted', $user, $inserted);
-
-        $user->name = 'Deivi Peña';
-
-        d('edited', $user, $inserted);
-        
-        $updated = $provider->update($user);
-
-        d(
-            'updated',
-            $user,
-            $updated,
-            'found',
-            $provider->find($user->id)
-        );
-
-        $id = $user->id;
-
-        dd(
-            'delete',
-            $provider->delete($user),
-            $user,
-            $provider->find($id),
-        );
-    }
-
-    public function testModelSave()
-    {
-        $provider = new UserProvider();
-
-        $user = $provider->new();
-
-        $user->name = Str::faker()->firstName . ' ' . Str::faker()->lastName;
-        $user->email = Str::faker()->email;
-        $user->password = 'secret';
-
-        if (!$user->isValid()) {
-            dd($user->getErrors(), $user);
-        }
-
-        $user->password = Hash::make($user->password);
-
-        d(
-            'edited',
-            $user,
-        );
-
-        if (!$provider->save($user)) {
-            dd('Not inserted');
-        }
-
-        d(
-            'inserted',
-            $user,
-        );
-
-        $user->name = 'Deivi Peña';
-
-        if (!$provider->save($user)) {
-            dd('Not updated');
-        }
-
-        d(
-            'updated',
-            $user,
-        );
-
-        $user->delete();
-
-        if (!$provider->save($user)) {
-            dd('Not deleted');
-        }
-
-        dd(
-            'deleted',
-            $user,
-        );
-    }
-
-    public function testHttpClient($request)
-    {
-        $client = new \Amber\Http\Client\Client();
-
-        $request = new \Amber\Http\Message\Request(
-            'http://localhost:3000/api/users',
-            'GET',
-            null,
-            [
-                'Accept' => 'application/json',
-                'Header' => 'lol',
-            ]
-        );
-
-        $response = $client->sendRequest($request);
-
-        dd(
-            $response,
-            (string) $response->getBody()
-        );
+        dd($class->toString());
     }
 }
