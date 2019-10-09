@@ -7,9 +7,9 @@ class CreateRolePermissionTable
     public function up(Schema $schema)
     {
         $schema->create('role_permission', function ($table) {
-            $table->increments('id');
-            $table->integer('role_id');
-            $table->integer('permission_id');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('role_id');
+            $table->unsignedBigInteger('permission_id');
 
             $table->foreign('role_id')
                 ->references('id')

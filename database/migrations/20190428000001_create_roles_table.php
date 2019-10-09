@@ -7,9 +7,10 @@ class CreateRolesTable
     public function up(Schema $schema)
     {
         $schema->create('roles', function ($table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

@@ -7,9 +7,9 @@ class CreateUserRoleTable
     public function up(Schema $schema)
     {
         $schema->create('user_role', function ($table) {
-            $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('role_id');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('role_id');
             $table->timestamps();
 
             $table->foreign('user_id')

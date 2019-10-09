@@ -7,9 +7,10 @@ class CreatePermissionsTable
     public function up(Schema $schema)
     {
         $schema->create('permissions', function ($table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
