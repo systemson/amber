@@ -227,6 +227,13 @@ class Router implements RequestMethodInterface
         );
     }
 
+    public function apiResource($url, $controller)
+    {
+        $this->get($url, "{$controller}::index");
+        $this->get("$url/{id}", "{$controller}::read");
+        $this->post("$url", "{$controller}::create");
+    }
+
     public function group(\Closure $callback, array $options = []): self
     {
         $routes = new static(

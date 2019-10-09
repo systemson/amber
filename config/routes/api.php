@@ -19,3 +19,7 @@ $routes->group(function ($routes) {
 }, [
     'prefix' => '/users',
 ]);
+
+
+$routes->apiResource('/articles', 'ArticlesController');
+$routes->apiResource('/categories', 'CategoriesController');

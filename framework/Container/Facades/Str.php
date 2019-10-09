@@ -18,7 +18,7 @@ class Str extends AbstractWrapper
 
     public static function new(string $string = null)
     {
-    	return Accessor::make($string);
+        return Accessor::make($string);
     }
 
     /**
@@ -51,15 +51,15 @@ class Str extends AbstractWrapper
      */
     public static function __callStatic($method, $args = [])
     {
-    	$first = current($args);
+        $first = current($args);
 
-    	if ($first !== null && is_string($first) && in_array($method, get_class_methods(static::getAccessor()))) {
-    		static::setArguments($first);
-    		unset($args[0]);
-    	} else {
-    		static::$arguments = [];
-    	}
+        if ($first !== null && is_string($first) && in_array($method, get_class_methods(static::getAccessor()))) {
+            static::setArguments($first);
+            unset($args[0]);
+        } else {
+            static::$arguments = [];
+        }
 
-    	return parent::__callStatic($method, $args);
+        return parent::__callStatic($method, $args);
     }
 }

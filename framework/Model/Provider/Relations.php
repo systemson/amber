@@ -65,15 +65,22 @@ trait Relations
         $this->relations[$provider->getName()] = [$pk => $fk];
     }
 
-    public function belongsTo(string $class, $pk = null, $fk = null)
+    public function belongsTo(string $class, $fk = null, $pd = null)
     {
-        $provider = new $class;
+        $related = new $class;
 
-        $name = $provider->getName();
+        $resource = $related->getResource();
 
-        $pk = $pk ?? $provider->getId();
-        $fk = $fk ?? "{$name}_{$pk}";
+        $query = $this->query();
 
-        $this->relations[$provider->getName()] = [$pk => $fk];
+        $query->removeCol('*');
+        
+        return $query
+                ->cols([
+                    $related->name . '.*',
+                    "{$this->name}.{$resource}_{$related->id}"
+                ])
+            ->join('inner', $related->name, "{$related->name}.{$related->id} = {$this->name}.{$resource}_{$related->id}")
+        ;
     }
 }

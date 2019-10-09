@@ -136,6 +136,15 @@ abstract class AbstractProvider
         return $this->attributes;
     }
 
+    public function getAttributesNames(): array
+    {
+        foreach ($this->attributes as $key => $value) {
+            $attributes[] = is_numeric($key) ? $value : $key;
+        }
+
+        return $attributes ?? [];
+    }
+
     public function query(string $type = 'select')
     {
         if (!is_null($this->query)) {

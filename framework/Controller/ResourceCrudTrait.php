@@ -53,7 +53,7 @@ trait ResourceCrudTrait
         $provider = $this->getProvider();
 
         $resource = $provider->new(
-            $request->getParsedBody()->all()
+            $request->getParsedBody()->only($provider ->getAttributesNames())->toArray()
         );
 
         if ($resource->isValid()) {
@@ -181,7 +181,7 @@ trait ResourceCrudTrait
         return $request;
     }
 
-    protected function alterResourceBeforeCreation($resource)
+    protected function alterResourceBeforeCreate($resource)
     {
         return $resource;
     }
