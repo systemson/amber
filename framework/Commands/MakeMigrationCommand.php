@@ -8,7 +8,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Carbon\Carbon;
-use Amber\Helpers\ClassMaker\ClassBlueprint;
+use Amber\Helpers\ClassMaker\Builder as ClassBlueprint;
+use Amber\Helpers\ClassMaker\Method;
+use Amber\Helpers\ClassMaker\MethodArgument;
 use Amber\Phraser\Phraser;
 use Amber\Container\Facades\Filesystem;
 
@@ -73,8 +75,10 @@ class MakeMigrationCommand extends Command
         $class = (new ClassBlueprint())
             ->setName($name)
             ->addInclude('Illuminate\Database\Schema\Builder as Schema')
-            ->addMethod('up', ['schema' => ['type' => 'Schema']], 'public', null, $upMethod)
-            ->addMethod('down', ['schema' => ['type' => 'Schema']], 'public', null, $downMethod)
+            //->addMethod('up', ['schema' => ['type' => 'Schema']], 'public', null, $upMethod)
+            ->addMethod(new Method('up', [new MethodArgument('schema', 'Schema')], 'public', null, $upMethod))
+            //->addMethod('down', ['schema' => ['type' => 'Schema']], 'public', null, $downMethod)
+            ->addMethod(new Method('down', [new MethodArgument('schema', 'Schema')], 'public', null, $downMethod))
         ;
 
         Filesystem::write("database/migrations/{$file}", $class->toString());

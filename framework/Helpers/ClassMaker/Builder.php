@@ -4,7 +4,7 @@ namespace Amber\Helpers\ClassMaker;
 
 use Amber\Phraser\Phraser;
 
-class ClassBlueprint
+class Builder
 {
     protected $namespace;
     protected $name;
@@ -65,7 +65,11 @@ class ClassBlueprint
 
     public function addInclude(string $namespace): self
     {
-        $this->includes[] = $namespace;
+        $this->includes[] = Phraser::make($namespace)
+            ->prepend('use ')
+            ->append(';')
+            ->toString()
+        ;
 
         return $this;
     }
@@ -113,13 +117,9 @@ class ClassBlueprint
         return $this->properties;
     }
 
-    public function addProperty(string $name, $visibility = 'public', $typehint = null): self
+    public function addProperty(Property $property): self
     {
-        $this->properties[] = (object) [
-            'name' => $name,
-            'visibility' => $visibility,
-            'typehint' => $typehint,
-        ];
+        $this->properties[] = $property->toString();
 
         return $this;
     }
@@ -129,80 +129,29 @@ class ClassBlueprint
         return $this->methods;
     }
 
-    public function addMethod(
-        string $name,
-        array $arguments = [],
-        $visibility = 'public',
-        string $returnTypehint = null,
-        string $code = null
-    ): self {
-        $this->methods[$name] = (object) [
-            'name' => $name,
-            'arguments' => $this->formatArguments($arguments),
-            'visibility' => $visibility,
-            'returnTypehint' => $returnTypehint,
-            'code' => $code,
-        ];
+    public function addMethod(Method $method): self
+    {
+        $this->methods[$method->getName()] = $method->toString();
 
         return $this;
-    }
-
-    protected function formatArguments(array $arguments): array
-    {
-        foreach ($arguments as $key => $value) {
-            $name = is_numeric($key) ? $value : $key;
-            $typehint = $value['type'] ?? null;
-            $default = $value['default'] ?? null;
-
-            $args[] =  Phraser::make('$' . $name)
-                ->prepend("{$typehint} ", $typehint)
-                ->append(" = {$default}", $default)
-            ;
-        }
-
-        return $args ?? [];
     }
 
     public function toString(): string
     {
         $implements = implode(', ', $this->implements);
+
         $traits = implode(', ', $this->traits);
 
-        $properties =[];
-        foreach ($this->properties as $property) {
-            $properties[] = Phraser::make("\${$property->name};")
-                ->prepend("{$property->visibility} ", $property->visibility)
-                ->prepend('    ')
-            ;
-        }
+        $properties = implode(Phraser::make()->eol(2), $this->properties);
 
-        $includes = [];
-        foreach ($this->includes as $include) {
-            $includes[] = Phraser::make($include)
-                ->prepend('use ')
-                ->append(';')
-            ;
-        }
+        $methods = implode(Phraser::make()->eol(2), $this->methods);
 
-        $methods = [];
-        foreach ($this->methods as $method) {
-            $arguments = implode(', ', $method->arguments);
-
-            $methods[] = Phraser::make("    {$method->visibility} function {$method->name}({$arguments})")
-                ->append(": {$method->returnTypehint}", $method->returnTypehint)
-                ->eol()
-                ->append('    {')
-                ->eol()
-                ->append("{$method->code}", $method->code)
-                ->eol()
-                ->append('    }')
-            ;
-        }
+        $includes = implode(Phraser::make()->eol(), $this->includes);
 
         return Phraser::make('<?php')
             ->eol(2)
             ->append("namespace {$this->namespace};" . Phraser::make()->eol(2), $this->namespace)
-            ->append(implode(Phraser::make()->eol(), $includes) . Phraser::make()->eol(2), $this->includes)
+            ->append($includes . Phraser::make()->eol(2), $includes)
             ->append("class {$this->name}")
             ->append(" extends {$this->parent}", $this->parent)
             ->append(" implements {$implements}", $implements)
@@ -210,9 +159,14 @@ class ClassBlueprint
             ->append('{')
             ->eol()
             ->append("    use {$traits};" . Phraser::make()->eol(2), $traits)
-            ->append(implode(Phraser::make()->eol(2), $properties) . Phraser::make()->eol(2), $properties)
-            ->append(implode(Phraser::make()->eol(2), $methods), $methods)
+            ->append($properties . Phraser::make()->eol(2), $properties)
+            ->append($methods, $methods)
             ->append(Phraser::make()->eol() . '}')
         ;
+    }
+
+    public function __toString(): string
+    {
+        return $this->toString();
     }
 }
