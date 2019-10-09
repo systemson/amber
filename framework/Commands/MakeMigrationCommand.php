@@ -11,8 +11,8 @@ use Carbon\Carbon;
 use Amber\Helpers\ClassMaker\Builder as ClassBlueprint;
 use Amber\Helpers\ClassMaker\Method;
 use Amber\Helpers\ClassMaker\MethodArgument;
-use Amber\Phraser\Phraser;
 use Amber\Container\Facades\Filesystem;
+use Amber\Container\Facades\Str as Phraser;
 use Amber\Phraser\Base\StringArray\StringArray;
 
 class MakeMigrationCommand extends Command
@@ -57,7 +57,6 @@ class MakeMigrationCommand extends Command
         $class = (new ClassBlueprint())
             ->setName($name)
             ->addInclude('Illuminate\Database\Schema\Builder as Schema')
-            //->addMethod('up', ['schema' => ['type' => 'Schema']], 'public', null, $upMethod)
             ->setMethods($methods)
         ;
 
@@ -70,27 +69,26 @@ class MakeMigrationCommand extends Command
 
         $output->writeln("Create {$table} table migration in process.");
 
-        $raw = Phraser::make($table)
-            ->prepend('_create_')
-            ->append('_table')
-            ->fromSnakeCase()
+        $raw = Phraser::fromSnakeCase($table)
+            ->prepend('create')
+            ->append('table')
         ;
 
-        $upMethod = Phraser::make('        $schema->create(\'' . $table . '\', function ($table) {')
+        $upMethod = Phraser::new(Phraser::tab(2) . '$schema->create(\'' . $table . '\', function ($table) {')
             ->eol()
-            ->append('            //')
+            ->append(Phraser::tab(3) . '$table->bigIncrements(\'id\');')
             ->eol()
-            ->append('        });')
+            ->append(Phraser::tab(2) . '});')
         ;
 
-        $downMethod = Phraser::make('        $schema->dropIfExists(\'' . $table . '\');');
+        $downMethod = Phraser::new('        $schema->dropIfExists(\'' . $table . '\');');
 
         $methods[] = new Method('up', [new MethodArgument('schema', 'Schema')], 'public', null, $upMethod);
         $methods[] = new Method('down', [new MethodArgument('schema', 'Schema')], 'public', null, $downMethod);
 
         $this->makeClass($table, $raw, $methods);
 
-        $output->writeln("Create {$table} table migration done.");
+        $output->writeln("<info>Create {$table} table migration done.</info>");
     }
 
     protected function alter(InputInterface $input, OutputInterface $output)
@@ -99,27 +97,24 @@ class MakeMigrationCommand extends Command
 
         $output->writeln("Alter {$table} table migration in process.");
 
-        $raw = Phraser::make($table)
-            ->prepend('_alter_')
-            ->append('_table')
-            ->fromSnakeCase()
+        $raw = Phraser::fromSnakeCase($table)
+            ->prepend('alter')
+            ->append('table')
         ;
 
-        $upMethod = Phraser::make('        $schema->table(\'' . $table . '\', function ($table) {')
+        $upMethod = Phraser::new('        $schema->table(\'' . $table . '\', function ($table) {')
             ->eol()
             ->append('            //')
             ->eol()
             ->append('        });')
         ;
 
-        $downMethod = Phraser::make('        $schema->dropIfExists(\'' . $table . '\');');
-
         $methods[] = new Method('up', [new MethodArgument('schema', 'Schema')], 'public', null, $upMethod);
-        $methods[] = new Method('down', [new MethodArgument('schema', 'Schema')], 'public', null, $downMethod);
+        $methods[] = new Method('down', [new MethodArgument('schema', 'Schema')], 'public');
 
         $this->makeClass($table, $raw, $methods);
 
-        $output->writeln("Alter {$table} table migration done.");
+        $output->writeln("<info>Alter {$table} table migration done.</info>");
     }
 
     protected function empty(InputInterface $input, OutputInterface $output)
@@ -128,7 +123,7 @@ class MakeMigrationCommand extends Command
 
         $output->writeln("Migration {$argument} in process.");
 
-        $raw = Phraser::make($argument)
+        $raw = Phraser::new($argument)
             ->prepend('migration_')
             ->fromSnakeCase()
         ;
@@ -138,6 +133,6 @@ class MakeMigrationCommand extends Command
 
         $this->makeClass($argument, $raw, $methods);
 
-        $output->writeln("Migration {$argument} done.");
+        $output->writeln("<info>Migration {$argument} done.</info>");
     }
 }
