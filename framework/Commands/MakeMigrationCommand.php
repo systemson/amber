@@ -13,6 +13,7 @@ use Amber\Helpers\ClassMaker\Method;
 use Amber\Helpers\ClassMaker\MethodArgument;
 use Amber\Phraser\Phraser;
 use Amber\Container\Facades\Filesystem;
+use Amber\Phraser\Base\StringArray\StringArray;
 
 class MakeMigrationCommand extends Command
 {
@@ -44,6 +45,25 @@ class MakeMigrationCommand extends Command
         }
     }
 
+    protected function makeClass(string $name, StringArray $array, array $methods = [])
+    {
+        $name = $array->toCamelCase();
+
+        $file = $array->toSnakeCase()
+            ->append('.php')
+            ->prepend(Carbon::now()->format('Ymdhis') . '_')
+        ;
+
+        $class = (new ClassBlueprint())
+            ->setName($name)
+            ->addInclude('Illuminate\Database\Schema\Builder as Schema')
+            //->addMethod('up', ['schema' => ['type' => 'Schema']], 'public', null, $upMethod)
+            ->setMethods($methods)
+        ;
+
+        Filesystem::write("database/migrations/{$file}", $class->toString());
+    }
+
     protected function create(InputInterface $input, OutputInterface $output)
     {
         $table = $input->getOption('create');
@@ -56,13 +76,6 @@ class MakeMigrationCommand extends Command
             ->fromSnakeCase()
         ;
 
-        $name = $raw->toCamelCase();
-
-        $file = $raw->toSnakeCase()
-            ->append('.php')
-            ->prepend(Carbon::now()->format('Ymdhis') . '_')
-        ;
-
         $upMethod = Phraser::make('        $schema->create(\'' . $table . '\', function ($table) {')
             ->eol()
             ->append('            //')
@@ -72,16 +85,10 @@ class MakeMigrationCommand extends Command
 
         $downMethod = Phraser::make('        $schema->dropIfExists(\'' . $table . '\');');
 
-        $class = (new ClassBlueprint())
-            ->setName($name)
-            ->addInclude('Illuminate\Database\Schema\Builder as Schema')
-            //->addMethod('up', ['schema' => ['type' => 'Schema']], 'public', null, $upMethod)
-            ->addMethod(new Method('up', [new MethodArgument('schema', 'Schema')], 'public', null, $upMethod))
-            //->addMethod('down', ['schema' => ['type' => 'Schema']], 'public', null, $downMethod)
-            ->addMethod(new Method('down', [new MethodArgument('schema', 'Schema')], 'public', null, $downMethod))
-        ;
+        $methods[] = new Method('up', [new MethodArgument('schema', 'Schema')], 'public', null, $upMethod);
+        $methods[] = new Method('down', [new MethodArgument('schema', 'Schema')], 'public', null, $downMethod);
 
-        Filesystem::write("database/migrations/{$file}", $class->toString());
+        $this->makeClass($table, $raw, $methods);
 
         $output->writeln("Create {$table} table migration done.");
     }
@@ -98,13 +105,6 @@ class MakeMigrationCommand extends Command
             ->fromSnakeCase()
         ;
 
-        $name = $raw->toCamelCase();
-
-        $file = $raw->toSnakeCase()
-            ->append('.php')
-            ->prepend(Carbon::now()->format('Ymdhis') . '_')
-        ;
-
         $upMethod = Phraser::make('        $schema->table(\'' . $table . '\', function ($table) {')
             ->eol()
             ->append('            //')
@@ -114,21 +114,17 @@ class MakeMigrationCommand extends Command
 
         $downMethod = Phraser::make('        $schema->dropIfExists(\'' . $table . '\');');
 
-        $class = (new ClassBlueprint())
-            ->setName($name)
-            ->addInclude('Illuminate\Database\Schema\Builder as Schema')
-            ->addMethod('up', ['schema' => ['type' => 'Schema']], 'public', null, $upMethod)
-            ->addMethod('down', ['schema' => ['type' => 'Schema']], 'public', null, $downMethod)
-        ;
+        $methods[] = new Method('up', [new MethodArgument('schema', 'Schema')], 'public', null, $upMethod);
+        $methods[] = new Method('down', [new MethodArgument('schema', 'Schema')], 'public', null, $downMethod);
 
-        Filesystem::write("database/migrations/{$file}", $class->toString());
+        $this->makeClass($table, $raw, $methods);
 
         $output->writeln("Alter {$table} table migration done.");
     }
 
     protected function empty(InputInterface $input, OutputInterface $output)
     {
-        $argument = $input->getArgument('name') ?? 'custom_'.Carbon::now()->format('Ymdhis');
+        $argument = $input->getArgument('name') ?? Carbon::now()->format('Ymdhis');
 
         $output->writeln("Migration {$argument} in process.");
 
@@ -137,21 +133,10 @@ class MakeMigrationCommand extends Command
             ->fromSnakeCase()
         ;
 
-        $name = $raw->toCamelCase();
+        $methods[] = new Method('up', [new MethodArgument('schema', 'Schema')]);
+        $methods[] = new Method('down', [new MethodArgument('schema', 'Schema')]);
 
-        $file = $raw->toSnakeCase()
-            ->append('.php')
-            ->prepend(Carbon::now()->format('Ymdhis') . '_')
-        ;
-
-        $class = (new ClassBlueprint())
-            ->setName($name)
-            ->addInclude('Illuminate\Database\Schema\Builder as Schema')
-            ->addMethod('up', ['schema' => ['type' => 'Schema']], 'public')
-            ->addMethod('down', ['schema' => ['type' => 'Schema']], 'public')
-        ;
-
-        Filesystem::write("database/migrations/{$file}", $class->toString());
+        $this->makeClass($argument, $raw, $methods);
 
         $output->writeln("Migration {$argument} done.");
     }

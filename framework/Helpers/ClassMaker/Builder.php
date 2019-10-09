@@ -129,6 +129,15 @@ class Builder
         return $this->methods;
     }
 
+    public function setMethods(array $methods = []): self
+    {
+        foreach ($methods as $method) {
+            $this->addMethod($method);
+        }
+
+        return $this;
+    }
+
     public function addMethod(Method $method): self
     {
         $this->methods[$method->getName()] = $method->toString();
