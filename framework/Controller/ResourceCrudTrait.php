@@ -18,9 +18,7 @@ trait ResourceCrudTrait
     {
         $provider = $this->getProvider();
 
-        return $provider
-            ->with($provider->relations)
-            ->find($id)
+        return $provider->find($id)
         ;
     }
 
@@ -28,10 +26,7 @@ trait ResourceCrudTrait
     {
         $provider = $this->getProvider();
 
-        $resources = $provider
-            ->with($provider->relations)
-            ->all()
-        ;
+        $resources = $provider->all();
 
         return Response::json($resources);
     }

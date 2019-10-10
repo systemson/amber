@@ -299,6 +299,9 @@ class Resource implements ResourceInterface
             $ret =& $value;
 
             return $ret;
+        } elseif (isset($this->_relations[$offset])) {
+            $ret =& $this->_relations[$offset];
+            return $ret;
         }
 
         return $value;
@@ -306,7 +309,7 @@ class Resource implements ResourceInterface
 
     public function setRelation($name, $values)
     {
-        $this->_relations[$name][] = $values;
+        $this->_relations[$name] = $values;
     }
 
     public function toArray(): array
@@ -314,10 +317,10 @@ class Resource implements ResourceInterface
         return $this->getValues()->toArray();
     }
 
-    public function join($array, $name, $pkey, $fkey): self
+    public function join($array, string $name, string $fkey, string $pkey): self
     {
         foreach ($array as $value) {
-            if ($this->{$pkey} === $value[$fkey]) {
+            if ($this->{$fkey} === $value->{$pkey}) {
                 $this->setRelation($name, $value);
             }
         }

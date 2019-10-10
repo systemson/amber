@@ -19,14 +19,21 @@ class ResourceCollection extends Collection implements ResourceCollectionInterfa
      *
      * @return CollectionInterface A new collection instance.
      */
-    public function join(array $array, string $name, string $pkey, string $fkey): self
+    public function join($array, string $name, string $fkey, string $pkey, bool $multiple = false): self
     {
         return $this->map(
-            function ($item) use ($array, $name, $pkey, $fkey) {
+            function ($item) use ($array, $name, $fkey, $pkey, $multiple) {
                 foreach ($array as $value) {
-                    if ($item->{$pkey} === $value[$fkey]) {
-                        $item->setRelation($name, $value);
+                    if ($item->{$fkey} === $value->{$pkey}) {
+                        if (!$multiple) {
+                            $item->setRelation($name, $value);
+                            break;
+                        }
+
+                        $values[] = $value;
                     }
+
+                    $item->setRelation($name, $values);
                 }
             }
         );

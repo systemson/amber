@@ -6,18 +6,6 @@ use Amber\Container\Facades\Gemstone;
 
 trait Relations
 {
-    public function with(array $relations = [])
-    {
-        foreach ($relations as $relation) {
-            $callback = [$this, $relation];
-
-            $this->eagerLoadedRelations[$relation] = Gemstone::execute(call_user_func($callback));
-            $this->clearQuery();
-        }
-
-        return $this;
-    }
-
     public function hasAndBelongsToMany($class, $pivot)
     {
         $related = new $class;
@@ -39,20 +27,6 @@ trait Relations
         ;
     }
 
-    public function hasMany(string $class, $pk = null, $fk = null)
-    {
-        $provider = new $class;
-
-        $name = $provider->getName();
-        $pk = $pk ?? $this->getId();
-        $fk = $fk ?? "{$this->getResource()}_{$pk}";
-
-        return $this->select()
-            ->join('inner', $name, "{$name}.{$fk} = {$this->getName()}.{$pk}")
-            ->get()
-        ;
-    }
-
     public function hasOne(string $class, $pk = null, $fk = null)
     {
         $provider = new $class;
@@ -65,22 +39,54 @@ trait Relations
         $this->relations[$provider->getName()] = [$pk => $fk];
     }
 
-    public function belongsTo(string $class, $fk = null, $pd = null)
+    public function belongsTo(string $class, string $fk = null, string $pk = null)
     {
         $related = new $class;
 
+        $fk = $fk ?? $related->getResource() . '_' . $related->getId();
+        $pk = $pk ?? $related->id;
+
+        $this->query('select', true);
+
+        $this
+            ->from($related->getName())
+            ->whereIn($pk, null)
+        ;
+
+        return (object) [
+                'query' => $this->query,
+                'provider' => $related,
+                'pk' => $pk,
+                'fk' => $fk,
+                'multiple' => false,
+            ]
+        ;
+    }
+
+    public function hasMany(string $class, string $pk = null, string $fk = null)
+    {
+        $related = new $class;
+
+        $fk = $fk ?? $this->getResource() . '_' . $this->getId();
+        $pk = $pk ?? $this->id;
+        $on = $this->id;
+
         $resource = $related->getResource();
 
-        $query = $this->query();
+        $query = $this->query('select', true);
 
-        $query->removeCol('*');
-        
-        return $query
-                ->cols([
-                    $related->name . '.*',
-                    "{$this->name}.{$resource}_{$related->id}"
-                ])
-            ->join('inner', $related->name, "{$related->name}.{$related->id} = {$this->name}.{$resource}_{$related->id}")
+        $this
+            ->from($related->getName())
+            ->whereIn($fk, null)
+        ;
+
+        return (object) [
+                'query' => $this->query,
+                'provider' => $related,
+                'pk' => $fk,
+                'fk' => $pk,
+                'multiple' => true,
+            ]
         ;
     }
 }

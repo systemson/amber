@@ -71,7 +71,7 @@ trait Selectable
     public function whereIn(string $column, $values)
     {
         $this->query()
-            ->where("{$column} IN (?)", Gemstone::quote($array))
+            ->where("{$column} IN (?)", $values)
         ;
 
         return $this;

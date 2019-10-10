@@ -145,7 +145,7 @@ abstract class AbstractProvider
         return $attributes ?? [];
     }
 
-    public function query(string $type = 'select')
+    public function query(string $type = 'select', bool $empty = false)
     {
         if (!is_null($this->query)) {
             $class = (string) Phraser::make(get_class($this->query))
@@ -166,6 +166,10 @@ abstract class AbstractProvider
 
         switch ($type) {
             case 'select':
+                if ($empty) {
+                    return $this->query = $factory->newSelect();
+                }
+
                 return $this->query = $factory->newSelect()
                     ->from($this->getName())
                 ;
@@ -199,7 +203,7 @@ abstract class AbstractProvider
     public function get()
     {
         $query = $this->query;
-        $this->query = null;
+        $this->clearQuery();
 
         $result = Gemstone::execute($query);
 
@@ -213,13 +217,44 @@ abstract class AbstractProvider
             return $result;
         }
 
-        foreach ($this->eagerLoadedRelations as $name => $value) {
-            $new->join(
-                $value->toArray(),
-                $name,
-                $this->id,
-                $this->getResource() . '_' . $this->getId()
-            );
+        if (!empty($this->relations)) {
+            foreach ($this->relations as $name) {
+                $relation = $this->{$name}();
+
+                if ($result instanceof CollectionInterface && $result->isNotEmpty()) {
+                    $bindValue = array_unique($new->map(function ($resource) use ($relation) {
+                        return $resource->{$relation->fk};
+                    })
+                        ->toArray())
+                    ;
+                } else {
+                    $bindValue = $new->{$relation->fk};
+                }
+
+                $query = $relation->query->bindValue('_1_', $bindValue);
+
+                $this->eagerLoadedRelations[$name] = $relation;
+                $result = Gemstone::select($query);
+
+                if ($result instanceof CollectionInterface && $result->isNotEmpty()) {
+                    $relation->result = $result->map(function ($values) use ($relation) {
+                        return $relation->provider->new($values, true);
+                    });
+
+                } elseif (is_array($result)) {
+                    $relation->result = $relation->provider->new($result, true);
+                } else {
+                    $relation->result = $result;
+                }
+
+                $new->join(
+                    $relation->result,
+                    $name,
+                    $relation->fk,
+                    $relation->pk,
+                    $relation->multiple
+                );
+            }
         }
 
         return $new;
