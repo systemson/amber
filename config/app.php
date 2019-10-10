@@ -78,5 +78,6 @@ return [
         Amber\Commands\AppCacheCommand::class,
         Amber\Commands\ServerCommand::class,
         Amber\Commands\MakeMigrationCommand::class,
+        Amber\Commands\MakeKeyCommand::class,
     ],
 ];

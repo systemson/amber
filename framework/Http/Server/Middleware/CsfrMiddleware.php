@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Amber\Container\Facades\Response as ResponseFacade;
-use Amber\Helpers\Hash;
+use Amber\Helpers\Crypto\Hash;
 
 /**
  * Participant in processing a server request and response.

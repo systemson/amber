@@ -10,7 +10,7 @@ use Amber\Auth\UserProvider;
 use Carbon\Carbon;
 use Psr\Container\ContainerInterface;
 use Amber\Container\Facades\Session;
-use Amber\Helpers\Hash;
+use Amber\Helpers\Crypto\Hash;
 use Psr\Http\Message\ServerRequestInterface;
 use Amber\Validator\Validator;
 use Amber\Container\Facades\Lang;
