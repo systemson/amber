@@ -10,6 +10,7 @@ use Aura\SqlQuery\AbstractQuery;
 use Amber\Container\Facades\Gemstone;
 use Amber\Container\Facades\Str;
 use Amber\Collection\Contracts\CollectionInterface;
+use Amber\Model\Resource\ResourceCollection;
 use Amber\Phraser\Phraser;
 
 use Amber\Model\Traits\AttributesTrait;
@@ -167,7 +168,9 @@ abstract class AbstractProvider
         switch ($type) {
             case 'select':
                 if ($empty) {
-                    return $this->query = $factory->newSelect();
+                    $this->query = $factory->newSelect();
+                    $this->query->removeCol('*');
+                    return $this->query;
                 }
 
                 return $this->query = $factory->newSelect()
@@ -221,7 +224,7 @@ abstract class AbstractProvider
             foreach ($this->relations as $name) {
                 $relation = $this->{$name}();
 
-                if ($result instanceof CollectionInterface && $result->isNotEmpty()) {
+                if ($result instanceof ResourceCollection && $result->isNotEmpty()) {
                     $bindValue = array_unique($new->map(function ($resource) use ($relation) {
                         return $resource->{$relation->fk};
                     })
@@ -233,18 +236,28 @@ abstract class AbstractProvider
 
                 $query = $relation->query->bindValue('_1_', $bindValue);
 
-                $this->eagerLoadedRelations[$name] = $relation;
-                $result = Gemstone::select($query);
+                $this->clearQuery();
 
-                if ($result instanceof CollectionInterface && $result->isNotEmpty()) {
-                    $relation->result = $result->map(function ($values) use ($relation) {
-                        return $relation->provider->new($values, true);
+                $this->eagerLoadedRelations[$name] = $relation;
+                $relationResult = Gemstone::select($query);
+
+                if ($relationResult instanceof ResourceCollection && $relationResult->isNotEmpty()) {
+                    $relation->result = $relationResult->map(function ($values) use ($relation, $name) {
+
+                        $item =  $relation->provider->new($values, true);
+
+                        $item->setMetadata($name, [
+                            $relation->pk => $values[$relation->pk],
+                            $relation->fk => $values[$relation->fk],
+                        ]);
+
+                        return $item;
                     });
 
-                } elseif (is_array($result)) {
-                    $relation->result = $relation->provider->new($result, true);
+                } elseif (is_array($relationResult)) {
+                    $relation->result = $relation->provider->new($relationResult, true);
                 } else {
-                    $relation->result = $result;
+                    $relation->result = $relationResult;
                 }
 
                 $new->join(

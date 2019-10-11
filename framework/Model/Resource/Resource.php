@@ -53,7 +53,9 @@ class Resource implements ResourceInterface
     public function setValues(iterable $values = []): ResourceInterface
     {
         foreach ($values as $name => $value) {
-            $this->getAttribute($name)->setValue($value);
+            if ($this->hasAttribute($name)) {
+                $this->getAttribute($name)->setValue($value);
+            }
         }
 
         return $this;
@@ -76,10 +78,21 @@ class Resource implements ResourceInterface
         return $array;
     }
 
+    public function getRawValues(): Collection
+    {
+        $array = $this->getAttributes()->map(function ($attr) {
+            return $attr->getValue();
+        });
+
+        return $array;
+    }
+
     public function setStoredValues(array $values): ResourceInterface
     {
         foreach ($values as $name => $value) {
-            $this->getAttribute($name)->setStoredValue($value);
+            if ($this->hasAttribute($name)) {
+                $this->getAttribute($name)->setStoredValue($value);
+            }
         }
 
         return $this;
@@ -114,6 +127,18 @@ class Resource implements ResourceInterface
     public function getName(): string
     {
         return $this->_name;
+    }
+
+    public function getMetadata(string $name)
+    {
+        return $this->_metadata[$name] ?? null;
+    }
+
+    public function setMetadata(string $name, $value)
+    {
+        $this->_metadata[$name] = $value;
+
+        return $this;
     }
 
     public function getAttributesNames(): array
@@ -202,7 +227,7 @@ class Resource implements ResourceInterface
 
     public function updatable(): Collection
     {
-        return $this->getValues()->diff($this->getStoredValues()->toArray());
+        return $this->getRawValues()->diff($this->getStoredValues()->toArray());
     }
 
     public function hasDefault(string $attribute)
@@ -317,12 +342,19 @@ class Resource implements ResourceInterface
         return $this->getValues()->toArray();
     }
 
-    public function join($array, string $name, string $fkey, string $pkey): self
+    public function join($array, string $name, string $fkey, string $pkey, bool $multiple = false): self
     {
         foreach ($array as $value) {
-            if ($this->{$fkey} === $value->{$pkey}) {
-                $this->setRelation($name, $value);
+            if ($this->{$fkey} === $value->getMetadata($name)[$pkey]) {
+                if (!$multiple) {
+                    $this->setRelation($name, $value);
+                    break;
+                }
+
+                $values[] = $value;
             }
+
+            $this->setRelation($name, $values ?? []);
         }
 
         return $this;

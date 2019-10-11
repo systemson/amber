@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Schema\Builder as Schema;
 use App\Models\UserProvider as Provider;
-use Amber\Helpers\Hash;
+use Amber\Helpers\Crypto\Hash;
 
 class UserTableSeeder
 {

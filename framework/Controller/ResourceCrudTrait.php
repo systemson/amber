@@ -26,9 +26,7 @@ trait ResourceCrudTrait
     {
         $provider = $this->getProvider();
 
-        $resources = $provider->all();
-
-        return Response::json($resources);
+        return Response::json($provider->all());
     }
 
     public function form(Request $request, int $id = null)

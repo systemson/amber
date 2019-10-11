@@ -29,6 +29,6 @@ class UserProvider extends AbstractProvider
 
     public function roles()
     {
-        return $this->hasAndBelongsToMany(RoleProvider::class, 'user_role', 'user_id', 'role_id');
+        return $this->hasAndBelongsToMany(RoleProvider::class, UserRolePivot::class, 'user_id', 'role_id');
     }
 }

@@ -24,7 +24,7 @@ class ResourceCollection extends Collection implements ResourceCollectionInterfa
         return $this->map(
             function ($item) use ($array, $name, $fkey, $pkey, $multiple) {
                 foreach ($array as $value) {
-                    if ($item->{$fkey} === $value->{$pkey}) {
+                    if ($item->{$fkey} === $value->getMetadata($name)[$pkey]) {
                         if (!$multiple) {
                             $item->setRelation($name, $value);
                             break;
@@ -33,7 +33,7 @@ class ResourceCollection extends Collection implements ResourceCollectionInterfa
                         $values[] = $value;
                     }
 
-                    $item->setRelation($name, $values);
+                    $item->setRelation($name, $values ?? []);
                 }
             }
         );
