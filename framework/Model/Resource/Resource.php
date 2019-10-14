@@ -10,6 +10,7 @@ use Amber\Collection\Implementations\ArrayAccessTrait;
 use Amber\Collection\Implementations\PropertyAccessTrait;
 use Amber\Collection\Implementations\SerializableTrait;
 use Amber\Collection\Implementations\CountableTrait;
+use Amber\Model\Provider\AbstractProvider;
 
 class Resource implements ResourceInterface
 {
@@ -52,8 +53,18 @@ class Resource implements ResourceInterface
 
     public function setValues(iterable $values = []): ResourceInterface
     {
+
         foreach ($values as $name => $value) {
-            if ($this->hasAttribute($name)) {
+            if ($this->hasAttribute($name) || in_array($name, [AbstractProvider::CREATED_AT, AbstractProvider::EDITED_AT, $this->getId()]) ) {
+
+                if ($name == AbstractProvider::CREATED_AT) {
+                    $this->setAttribute(AbstractProvider::CREATED_AT, 'date');
+                } elseif ($name == AbstractProvider::EDITED_AT) {
+                    $this->setAttribute(AbstractProvider::EDITED_AT, 'date');
+                } elseif ($name == $this->getId()) {
+                    $this->setAttribute($this->getId(), 'numeric');
+                }
+
                 $this->getAttribute($name)->setValue($value);
             }
         }

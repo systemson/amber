@@ -248,7 +248,7 @@ abstract class AbstractProvider
 
                         $item->setMetadata($name, [
                             $relation->pk => $values[$relation->pk],
-                            $relation->fk => $values[$relation->fk],
+                            $relation->fk => $values[$relation->fk] ?? null,
                         ]);
 
                         return $item;

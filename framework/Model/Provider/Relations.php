@@ -41,26 +41,6 @@ trait Relations
                 'multiple' => true,
             ]
         ;
-
-        ///////////////////////////////////////
-
-        $related = new $class;
-
-        $query = $this->query();
-
-        $pivot_id1 = $this->getResource() . '_' . $this->getId();
-        $pivot_id2 = $related->getResource() . '_' . $related->getId();
-
-        $query->removeCol('*');
-        dd($query);
-        return $query
-            ->cols([
-                $related->getName() . '.*',
-                $pivot . '.*'
-            ])
-            ->join('inner', $pivot, "{$pivot}.{$pivot_id1} = {$this->name}.{$this->id}")
-            ->join('inner', $related->name, "{$pivot}.{$pivot_id2} = {$related->name}.{$related->id}")
-        ;
     }
 
     public function belongsTo(string $class, string $fk = null, string $pk = null)
@@ -92,7 +72,7 @@ trait Relations
         ;
     }
 
-    public function hasMany(string $class, string $pk = null, string $fk = null)
+    public function hasMany(string $class, string $fk = null, string $pk = null)
     {
         $related = new $class;
 
@@ -123,7 +103,7 @@ trait Relations
         ;
     }
 
-    public function hasOne(string $class, string $pk = null, string $fk = null)
+    public function hasOne(string $class, string $fk = null, string $pk = null)
     {
         $related = new $class;
 
