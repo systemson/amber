@@ -26,10 +26,12 @@ trait ResourceCrudTrait
     {
         $provider = $this->getProvider();
 
-        return Response::json($provider->all());
+        return Response::json([
+            'data' => $provider->all(),
+        ]);
     }
 
-    public function form(Request $request, int $id = null)
+    /*public function form(Request $request, int $id = null)
     {
         $resource = $this->find($id);
 
@@ -39,7 +41,7 @@ trait ResourceCrudTrait
         ;
 
         return View::toHtml();
-    }
+    }*/
 
     public function create(Request $request)
     {
@@ -50,10 +52,13 @@ trait ResourceCrudTrait
         );
 
         if ($resource->isValid()) {
-            $resource = $this->alterResourceBeforeCreate($resource);
+            $resource = $this->alterResourceBeforeCreate($request, $resource);
 
             if ($provider->save($resource)) {
-                return Response::created()->json($resource);
+                return Response::created()->json([
+                    //'status' => 'created',
+                    'data' => $resource,
+                ]);
             }
         }
 
@@ -72,7 +77,9 @@ trait ResourceCrudTrait
             return Response::notFound();
         }
 
-        return Response::json($resource);
+        return Response::json([
+            'data' => $resource
+        ]);
     }
 
     public function update(Request $request, int $id)
@@ -85,61 +92,21 @@ trait ResourceCrudTrait
             return Response::notFound();
         }
 
-        $raw_data = file_get_contents('php://input');
-        $boundary = substr($raw_data, 0, strpos($raw_data, "\r\n"));
+        $values = $request->getParsedBody()->only($provider ->getAttributesNames())->toArray();
 
-        $parts = array_slice(explode($boundary, $raw_data), 1);
-
-        foreach ($parts as $part) {
-            if ($part == "--\r\n") {
-                break;
+        if (!empty($values)) {
+            foreach ($values as $attr => $value) {
+                $resource->{$attr} = $value;
             }
 
-            $part = ltrim($part, "\r\n");
-            list($raw_headers, $body) = explode("\r\n\r\n", $part, 2);
+            if ($resource->isValid()) {
+                $resource = $this->alterResourceBeforeUpdate($request, $resource);
 
-            $raw_headers = explode(";", $raw_headers);
-            $raw_headers = end($raw_headers);
-            list($name, $value) = explode('=', $raw_headers);
-
-            $values[$value] = $body;
-        }
-
-        dd(
-            $raw_data,
-            $values,
-        );
-
-        dd(
-            $parts,
-            file_get_contents('php://input'),
-            json_decode(file_get_contents('php://input'), true),
-            parse_str(file_get_contents('php://input'), $_PATCH),
-            $_PATCH,
-        );
-
-        d($resource->password);
-        d(parse_str(file_get_contents('php://input')));
-        d($resource->getAttributesNames());
-        d($request->getParsedBody());
-        d($request->getParsedBody()
-                ->only($resource->getAttributesNames())
-                ->toArray());
-
-        $resource->fill(
-            $request->getParsedBody()
-                ->only($resource->getAttributesNames())
-                ->toArray()
-        );
-
-        dd($resource->password);
-
-
-        if ($resource->isValid()) {
-            $resource = $this->alterResourceBeforeUpdate($request, $resource);
-
-            if ($provider->save($resource)) {
-                return Response::json($resource);
+                if ($provider->save($resource)) {
+                    return Response::created()->json([
+                        'data' => $resource
+                    ]);
+                }
             }
         }
 
@@ -165,6 +132,7 @@ trait ResourceCrudTrait
         }
 
         return Response::json([
+            'status' => 'success',
             'message' => 'Resource successfully deleted.',
         ]);
     }
@@ -174,7 +142,7 @@ trait ResourceCrudTrait
         return $request;
     }
 
-    protected function alterResourceBeforeCreate($resource)
+    protected function alterResourceBeforeCreate(Request $request, $resource)
     {
         return $resource;
     }

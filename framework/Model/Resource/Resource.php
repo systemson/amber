@@ -38,7 +38,7 @@ class Resource implements ResourceInterface
 
         $this->setId($id);
         $this->setName($name);
-        
+
         $this->setValues($values);
 
         if ($isStored) {
@@ -53,10 +53,8 @@ class Resource implements ResourceInterface
 
     public function setValues(iterable $values = []): ResourceInterface
     {
-
         foreach ($values as $name => $value) {
-            if ($this->hasAttribute($name) || in_array($name, [AbstractProvider::CREATED_AT, AbstractProvider::EDITED_AT, $this->getId()]) ) {
-
+            if ($this->hasAttribute($name) || in_array($name, [AbstractProvider::CREATED_AT, AbstractProvider::EDITED_AT, $this->getId()])) {
                 if ($name == AbstractProvider::CREATED_AT) {
                     $this->setAttribute(AbstractProvider::CREATED_AT, 'date');
                 } elseif ($name == AbstractProvider::EDITED_AT) {
@@ -82,7 +80,9 @@ class Resource implements ResourceInterface
 
         if (!empty($this->_relations)) {
             foreach ($this->_relations as $name => $values) {
-                $array[$name] = $values;
+                if (!empty($values)) {
+                    $array[$name] = $values->toArray();
+                }
             }
         }
 
@@ -215,30 +215,35 @@ class Resource implements ResourceInterface
 
     public function fill(array $values): ResourceInterface
     {
-        foreach ($values as $name => $value) {
-            $attribute = $this->getAttribute($name);
-
-            $attribute->setValue($value);
-        }
+        $attribute->setValue($value);
  
         return $this;
     }
 
     public function update(array $values): ResourceInterface
     {
-        foreach ($values as $name => $value) {
-            $attribute = $this->getAttribute($name);
+        $this->setValues($values);
+        $this->setStoredValues($values);
 
-            $attribute->setValue($value);
-            $attribute->setStoredValue($value);
-        }
- 
+        return $this;
+    }
+
+    public function replace(ResourceInterface $resource): ResourceInterface
+    {
+        $vars = get_object_vars($resource);
+
+        $this->setValues($resource->toArray());
+        $this->setRelations($vars['_relations']);
+
         return $this;
     }
 
     public function updatable(): Collection
     {
-        return $this->getRawValues()->diff($this->getStoredValues()->toArray());
+        $array1 = $this->getRawValues()->toArray();
+        $array2 = $this->getStoredValues()->toArray();
+
+        return new Collection(array_diff_assoc($array1, $array2));
     }
 
     public function hasDefault(string $attribute)
@@ -343,9 +348,20 @@ class Resource implements ResourceInterface
         return $value;
     }
 
-    public function setRelation($name, $values)
+    public function setRelation($name, $values): self
     {
         $this->_relations[$name] = $values;
+
+        return $this;
+    }
+
+    public function setRelations(array $relations): self
+    {
+        foreach ($relations as $name => $values) {
+            $this->setRelation($name, $values);
+        }
+
+        return $this;
     }
 
     public function toArray(): array
@@ -355,18 +371,20 @@ class Resource implements ResourceInterface
 
     public function join($array, string $name, string $fkey, string $pkey, bool $multiple = false): self
     {
+        $values = $multiple ? [] : null;
+
         foreach ($array as $value) {
             if ($this->{$fkey} === $value->getMetadata($name)[$pkey]) {
                 if (!$multiple) {
-                    $this->setRelation($name, $value);
+                    $values = $value;
                     break;
                 }
 
                 $values[] = $value;
             }
-
-            $this->setRelation($name, $values ?? []);
         }
+
+        $this->setRelation($name, $values);
 
         return $this;
     }

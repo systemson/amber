@@ -34,7 +34,7 @@ trait Insertable
         $id = Gemstone::execute($query);
 
         if ($id !== false) {
-            return $resource->update($this->find($id)->toArray());
+            return $resource->replace($this->find($id));
         }
 
         return false;

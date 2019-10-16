@@ -16,8 +16,7 @@ use Amber\Phraser\Phraser;
 use Amber\Model\Traits\AttributesTrait;
 
 /**
- * @todo MUST implement method save(), it should decide to insert or update the resource in the storage.
- * @todo Method save must accept a single resource or an Array/Collection of resources.
+ *
  */
 abstract class AbstractProvider
 {
@@ -220,54 +219,50 @@ abstract class AbstractProvider
             return $result;
         }
 
-        if (!empty($this->relations)) {
-            foreach ($this->relations as $name) {
-                $relation = $this->{$name}();
+        foreach ($this->relations as $name) {
+            $relation = $this->{$name}();
 
-                if ($result instanceof ResourceCollection && $result->isNotEmpty()) {
-                    $bindValue = array_unique($new->map(function ($resource) use ($relation) {
-                        return $resource->{$relation->fk};
-                    })
-                        ->toArray())
-                    ;
-                } else {
-                    $bindValue = $new->{$relation->fk};
-                }
-
-                $query = $relation->query->bindValue('_1_', $bindValue);
-
-                $this->clearQuery();
-
-                $this->eagerLoadedRelations[$name] = $relation;
-                $relationResult = Gemstone::select($query);
-
-                if ($relationResult instanceof ResourceCollection && $relationResult->isNotEmpty()) {
-                    $relation->result = $relationResult->map(function ($values) use ($relation, $name) {
-
-                        $item =  $relation->provider->new($values, true);
-
-                        $item->setMetadata($name, [
-                            $relation->pk => $values[$relation->pk],
-                            $relation->fk => $values[$relation->fk] ?? null,
-                        ]);
-
-                        return $item;
-                    });
-
-                } elseif (is_array($relationResult)) {
-                    $relation->result = $relation->provider->new($relationResult, true);
-                } else {
-                    $relation->result = $relationResult;
-                }
-
-                $new->join(
-                    $relation->result,
-                    $name,
-                    $relation->fk,
-                    $relation->pk,
-                    $relation->multiple
-                );
+            if ($result instanceof ResourceCollection && $result->isNotEmpty()) {
+                $bindValues = array_unique($new->map(function ($resource) use ($relation) {
+                    return $resource->{$relation->fk};
+                })
+                    ->toArray())
+                ;
+            } else {
+                $bindValues = $new->{$relation->fk};
             }
+
+            $query = $relation->query->bindValue('_1_', $bindValues);
+            $this->clearQuery();
+
+            $this->eagerLoadedRelations[$name] = $relation;
+            $relationResult = Gemstone::select($query);
+
+            if ($relationResult instanceof ResourceCollection && $relationResult->isNotEmpty()) {
+                $relation->result = $relationResult->map(function ($values) use ($relation, $name) {
+
+                    $item =  $relation->provider->new($values, true);
+
+                    $item->setMetadata($name, [
+                        $relation->pk => $values[$relation->pk],
+                        $relation->fk => $values[$relation->fk] ?? null,
+                    ]);
+
+                    return $item;
+                });
+            } elseif (is_array($relationResult)) {
+                $relation->result = $relation->provider->new($relationResult, true);
+            } else {
+                $relation->result = $relationResult;
+            }
+
+            $new->join(
+                $relation->result,
+                $name,
+                $relation->fk,
+                $relation->pk,
+                $relation->multiple
+            );
         }
 
         return $new;

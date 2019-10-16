@@ -230,8 +230,10 @@ class Router implements RequestMethodInterface
     public function apiResource($url, $controller)
     {
         $this->get($url, "{$controller}::index");
-        $this->get("$url/{id}", "{$controller}::read");
-        $this->post("$url", "{$controller}::create");
+        $this->post($url, "{$controller}::create");
+        $this->get("{$url}/{id}", "{$controller}::read");
+        $this->update("{$url}/{id}", "{$controller}::update");
+        $this->delete("{$url}/{id}", "{$controller}::delete");
     }
 
     public function group(\Closure $callback, array $options = []): self

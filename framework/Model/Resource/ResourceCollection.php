@@ -23,18 +23,20 @@ class ResourceCollection extends Collection implements ResourceCollectionInterfa
     {
         return $this->map(
             function ($item) use ($array, $name, $fkey, $pkey, $multiple) {
+                $values = $multiple ? [] : null;
+
                 foreach ($array as $value) {
                     if ($item->{$fkey} === $value->getMetadata($name)[$pkey]) {
                         if (!$multiple) {
-                            $item->setRelation($name, $value);
+                            $values = $value;
                             break;
                         }
 
                         $values[] = $value;
                     }
-
-                    $item->setRelation($name, $values ?? []);
                 }
+
+                $item->setRelation($name, $values);
             }
         );
     }

@@ -46,6 +46,10 @@ class Attribute
                     ->explode(':')
                     ->last()
                 ;
+
+                if ($default == 'null') {
+                    $default = null;
+                }
                 break;
             }
 
@@ -117,7 +121,12 @@ class Attribute
     {
         $value = $this->default;
 
+        if (in_array($value, ['null', null])) {
+            return null;
+        }
+
         switch ($this->getType()) {
+
             case 'string':
                 return (string) $value;
                 break;

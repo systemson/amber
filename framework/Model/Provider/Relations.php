@@ -30,7 +30,8 @@ trait Relations
             ->join('inner', $pivot->getName(), $pivot->getName() . '.' . $join1 . ' = ' . $related->getName() . '.' . $pk)
             ->join('inner', $this->getName(), $this->getName() . '.' . $fk . ' = ' .  $pivot->getName() . '.' . $join2)
         ;
-        $query = $this->query; // dd($query->getStatement());
+
+        $query = $this->query;
         $this->clearQuery();
 
         return (object) [
@@ -53,7 +54,7 @@ trait Relations
         $this->query('select', true);
 
         $this
-            ->cols(['*'])
+            ->cols($related->getAttributesNames())
             ->from($related->getName())
             ->whereIn($pk, null)
             ->orderBy($related->id)
@@ -84,7 +85,7 @@ trait Relations
         $this->query('select', true);
 
         $this
-            ->cols(['*'])
+            ->cols($related->getAttributesNames())
             ->from($related->getName())
             ->whereIn($fk, null)
             ->orderBy($related->id)
@@ -115,7 +116,7 @@ trait Relations
         $this->query('select', true);
 
         $this
-            ->cols(['*'])
+            ->cols($related->getAttributesNames())
             ->from($related->getName())
             ->whereIn($fk, null)
             ->orderBy($related->id)

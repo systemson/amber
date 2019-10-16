@@ -16,8 +16,6 @@ class UserProvider extends AbstractProvider
         'status' => 'numeric|default:1',
         'description' => 'alnum|optional|length:null,256',
         'remember_token' => 'optional|alnum',
-        'created_at' => 'date|optional',
-        'updated_at' => 'date|optional',
     ];
 
     /**
