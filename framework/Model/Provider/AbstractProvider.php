@@ -89,7 +89,7 @@ abstract class AbstractProvider
             return $this->resource;
         }
 
-        return Str::singular($this->name);
+        return Str::singular($this->getName());
     }
 
     public function setId(string $id): self
@@ -224,7 +224,7 @@ abstract class AbstractProvider
 
             if ($result instanceof ResourceCollection && $result->isNotEmpty()) {
                 $bindValues = array_unique($new->map(function ($resource) use ($relation) {
-                    return $resource->{$relation->fk};
+                    return $resource->{$relation->getFkey()};
                 })
                     ->toArray())
                 ;
@@ -232,39 +232,36 @@ abstract class AbstractProvider
                 $bindValues = $new->{$relation->fk};
             }
 
-            $query = $relation->query->bindValue('_1_', $bindValues);
+            $query = $relation->getQuery()->bindValue('_1_', $bindValues);
             $this->clearQuery();
 
             $this->eagerLoadedRelations[$name] = $relation;
             $relationResult = Gemstone::select($query);
 
             if ($relationResult instanceof ResourceCollection && $relationResult->isNotEmpty()) {
-                $relation->result = $relationResult->map(function ($values) use ($relation, $name) {
+                $relationResult = $relationResult->map(function ($values) use ($relation, $name) {
 
-                    $item =  $relation->provider->new($values, true);
+                    $item =  $relation->getProvider()->new($values, true);
 
                     $item->setMetadata($name, [
-                        $relation->pk => $values[$relation->pk],
-                        $relation->fk => $values[$relation->fk] ?? null,
+                        $relation->getPkey() => $values[$relation->getPkey()],
+                        $relation->getFkey() => $values[$relation->getFkey()] ?? null,
                     ]);
 
                     return $item;
                 });
             } elseif (is_array($relationResult)) {
-                $relation->result = $relation->provider->new($relationResult, true);
-            } else {
-                $relation->result = $relationResult;
+                $relationResult = $relation->getProvider()->new($relationResult, true);
             }
 
             $new->join(
-                $relation->result,
+                $relationResult,
                 $name,
-                $relation->fk,
-                $relation->pk,
-                $relation->multiple
+                $relation->getFkey(),
+                $relation->getPkey(),
+                $relation->getMultiple()
             );
         }
-
         return $new;
     }
 

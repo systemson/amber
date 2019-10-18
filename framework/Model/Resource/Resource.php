@@ -78,11 +78,11 @@ class Resource implements ResourceInterface
             }
         });
 
-        if (!empty($this->_relations)) {
-            foreach ($this->_relations as $name => $values) {
-                if (!empty($values)) {
-                    $array[$name] = $values->toArray();
-                }
+        foreach ($this->_relations as $name => $values) {
+            if (is_object($values) && in_array('toArray', get_class_methods($values))) {
+                $array[$name] = $values->toArray();
+            } else {
+                $array[$name] = $values;
             }
         }
 
@@ -230,10 +230,8 @@ class Resource implements ResourceInterface
 
     public function replace(ResourceInterface $resource): ResourceInterface
     {
-        $vars = get_object_vars($resource);
-
         $this->setValues($resource->toArray());
-        $this->setRelations($vars['_relations']);
+        $this->setRelations($resource->getRelations());
 
         return $this;
     }
@@ -355,6 +353,11 @@ class Resource implements ResourceInterface
         return $this;
     }
 
+    public function getRelation($name)
+    {
+        return $this->_relations[$name] ?? null;
+    }
+
     public function setRelations(array $relations): self
     {
         foreach ($relations as $name => $values) {
@@ -362,6 +365,11 @@ class Resource implements ResourceInterface
         }
 
         return $this;
+    }
+
+    public function getRelations()
+    {
+        return $this->_relations;
     }
 
     public function toArray(): array

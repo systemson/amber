@@ -126,7 +126,6 @@ class Attribute
         }
 
         switch ($this->getType()) {
-
             case 'string':
                 return (string) $value;
                 break;

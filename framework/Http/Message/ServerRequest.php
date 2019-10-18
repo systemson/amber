@@ -76,12 +76,12 @@ class ServerRequest implements ServerRequestInterface
         $params = []
     ) {
         $this->server = new ImmutableCollection($params['server'] ?? []);
-        $this->cookies = new Collection($params['cookies'] ?? []);
-        $this->query = new Collection($params['query'] ?? []);
+        $this->cookies = new ImmutableCollection($params['cookies'] ?? []);
+        $this->query = new ImmutableCollection($params['query'] ?? []);
         $this->files = new FileCollection($params['files'] ?? []);
-        $this->post = new Collection($params['post'] ?? []);
+        $this->post = new ImmutableCollection($params['post'] ?? []);
+        $this->headers = new ImmutableCollection($headers);
         $this->attributes = new Collection($params['attributes'] = []);
-        $this->headers = new Collection($headers);
 
         $this->version = $version;
         $this->method = $method;

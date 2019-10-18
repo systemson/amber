@@ -3,6 +3,7 @@
 namespace Amber\Model\Provider;
 
 use Amber\Container\Facades\Gemstone;
+use Amber\Model\Provider\RelationProvider;
 
 trait Relations
 {
@@ -18,12 +19,15 @@ trait Relations
 
         $this->query('select', true);
 
+        foreach ($related->getAttributesNames() as $name) {
+            $cols[] = $related->getName() . '.' . $name;
+        }
+
+        $cols[] = $pivot->getName() . '.' . $join1;
+        $cols[] = $pivot->getName() . '.' . $join2;
+
         $this
-            ->cols([
-                $related->getName() . '.*',
-                $pivot->getName() . '.' . $join1,
-                $pivot->getName() . '.' . $join2,
-            ])
+            ->cols($cols)
             ->from($related->getName())
             ->whereIn($this->getName() . '.' . $fk, null)
             ->orderBy($related->getName() . '.' . $pk)
@@ -34,14 +38,13 @@ trait Relations
         $query = $this->query;
         $this->clearQuery();
 
-        return (object) [
-                'query' => $query,
-                'provider' => $related,
-                'pk' => $join2,
-                'fk' => $fk,
-                'multiple' => true,
-            ]
-        ;
+        return new RelationProvider(
+            $related,
+            $query,
+            $join2,
+            $fk,
+            true
+        );
     }
 
     public function belongsTo(string $class, string $fk = null, string $pk = null)
@@ -63,14 +66,13 @@ trait Relations
         $query = $this->query;
         $this->clearQuery();
 
-        return (object) [
-                'query' => $query,
-                'provider' => $related,
-                'pk' => $pk,
-                'fk' => $fk,
-                'multiple' => false,
-            ]
-        ;
+        return new RelationProvider(
+            $related,
+            $query,
+            $pk,
+            $fk,
+            true
+        );
     }
 
     public function hasMany(string $class, string $fk = null, string $pk = null)
@@ -94,14 +96,13 @@ trait Relations
         $query = $this->query;
         $this->clearQuery();
 
-        return (object) [
-                'query' => $query,
-                'provider' => $related,
-                'pk' => $fk,
-                'fk' => $pk,
-                'multiple' => true,
-            ]
-        ;
+        return new RelationProvider(
+            $related,
+            $query,
+            $fk,
+            $pk,
+            true
+        );
     }
 
     public function hasOne(string $class, string $fk = null, string $pk = null)
@@ -125,13 +126,12 @@ trait Relations
         $query = $this->query;
         $this->clearQuery();
 
-        return (object) [
-                'query' => $query,
-                'provider' => $related,
-                'pk' => $fk,
-                'fk' => $pk,
-                'multiple' => false,
-            ]
-        ;
+        return new RelationProvider(
+            $related,
+            $query,
+            $fk,
+            $pk,
+            true
+        );
     }
 }

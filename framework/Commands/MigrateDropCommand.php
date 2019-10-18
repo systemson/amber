@@ -21,7 +21,7 @@ class MigrateDropCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<comment>Dropping tables down.</comment>');
+        $output->writeln('<comment>Dropping all tables down.</comment>');
 
         $mediator = Gemstone::getMediator('sql');
         $pdo = $mediator->pdo;
