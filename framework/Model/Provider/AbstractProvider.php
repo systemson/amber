@@ -229,7 +229,7 @@ abstract class AbstractProvider
                     ->toArray())
                 ;
             } else {
-                $bindValues = $new->{$relation->fk};
+                $bindValues = $new->{$relation->getFkey()};
             }
 
             $query = $relation->getQuery()->bindValue('_1_', $bindValues);
