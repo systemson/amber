@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Amber\Container\Facades\View;
+use Amber\Container\Facades\Amber;
 
 class HomeController extends Controller
 {
@@ -12,7 +13,7 @@ class HomeController extends Controller
             ->setLayout('layouts/app.php')
             ->setVar('name', 'World')
             ->setVar('description', 'This is a sample page.')
-            ->setVar('version', 'v0.5-beta')
+            ->setVar('version', Amber::version())
         ;
 
         return View::toHtml();

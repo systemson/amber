@@ -10,7 +10,7 @@ class UserProvider extends AbstractProvider
 
     protected $attributes = [
         'id',
-        'name' => 'alpha',
+        'name' => 'string-type|alpha|length:10,64',
         'email' => 'email|length:null,64',
         'password' => 'alnum|length:null,64',
         'status' => 'numeric|default:1',

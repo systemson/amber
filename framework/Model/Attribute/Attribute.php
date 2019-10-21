@@ -4,6 +4,7 @@ namespace Amber\Model\Attribute;
 
 use Amber\Phraser\Phraser;
 use Amber\Container\Facades\Str;
+use Amber\Validator\Validator;
 
 class Attribute
 {
@@ -25,9 +26,9 @@ class Attribute
 
         $this->setType($type);
 
-        $this->setDefault($default ?? null);
+        $this->setDefault($default);
         $this->nullable = $nullable;
-        $this->setRules($rules ?? null);
+        $this->setRules($rules);
     }
 
     protected function parseOptions(string $options = null)
@@ -53,19 +54,23 @@ class Attribute
                 break;
             }
 
-            if ($option == 'optional') {
+            if (in_array($option, ['optional', 'nullable'])) {
                 $nullable = true;
             }
 
-            if (ends_with('Type', $options)) {
+            if (ends_with('type', $option)) {
                 $type = (string) Phraser::make($option)
-                ->fromCamelCase()
+                    ->fromKebabCase()
                     ->first()
                 ;
             } else {
                 switch ($option) {
                     case 'numeric':
                         $type = 'numeric';
+                        break;
+
+                    case 'date':
+                        $type = 'date';
                         break;
                 }
             }
@@ -188,5 +193,10 @@ class Attribute
     public function getStoredValue()
     {
         return $this->stored;
+    }
+
+    public function isValid()
+    {
+        return Validator::validate($this->getValue(), $this->getRules());
     }
 }

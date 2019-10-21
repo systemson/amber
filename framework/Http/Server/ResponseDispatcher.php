@@ -14,8 +14,8 @@ class ResponseDispatcher
     public function send(ResponseInterface $response): self
     {
         if (headers_sent()) {
-            die();
             throw new \RuntimeException('Headers are already sent.');
+            die();
         }
 
         $this

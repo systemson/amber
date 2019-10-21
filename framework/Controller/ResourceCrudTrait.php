@@ -18,8 +18,7 @@ trait ResourceCrudTrait
     {
         $provider = $this->getProvider();
 
-        return $provider->find($id)
-        ;
+        return $provider->find($id);
     }
 
     public function index(Request $request)
@@ -84,8 +83,6 @@ trait ResourceCrudTrait
 
     public function update(Request $request, int $id)
     {
-        $provider = $this->getProvider();
-
         $resource = $this->find($id);
 
         if (is_null($resource)) {
@@ -119,9 +116,7 @@ trait ResourceCrudTrait
 
     public function delete(Request $request, int $id)
     {
-        $provider = $this->getProvider();
-
-        $resource = $provider->find($id);
+        $resource = $this->find($id);
 
         if (is_null($resource)) {
             return Response::notFound();
