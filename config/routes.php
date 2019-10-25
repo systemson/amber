@@ -22,6 +22,7 @@ return [
             'path' => path('config', 'routes', 'api.php'),
             'middlewares' => [
                 Amber\Http\Server\Middleware\ThrottleRequestMiddleware::class,
+                Amber\Http\Server\Middleware\CorsMiddleware::class,
             ],
             'prefix' => 'api',
             'namespace' => 'App\Http\Controllers\Api',

@@ -2,14 +2,18 @@
 
 namespace Amber\Controller;
 
-use Amber\Model\Provider\AbstractProvider as ProviderInterface;
+use Amber\Model\Provider\AbstractProvider as Provider;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Amber\Container\Facades\Response;
 use Amber\Container\Facades\View;
+use Amber\Container\Facades\Str;
+use Amber\Helpers\Caster\Caster;
 
 trait ResourceCrudTrait
 {
-    protected function getProvider(): ProviderInterface
+    use ListableTrait;
+
+    protected function getProvider(): Provider
     {
         return new $this->provider;
     }
@@ -25,9 +29,9 @@ trait ResourceCrudTrait
     {
         $provider = $this->getProvider();
 
-        return Response::json([
-            'data' => $provider->all(),
-        ]);
+        $resources = $this->getResourceList($provider, $request);
+
+        return Response::json($resources);
     }
 
     /*public function form(Request $request, int $id = null)

@@ -31,6 +31,7 @@ return [
         Amber\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
         Amber\Http\Server\Middleware\ThrottleRequestMiddleware::class,
         Amber\Http\Server\Middleware\ParseBodyContentMiddleware::class,
+        Amber\Http\Server\Middleware\CorsMiddleware::class,
     ],
 
     /*

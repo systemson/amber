@@ -39,7 +39,7 @@ abstract class AbstractProvider
 
     protected $mediator;
 
-    protected $query;
+    public $query;
 
     protected $timestamps = true;
     protected $created_at = true;
@@ -132,6 +132,11 @@ abstract class AbstractProvider
     }
 
     public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    public function getAttribute(string $name)
     {
         return $this->attributes;
     }
