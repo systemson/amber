@@ -61,6 +61,6 @@ class Caster
 
     public static function __callStatic($method, $args = [])
     {
-        return call_user_func_array([new Static(), $method], $args);
+        return call_user_func_array([new static(), $method], $args);
     }
 }

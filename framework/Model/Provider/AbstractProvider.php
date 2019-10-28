@@ -44,6 +44,7 @@ abstract class AbstractProvider
     protected $timestamps = true;
     protected $created_at = true;
     protected $edited_at = true;
+    protected $queryBuilder;
 
     const CREATED_AT = 'created_at';
     const EDITED_AT = 'updated_at';
@@ -150,68 +151,17 @@ abstract class AbstractProvider
         return $attributes ?? [];
     }
 
-    public function query(string $type = 'select', bool $empty = false)
+    public function query()
     {
-        if (!is_null($this->query)) {
-            $class = (string) Phraser::make(get_class($this->query))
-                ->explode('\\')
-                ->last()
-                ->toLowerCase()
-            ;
-            if ($class == $type) {
-                return $this->query;
-            }
-        }
+        $factory = new QueryFactory($this->getMediator());
 
-        $factory = new QueryBuilder($this->getMediator());
-
-        $factory->setLastInsertIdNames([
-            $this->getName() . '.' . $this->getId() => $this->getName() . '_' . $this->getId() . '_seq',
-        ]);
-
-        switch ($type) {
-            case 'select':
-                if ($empty) {
-                    $this->query = $factory->newSelect();
-                    $this->query->removeCol('*');
-                    return $this->query;
-                }
-
-                return $this->query = $factory->newSelect()
-                    ->from($this->getName())
-                ;
-                break;
-
-            case 'insert':
-                return $this->query = $factory->newInsert();
-                break;
-
-            case 'update':
-                return $this->query = $factory->newUpdate();
-                break;
-
-            case 'delete':
-                return $this->query = $factory->newDelete();
-                break;
-            
-            default:
-                throw new \Exception("Wrong statement type.");
-                break;
-        }
+        return (new QueryBuilder($factory))
+            //->table($this->getName())
+        ;
     }
 
-    protected function clearQuery()
+    public function get($query)
     {
-        $this->query = null;
-
-        return $this;
-    }
-
-    public function get()
-    {
-        $query = $this->query;
-        $this->clearQuery();
-
         $result = Gemstone::execute($query);
 
         if ($result instanceof CollectionInterface && $result->isNotEmpty()) {
@@ -238,7 +188,6 @@ abstract class AbstractProvider
             }
 
             $query = $relation->getQuery()->bindValue('_1_', $bindValues);
-            $this->clearQuery();
 
             $this->eagerLoadedRelations[$name] = $relation;
             $relationResult = Gemstone::select($query);
@@ -267,6 +216,7 @@ abstract class AbstractProvider
                 $relation->getMultiple()
             );
         }
+
         return $new;
     }
 

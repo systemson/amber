@@ -2,7 +2,7 @@
 
 namespace Amber\Model\Provider;
 
-use Aura\SqlQuery\Common\SelectInterface;
+use Amber\Model\QueryBuilder\QueryBuilder;
 
 /**
  *
@@ -36,7 +36,7 @@ class RelationProvider
 
     public function __construct(
         AbstractProvider $provider,
-        SelectInterface $query,
+        QueryBuilder $query,
         string $pkey,
         string $fkey,
         bool $multiple = false
@@ -51,7 +51,7 @@ class RelationProvider
     /**
      * @return SelectInterface
      */
-    public function getQuery(): SelectInterface
+    public function getQuery(): QueryBuilder
     {
         return $this->query;
     }
@@ -59,7 +59,7 @@ class RelationProvider
     /**
      * @param SelectInterface $query
      */
-    public function setQuery(SelectInterface $query): self
+    public function setQuery(QueryBuilder $query): self
     {
         $this->query = $query;
 

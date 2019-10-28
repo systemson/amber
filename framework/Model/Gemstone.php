@@ -66,7 +66,7 @@ class Gemstone extends ContainerAwareClass
     public function select($query)
     {
         $result = $this->getMediator('sql')
-            ->select($query)
+            ->select($query->query())
         ;
 
         if ($result === false) {

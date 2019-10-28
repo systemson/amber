@@ -20,7 +20,7 @@ trait ListableTrait
 
             if (is_array($value)) {
                 foreach ($value as $value) {
-                $realValue[] = (new Caster)->cast($value, $attr->getType());
+                    $realValue[] = (new Caster)->cast($value, $attr->getType());
                 }
             } else {
                 $realValue = (new Caster)->cast($value, $attr->getType());
@@ -55,16 +55,23 @@ trait ListableTrait
         $limit = $query->get('limit') ?? 10;
         $page = $query->get('page') ?? 1;
 
-        $data = $provider
+        $dataQuery = $provider->query()
             ->select($cols)
+            ->from($provider->getName())
             ->whereAll($whereAll)
             ->setPaging($limit)
             ->page($page)
             ->orderBy($orderCol, $orderSeq ?? '')
-            //->query
-            //->getStatement()
-            ->get()
         ;
+
+        $countQuery = $provider->query()
+            ->select()
+            ->from($provider->getName())
+            ->whereAll($whereAll)
+            ->count()
+        ;
+
+        //$count = $provider->first($countQuery);
 
         /*$count = $provider
             ->count()
@@ -79,7 +86,7 @@ trait ListableTrait
         ];*/
 
         return [
-            'data' => $data,
+            'data' => $provider->get($dataQuery),
             //'pagination' => $pagination
         ];
     }

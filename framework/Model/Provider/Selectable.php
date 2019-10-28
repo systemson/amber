@@ -7,43 +7,24 @@ use Amber\Container\Facades\QueryBuilder;
 
 trait Selectable
 {
-    public function selectQuery(array $columns = [])
-    {
-        if (!is_null($this->query)) {
-            return $this->query;
-        }
-
-        QueryBuilder::setLastInsertIdNames([
-            $this->getName() . '.' . $this->getId() => $this->getName() . '_' . $this->getId() . '_seq',
-        ]);
-
-        return $this->query = QueryBuilder::newSelect($columns)
-            ->from($this->getName())
-        ;
-    }
-
-    public function select(array $columns = [])
-    {
-        $this->selectQuery($columns);
-
-        return $this;
-    }
-
     public function all()
     {
-        return $this->select()
+        $query = $this->query()
+            ->select()
             ->orderBy($this->getName() . '.' . $this->getId(), 'ASC')
             ->get()
         ;
+
+        return $this->get($query);
     }
 
-    public function first()
+    public function first($query)
     {
-        $this->query()
+        $query
             ->limit(1)
         ;
 
-        return $this->get();
+        return $this->get($query);
     }
 
     public function last()
@@ -58,92 +39,22 @@ trait Selectable
 
     public function find($id)
     {
-        return $this
+        $query = $this->query()
+            ->select(['*'])
             ->where($this->id, '=', $id)
-            ->first()
-        ;
-    }
-
-    public function where(string $column, string $operator, $value)
-    {
-        $this->query()
-            ->where("{$column} {$operator} ?", $value)
+            ->from($this->getName())
         ;
 
-        return $this;
+        return $this->first($query);
     }
-
-    public function whereAll(iterable $conditions = [])
-    {
-        foreach ($conditions as $column => $value) {
-            if (is_array($value)) {
-                $this->whereIn($column, $value);
-                continue;
-            }
-
-            $this->where($column, '=', $value);
-        }
-
-        return $this;
-    }
-
-    public function whereNot(string $column, $value)
-    {
-        $this->query()
-            ->where($column, '<>', $value)
-        ;
-
-        return $this;
-    }
-
-    public function whereIn(string $column, $values)
-    {
-        $this->query()
-            ->where("{$column} IN (?)", $values)
-        ;
-
-        return $this;
-    }
-
-    public function whereNotIn(string $column, $values)
-    {
-        $this->query()
-            ->where("{$column} NOT IN (?)", Gemstone::quote($array))
-        ;
-
-        return $this;
-    }
-
-    public function orderBy(string $column = null, string $order = 'ASC')
-    {
-        if (!empty($column)) {
-            $this->query()
-                ->orderBy(["{$column} $order"])
-            ;
-        }
-
-        return $this;
-    }
-
-    /*public function page(int $page)
-    {
-        $this->setPaging($page);
-
-        return $this;
-    }*/
-
-    /*public function limit(int $paging)
-    {
-        $this->query->paging = $paging;
-
-        return $this;
-    }*/
 
     public function count()
     {
-        return $this
-            ->select(["COUNT({$this->id})"])
-            //->get()
+        $query = $this->query()
+            ->select("COUNT({$this->id})")
+            ->from($this->getName())
         ;
+
+        return $this->get($query);
     }
 }

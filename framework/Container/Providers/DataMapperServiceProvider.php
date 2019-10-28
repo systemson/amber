@@ -8,6 +8,7 @@ use Amber\Model\Gemstone;
 use Amber\Model\Mediator\SqlMediator;
 use Amber\Model\Mediator\ArrayMediator;
 use Amber\Model\QueryBuilder\QueryBuilder;
+use Aura\SqlQuery\QueryFactory;
 use Aura\Sql\ExtendedPdo;
 
 class DataMapperServiceProvider extends ServiceProvider
@@ -18,16 +19,15 @@ class DataMapperServiceProvider extends ServiceProvider
 
         $default = config('database.default');
 
+        $container->register(QueryFactory::class)
+            ->setArgument('__construct', 'db', $default)
+        ;
+
         $container->bind(Schema::class, function () {
             return Manager::schema();
         });
 
-        $container->register(QueryBuilder::class)
-            ->setArgument('__construct', 'db', function () use ($default) {
-                return $default;
-            })
-            ->setArgument('__construct', 'common', QueryBuilder::COMMON)
-        ;
+        $container->register(QueryBuilder::class);
 
         $container->register(Gemstone::class)
             ->afterConstruct('setMediators', [

@@ -3,65 +3,49 @@
 namespace Amber\Model\QueryBuilder;
 
 use Aura\SqlQuery\QueryFactory;
+use Aura\SqlQuery\AbstractQuery;
 
-class QueryBuilder extends QueryFactory
+class QueryBuilder
 {
-    /**
-     *
-     * Constructor.
-     *
-     * @param string $db The database type.
-     *
-     * @param string $common Pass the constant self::COMMON to force common
-     * query objects instead of db-specific ones.
-     *
-     */
-    public function __construct(
-        $db,
-        $common = null
-    ) {
-        if (!isset($this->quotes[$db])) {
-            $db = self::COMMON;
-        }
+    use Selectable;
 
-        $this->db = ucfirst(strtolower($db));
-        $this->common = ($common === self::COMMON);
-        $this->quote_name_prefix = $this->quotes[$this->db][0];
-        $this->quote_name_suffix = $this->quotes[$this->db][1];
+    protected $query;
+    protected $factory;
+
+    public function __construct(QueryFactory $factory)
+    {
+        $this->factory = $factory;
     }
 
-    /**
-     *
-     * Returns a new SELECT object.
-     *
-     * @return Common\SelectInterface
-     *
-     */
-    public function newSelect($cols = [])
+    public function setFactory(QueryFactory $factory): self
     {
-        if (empty((array) $cols)) {
-            $cols[] = '*';
-        }
+        $this->factory = $factory;
 
-        return parent::newSelect()
-            ->cols($cols)
-        ;
+        return $this;
     }
-    /**
-     *
-     * Returns a new SELECT object.
-     *
-     * @return Common\SelectInterface
-     *
-     */
-    public function newUpdate($cols = [])
+
+    public function getFactory(): QueryFactory
     {
-        if (empty((array) $cols)) {
-            return parent::newUpdate();
+        return $this->factory;
+    }
+
+    public function query(): AbstractQuery
+    {
+        return $this->query;
+    }
+
+    public function __call($method, $args = []): self
+    {
+        if (!$this->query instanceof AbstractQuery || !in_array($method, get_class_methods($this->query))) {
+            throw new \Exception(sprintf(
+                "Class %s doesn't have a method %s",
+                get_called_class(),
+                $method
+            ));
         }
 
-        return parent::newUpdate()
-            ->cols($cols)
-        ;
+        $this->query = call_user_func_array([$this->query, $method], $args);
+
+        return $this;
     }
 }

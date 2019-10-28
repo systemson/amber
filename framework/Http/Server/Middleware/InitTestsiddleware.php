@@ -6,17 +6,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
-use Amber\Container\Facades\Filesystem;
-use Amber\Helpers\ClassMaker\Maker;
-use Amber\Http\Session\Session;
-use Amber\Helpers\Assets\Loader;
-use Amber\Http\Message\Uri;
-use Amber\Container\Facades\Gemstone;
-use App\Models\UserProvider;
-use Amber\Phraser\Phraser;
-use Amber\Helpers\Hash;
-use Amber\Container\Facades\Str;
-use Amber\Helpers\ClassMaker\ClassBlueprint;
+
+use Amber\Model\QueryBuilder\QueryBuilder;
+use Aura\SqlQuery\QueryFactory;
 
 /**
  * Participant in processing a server request and response.
@@ -36,6 +28,11 @@ class InitTestsiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
+        //$factory = $this->getContainer()->get(QueryFactory::class);
+        //$query = $this->getContainer()->get(QueryBuilder::class);
+
+        //dd($query->select());
+
         return $handler->handle($request);
     }
 }

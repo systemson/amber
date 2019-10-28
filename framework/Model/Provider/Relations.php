@@ -26,17 +26,14 @@ trait Relations
         $cols[] = $pivot->getName() . '.' . $join1;
         $cols[] = $pivot->getName() . '.' . $join2;
 
-        $this
-            ->cols($cols)
+        $query = $this->query()
+            ->select($cols)
             ->from($related->getName())
             ->whereIn($this->getName() . '.' . $fk, null)
             ->orderBy($related->getName() . '.' . $pk)
             ->join('inner', $pivot->getName(), $pivot->getName() . '.' . $join1 . ' = ' . $related->getName() . '.' . $pk)
             ->join('inner', $this->getName(), $this->getName() . '.' . $fk . ' = ' .  $pivot->getName() . '.' . $join2)
         ;
-
-        $query = $this->query;
-        $this->clearQuery();
 
         return new RelationProvider(
             $related,
@@ -54,17 +51,12 @@ trait Relations
         $fk = $fk ?? $related->getResource() . '_' . $related->getId();
         $pk = $pk ?? $related->id;
 
-        $this->query('select', true);
-
-        $this
-            ->cols($related->getAttributesNames())
+        $query = $this->query()
+            ->select($related->getAttributesNames())
             ->from($related->getName())
             ->whereIn($pk, null)
             ->orderBy($related->id)
         ;
-
-        $query = $this->query;
-        $this->clearQuery();
 
         return new RelationProvider(
             $related,
@@ -84,17 +76,12 @@ trait Relations
 
         $resource = $related->getResource();
 
-        $this->query('select', true);
-
-        $this
-            ->cols($related->getAttributesNames())
+        $query = $this->query()
+            ->select($related->getAttributesNames())
             ->from($related->getName())
             ->whereIn($fk, null)
             ->orderBy($related->id)
         ;
-
-        $query = $this->query;
-        $this->clearQuery();
 
         return new RelationProvider(
             $related,
@@ -114,24 +101,19 @@ trait Relations
 
         $resource = $related->getResource();
 
-        $this->query('select', true);
-
-        $this
-            ->cols($related->getAttributesNames())
+        $query = $this->query()
+            ->select($related->getAttributesNames())
             ->from($related->getName())
             ->whereIn($fk, null)
             ->orderBy($related->id)
         ;
-
-        $query = $this->query;
-        $this->clearQuery();
 
         return new RelationProvider(
             $related,
             $query,
             $fk,
             $pk,
-            true
+            false
         );
     }
 }
