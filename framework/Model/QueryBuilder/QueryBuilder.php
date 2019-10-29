@@ -7,7 +7,11 @@ use Aura\SqlQuery\AbstractQuery;
 
 class QueryBuilder
 {
-    use Selectable;
+    use Insertable,
+        Selectable,
+        Updatable,
+        Deletable
+    ;
 
     protected $query;
     protected $factory;
@@ -34,7 +38,7 @@ class QueryBuilder
         return $this->query;
     }
 
-    public function __call($method, $args = []): self
+    public function __call($method, $args = [])
     {
         if (!$this->query instanceof AbstractQuery || !in_array($method, get_class_methods($this->query))) {
             throw new \Exception(sprintf(
@@ -44,8 +48,12 @@ class QueryBuilder
             ));
         }
 
-        $this->query = call_user_func_array([$this->query, $method], $args);
+        $result = call_user_func_array([$this->query, $method], $args);
 
-        return $this;
+        if ($result instanceof AbstractQuery) {
+            return $this;
+        }
+
+        return $result;
     }
 }

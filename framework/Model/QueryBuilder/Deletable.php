@@ -1,21 +1,19 @@
 <?php
 
-namespace Amber\Model\Provider;
+namespace Amber\Model\QueryBuilder;
 
 use Amber\Container\Facades\Gemstone;
 use Amber\Model\Resource\Resource;
 
 trait Deletable
 {
-    public function delete(Resource $resource)
+    public function delete(): self
     {
-        $query = $this->query('delete')
-            ->from($this->getName())
-            ->where($this->getId() . ' = ?', $resource->{$this->getId()})
+        $this->query = $this
+            ->getFactory()
+            ->newDelete()
         ;
 
-        $resource->clear();
-
-        return Gemstone::execute($query);
+        return $this;
     }
 }

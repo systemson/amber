@@ -26,7 +26,8 @@ trait Insertable
             $values->set(static::CREATED_AT, (string) Carbon::now());
         }
 
-        $query = $this->query('insert')
+        $query = $this->query()
+            ->insert()
             ->into($this->getName())
             ->cols($values->toArray())
         ;

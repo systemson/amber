@@ -119,7 +119,7 @@ class Gemstone extends ContainerAwareClass
 
     public function execute($query)
     {
-        $type = Phraser::make(get_class($query))
+        $type = Phraser::make(get_class($query->query()))
             ->explode('\\')
             ->last()
         ;

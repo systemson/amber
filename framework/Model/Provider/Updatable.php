@@ -28,10 +28,11 @@ trait Updatable
 
         $id = $resource->{$this->getId()};
 
-        $query = $this->query('update')
+        $query = $this->query()
+            ->update()
             ->table($this->getName())
             ->cols($values->toArray())
-            ->where($this->getId() . ' = ?', $id)
+            ->where($this->getId(), '=', $id)
         ;
 
         $result = Gemstone::execute($query);

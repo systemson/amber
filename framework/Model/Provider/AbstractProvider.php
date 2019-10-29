@@ -160,66 +160,6 @@ abstract class AbstractProvider
         ;
     }
 
-    public function get($query)
-    {
-        $result = Gemstone::execute($query);
-
-        if ($result instanceof CollectionInterface && $result->isNotEmpty()) {
-            $new = $result->map(function ($values) {
-                return $this->new($values, true);
-            });
-        } elseif (is_array($result)) {
-            $new =  $this->new($result, true);
-        } else {
-            return $result;
-        }
-
-        foreach ($this->relations as $name) {
-            $relation = $this->{$name}();
-
-            if ($result instanceof ResourceCollection && $result->isNotEmpty()) {
-                $bindValues = array_unique($new->map(function ($resource) use ($relation) {
-                    return $resource->{$relation->getFkey()};
-                })
-                    ->toArray())
-                ;
-            } else {
-                $bindValues = $new->{$relation->getFkey()};
-            }
-
-            $query = $relation->getQuery()->bindValue('_1_', $bindValues);
-
-            $this->eagerLoadedRelations[$name] = $relation;
-            $relationResult = Gemstone::select($query);
-
-            if ($relationResult instanceof ResourceCollection && $relationResult->isNotEmpty()) {
-                $relationResult = $relationResult->map(function ($values) use ($relation, $name) {
-
-                    $item =  $relation->getProvider()->new($values, true);
-
-                    $item->setMetadata($name, [
-                        $relation->getPkey() => $values[$relation->getPkey()],
-                        $relation->getFkey() => $values[$relation->getFkey()] ?? null,
-                    ]);
-
-                    return $item;
-                });
-            } elseif (is_array($relationResult)) {
-                $relationResult = $relation->getProvider()->new($relationResult, true);
-            }
-
-            $new->join(
-                $relationResult,
-                $name,
-                $relation->getFkey(),
-                $relation->getPkey(),
-                $relation->getMultiple()
-            );
-        }
-
-        return $new;
-    }
-
     public function save(Resource $resource): bool
     {
         if ($resource->isNew()) {

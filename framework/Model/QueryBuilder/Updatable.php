@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Model\Provider;
+namespace Amber\Model\QueryBuilder;
 
 use Amber\Model\Resource\Resource;
 use Amber\Container\Facades\Gemstone;
@@ -9,37 +9,13 @@ use Amber\Collection\Collection;
 
 trait Updatable
 {
-    public function update(Resource $resource)
+    public function update(): self
     {
-        if ($resource->isNew()) {
-            return false;
-        }
-
-        $values = $resource->updatable();
-
-        if ($values->isEmpty()) {
-            $resource->setErrors(new Collection(['Nothing to update.']));
-            return false;
-        }
-
-        if ($this->timestamps() && $this->createdAt()) {
-            $values->set(static::EDITED_AT, (string) Carbon::now());
-        }
-
-        $id = $resource->{$this->getId()};
-
-        $query = $this->query('update')
-            ->table($this->getName())
-            ->cols($values->toArray())
-            ->where($this->getId() . ' = ?', $id)
+        $this->query = $this
+            ->getFactory()
+            ->newUpdate()
         ;
 
-        $result = Gemstone::execute($query);
-
-        if ($result === true) {
-            return $resource->update($this->find($id)->toArray());
-        }
-
-        return $result;
+        return $this;
     }
 }

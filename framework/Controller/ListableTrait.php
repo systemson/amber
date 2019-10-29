@@ -48,7 +48,7 @@ trait ListableTrait
             $provider
         );
 
-        list($orderCol, $orderSeq) = $this->getOrderBy($query->get('orderBy') ?? '');
+        list($orderCol, $orderSeq) = $this->getOrderBy($query->get('orderBy') ?? $provider->getId());
 
         $cols = $provider->getAttributesNames();
         $page = $query->get('page');

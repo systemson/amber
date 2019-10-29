@@ -9,9 +9,10 @@ trait Deletable
 {
     public function delete(Resource $resource)
     {
-        $query = $this->query('delete')
+        $query = $this->query()
+        	->delete()
             ->from($this->getName())
-            ->where($this->getId() . ' = ?', $resource->{$this->getId()})
+            ->where($this->getId(), '=', $resource->{$this->getId()})
         ;
 
         $resource->clear();
