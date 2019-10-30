@@ -101,7 +101,7 @@ trait Selectable
 
             $this->eagerLoadedRelations[$name] = $relation;
 
-            $relationResult = new ResourceCollection($this->execute($query));
+            $relationResult = new Collection($this->execute($query));
 
             if ($relationResult->isNotEmpty()) {
                 $relationResult = $relationResult;

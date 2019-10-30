@@ -15,7 +15,7 @@ return [
      */
     'binds' => [
         Amber\Auth\AuthClass::class,
-        Amber\Auth\UserProvider::class,
+        App\Models\UserProvider::class,
         Amber\Sketch\Template\Template::class,
         Amber\Http\Server\Middleware\InitTestsiddleware::class,
         Amber\Http\Server\Middleware\SessionMiddleware::class,

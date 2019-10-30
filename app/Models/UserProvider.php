@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Amber\Model\Provider\AbstractProvider;
+use Amber\Auth\UserProvider as ParentProvider;
 
-class UserProvider extends AbstractProvider
+class UserProvider extends ParentProvider
 {
     protected $name = 'users';
 

@@ -2,23 +2,24 @@
 
 namespace Amber\Auth;
 
-use App\Models\UserProvider as ParentProvider;
+use Amber\Model\Provider\AbstractProvider;
 
-class UserProvider extends ParentProvider implements UserProviderContract
+abstract class UserProvider extends AbstractProvider implements UserProviderContract
 {
     public function hasUserBy(string $key, $value): bool
     {
-        return $this->where($key, '=', $value)
-            ->count()
-            ->get()
-            > 0;
+        return $this->getUserBy($key, '=', $value) != null;
     }
 
     public function getUserBy(string $key, $value)
     {
-        return $this->where($key, '=', $value)
-            ->first()
+        $query = $this->query()
+            ->select(['*'])
+            ->from($this->getName())
+            ->where($key, '=', $value)
         ;
+
+        return $this->first($query);
     }
 
     public function hasUserById(int $value): bool

@@ -6,7 +6,7 @@ use Amber\Container\Facades\Response;
 use Amber\Container\Facades\View;
 use App\Controllers\Controller;
 use Amber\Http\Message\POST;
-use Amber\Auth\UserProvider;
+use App\Models\UserProvider;
 use Carbon\Carbon;
 use Psr\Container\ContainerInterface;
 use Amber\Container\Facades\Session;
