@@ -10,7 +10,7 @@ trait Deletable
     public function delete(Resource $resource)
     {
         $query = $this->query()
-        	->delete()
+            ->delete()
             ->from($this->getName())
             ->where($this->getId(), '=', $resource->{$this->getId()})
         ;

@@ -47,13 +47,17 @@ class Application extends ContainerFacade
             return;
         }
         if (empty(self::$laps)) {
-            self::$laps['Start'] = microtime(true);
+            self::$laps['Start'] = [
+                'name' => 'Start',
+                'total' => microtime(true),
+                'time' => 0,
+            ];
         }
 
         self::$laps[] = [
             'name' => $name,
-            'total' => (float) number_format($time = microtime(true) - self::$laps['Start'], 6),
-            'time' => (float) number_format($time - end(self::$laps)['time'], 6),
+            'total' => round($time = microtime(true) - self::$laps['Start']['time'], 6),
+            'time' => round($time - end(self::$laps)['time'], 6),
         ];
     }
 

@@ -40,7 +40,7 @@ class QueryBuilder
 
     public function __call($method, $args = [])
     {
-        if (!$this->query instanceof AbstractQuery || !in_array($method, get_class_methods($this->query))) {
+        if (!$this->query instanceof AbstractQuery || !in_array($method, get_class_methods($this->query()))) {
             throw new \Exception(sprintf(
                 "Class %s doesn't have a method %s",
                 get_called_class(),
@@ -48,7 +48,7 @@ class QueryBuilder
             ));
         }
 
-        $result = call_user_func_array([$this->query, $method], $args);
+        $result = call_user_func_array([$this->query(), $method], $args);
 
         if ($result instanceof AbstractQuery) {
             return $this;

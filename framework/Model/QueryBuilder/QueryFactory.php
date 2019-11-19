@@ -4,7 +4,7 @@ namespace Amber\Model\QueryBuilder;
 
 use Aura\SqlQuery\QueryFactory as ParentFactory;
 
-class QueryBuilder extends ParentFactory
+class QueryFactory extends ParentFactory
 {
     /**
      *

@@ -56,8 +56,11 @@ abstract class AbstractProvider
         'delete' => 'Aura\SqlQuery\Common\Delete',
     ];
 
-    public function __construct()
+    public function __construct(string $name = null)
     {
+        if (!is_null($name)) {
+            $this->setName($name);
+        }
         $this->mediator = env('DB_DRIVER', 'pgsql');
     }
 

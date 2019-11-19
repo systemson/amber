@@ -44,7 +44,7 @@ trait ConnectionManager
         if (!is_null($name) && $this->hasConnection($name)) {
             $configs = $this->getConnection($name);
         } else {
-            $configs = $this->getConnection('default');
+            $configs = $this->getConnection();
         }
 
         return new ExtendedPdo($this->getDsnFromArray($configs), $configs['user'], $configs['password']);

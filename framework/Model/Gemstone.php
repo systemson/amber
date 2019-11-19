@@ -146,4 +146,9 @@ class Gemstone extends ContainerAwareClass
                 break;
         }
     }
+
+    public function newProvider(string $name)
+    {
+        //return new
+    }
 }
