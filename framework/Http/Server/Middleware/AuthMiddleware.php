@@ -5,7 +5,7 @@ namespace Amber\Http\Server\Middleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
-use Amber\Auth\UserProvider;
+use Amber\Auth\UserProviderContract;
 use Amber\Container\Facades\Auth;
 use Psr\SimpleCache\CacheInterface;
 
@@ -37,7 +37,7 @@ class AuthMiddleware extends RequestMiddleware
             if ($cache->has($token)) {
                 $user = $cache->get($token);
             } else {
-                $userProvider = $this->getContainer()->get(UserProvider::class);
+                $userProvider = $this->getContainer()->get(UserProviderContract::class);
                 $user = $userProvider->getUserByToken($token);
             }
 

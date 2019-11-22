@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "85e5c2ddc20f24bcdc60d9ef294bc9eb",
+    "content-hash": "2f752a8448e5aa74cbbb0cf1bcddee11",
     "packages": [
         {
             "name": "amber/cache",
@@ -51,6 +51,7 @@
                 }
             ],
             "description": "Simple Cache.",
+            "abandoned": "amber/cache",
             "time": "2019-06-25T18:48:30+00:00"
         },
         {
@@ -2957,7 +2958,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "amber/cache": 10,
         "amber/common": 20,
         "amber/container": 10,
         "amber/phraser": 20,

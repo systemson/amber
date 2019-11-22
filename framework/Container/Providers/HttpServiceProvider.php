@@ -20,7 +20,8 @@ use Amber\Http\Security\Csrf;
 use Amber\Http\Server\RequestHandler;
 use Amber\Http\Server\ResponseDispatcher;
 use Amber\Http\Session\Session;
-use Amber\Auth\UserProvider;
+use App\Models\UserProvider;
+use Amber\Auth\UserProviderContract;
 use Amber\Auth\AuthClass;
 use Sunrise\Stream\StreamFactory;
 
@@ -58,5 +59,6 @@ class HttpServiceProvider extends ServiceProvider
         $container->register(ResponseFactoryInterface::class, ResponseFactory::class);
         $container->bind(ResponseDispatcher::class);
         $container->bind(StreamFactoryInterface::class, StreamFactory::class);
+        $container->bind(UserProviderContract::class, UserProvider::class);
     }
 }

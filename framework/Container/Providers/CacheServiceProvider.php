@@ -2,8 +2,8 @@
 
 namespace Amber\Container\Providers;
 
-use Amber\Cache\Cache;
-use Amber\Cache\Driver\SimpleCache;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Psr16Cache;
 use Psr\SimpleCache\CacheInterface;
 
 class CacheServiceProvider extends ServiceProvider
@@ -12,19 +12,14 @@ class CacheServiceProvider extends ServiceProvider
     {
         $container = static::getContainer();
 
-        $container->register(CacheInterface::class, Cache::class)
-            ->afterConstruct(
-                'pushHandler',
-                function () {
-                    $driver = config('cache.default.driver');
-                    return new $driver(config('cache.default.path'));
-                }
-            )
-        ->singleton();
+        $container->bind(CacheInterface::class, function () {
+            $adapter = new FilesystemAdapter('', 0, config('cache.default.path'));
+            return new Psr16Cache($adapter);
+        });
 
         $container->bind('_session_cache', function () {
-            $driver = config('cache.session.driver');
-                return new $driver(config('cache.session.path'));
+            $adapter = new FilesystemAdapter('', 0, config('cache.session.path'));
+            return new Psr16Cache($adapter);
         });
     }
 }
