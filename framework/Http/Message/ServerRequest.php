@@ -75,12 +75,19 @@ class ServerRequest implements ServerRequestInterface
         StreamInterface $body = null,
         $params = []
     ) {
+        // Must be moved to a HeadersCollection
+        $this->headers = (new Collection($headers))->map(
+            function ($param) {
+                return array_map('trim',explode(';',str_replace(',', ';', $param)));
+
+            }
+        );
+
         $this->server = new ImmutableCollection($params['server'] ?? []);
         $this->cookies = new Collection($params['cookies'] ?? []);
         $this->query = new Collection($params['query'] ?? []);
         $this->files = new FileCollection($params['files'] ?? []);
         $this->post = new Collection($params['post'] ?? []);
-        $this->headers = new Collection($headers);
         $this->attributes = new Collection($params['attributes'] = []);
 
         $this->version = $version;
