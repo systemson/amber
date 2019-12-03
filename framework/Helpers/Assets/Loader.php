@@ -22,9 +22,9 @@ class Loader
     {
         $array = explode('\\', $package, 3);
 
-        $class = $array[0].'\\'.$array[1].'\\'.'Provider';
+        $class = $array[0] . '\\' . $array[1] . '\\' . 'Provider';
 
-        $provider = new $class;
+        $provider = new $class();
         return file_get_contents($provider->js()['jQuery']);
     }
 }

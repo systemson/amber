@@ -19,8 +19,8 @@ class ResponseDispatcher
         }
 
         $this
-            ->sendHeaders($response)
             ->sendStatusLine($response)
+            ->sendHeaders($response)
             ->sendContent($response)
         ;
 

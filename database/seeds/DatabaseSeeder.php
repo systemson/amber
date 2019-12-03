@@ -9,10 +9,10 @@ class DatabaseSeeder
     public function seeds()
     {
         return [
-        	'UserTableSeeder',
-        	'RolesTableSeeder',
-        	'UsersRolesTableSeeder',
-        	//'PermissionsTableSeeder',
+            'UserTableSeeder',
+            'RolesTableSeeder',
+            'UsersRolesTableSeeder',
+            //'PermissionsTableSeeder',
         ];
     }
 }

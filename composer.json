@@ -55,13 +55,12 @@
         "vlucas/phpdotenv": "^3.3"
     },
     "require-dev": {
-        "filp/whoops": "^2.3",
-        "squizlabs/php_codesniffer": "^3.4",
-        "symfony/var-dumper": "^4.3"
+        "php-coveralls/php-coveralls": "^2.1",
+        "symfony/var-dumper": "^4.2"
     },
     "scripts": {
-        "sniff": "phpcs --standard=PSR2 ./app ./config ./framework",
-        "fix-cs": "phpcbf --standard=PSR2 ./app ./config ./framework"
+        "sniff": "phpcs --standard=PSR12 ./app ./framework ./database ./config",
+        "fix-cs": "phpcbf --standard=PSR12 ./app ./framework ./database ./config"
     },
     "config": {
         "preferred-install": "dist",

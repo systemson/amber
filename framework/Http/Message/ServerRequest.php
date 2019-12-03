@@ -78,8 +78,7 @@ class ServerRequest implements ServerRequestInterface
         // Must be moved to a HeadersCollection
         $this->headers = (new Collection($headers))->map(
             function ($param) {
-                return array_map('trim',explode(';',str_replace(',', ';', $param)));
-
+                return array_map('trim', explode(';', str_replace(',', ';', $param)));
             }
         );
 

@@ -15,7 +15,7 @@ trait ResourceCrudTrait
 
     protected function getProvider(): Provider
     {
-        return new $this->provider;
+        return new $this->provider();
     }
 
     protected function find($id)

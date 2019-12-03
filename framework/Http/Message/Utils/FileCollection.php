@@ -46,7 +46,7 @@ class FileCollection extends Collection
     {
         $ret = [];
 
-        for ($x=0; $x < count($files['name']); $x++) {
+        for ($x = 0; $x < count($files['name']); $x++) {
             $ret[] = $this->factory()->create(
                 $files['tmp_name'][$x],
                 $files['size'][$x],

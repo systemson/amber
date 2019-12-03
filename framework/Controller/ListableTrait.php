@@ -20,10 +20,10 @@ trait ListableTrait
 
             if (is_array($value)) {
                 foreach ($value as $value) {
-                    $realValue[] = (new Caster)->cast($value, $attr->getType());
+                    $realValue[] = (new Caster())->cast($value, $attr->getType());
                 }
             } else {
-                $realValue = (new Caster)->cast($value, $attr->getType());
+                $realValue = (new Caster())->cast($value, $attr->getType());
             }
 
             $queryString->set($key, $realValue);

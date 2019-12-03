@@ -9,8 +9,8 @@ trait Relations
 {
     public function hasAndBelongsToMany(string $class, string $pivot)
     {
-        $related = new $class;
-        $pivot = new $pivot;
+        $related = new $class();
+        $pivot = new $pivot();
 
         $join1 = $fk ?? $related->getResource() . '_' . $related->getId();
         $join2 = $fk ?? $this->getResource() . '_' . $related->getId();
@@ -46,7 +46,7 @@ trait Relations
 
     public function belongsTo(string $class, string $fk = null, string $pk = null)
     {
-        $related = new $class;
+        $related = new $class();
 
         $fk = $fk ?? $related->getResource() . '_' . $related->getId();
         $pk = $pk ?? $related->id;
@@ -69,7 +69,7 @@ trait Relations
 
     public function hasMany(string $class, string $fk = null, string $pk = null)
     {
-        $related = new $class;
+        $related = new $class();
 
         $fk = $fk ?? $this->getResource() . '_' . $this->getId();
         $pk = $pk ?? $this->id;
@@ -94,7 +94,7 @@ trait Relations
 
     public function hasOne(string $class, string $fk = null, string $pk = null)
     {
-        $related = new $class;
+        $related = new $class();
 
         $fk = $fk ?? $this->getResource() . '_' . $this->getId();
         $pk = $pk ?? $this->id;

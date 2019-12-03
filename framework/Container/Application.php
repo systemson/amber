@@ -185,7 +185,7 @@ class Application extends ContainerFacade
         $console = new \Symfony\Component\Console\Application();
 
         foreach ((array) config('app.cli_commands') as $command) {
-            $console->add(new $command);
+            $console->add(new $command());
         }
 
         $console->run();
