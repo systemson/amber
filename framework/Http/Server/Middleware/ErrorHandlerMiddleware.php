@@ -25,23 +25,32 @@ class ErrorHandlerMiddleware extends RequestMiddleware
      */
     public function process(Request $request, Handler $handler): Response
     {
+        $whoops = new \Whoops\Run();
+        
         if (getenv('APP_ENV') == 'dev') {
-            $whoops = new \Whoops\Run();
 
             if ($request->acceptsJson()) {
                 $whoops->pushHandler(new \Whoops\Handler\JsonResponseHandler());
-            /*} elseif ($request->acceptXml()) {
+            /*} elseif ($request->acceptsXml()) {
                 $whoops->pushHandler(new \Whoops\Handler\XmlResponseHandler());*/
             } else {
                 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
             }
-
-            $whoops->register();
         } else {
-            return set_exception_handler(function ($e) use ($request) {
-                $this->getContainer()->get(LoggerInterface::class)->error($e->getMessage(), $e->getTrace());
-            });
+            // Must be replaced by a production view with a generic error message.
+            $whoops->pushHandler(new \Whoops\Handler\PlainTextHandler());
         }
+
+        $whoops->pushHandler(function ($e) {
+            $class = get_class($e);
+
+            $message = sprintf("%s in %s on line %s", $e->getMessage(), $e->getFile(), $e->getLine());
+
+            $this->getContainer()->get(LoggerInterface::class)->error("{$class}: {$message}");
+        });
+
+        $whoops->register();
+
         return $handler->handle($request);
     }
 }

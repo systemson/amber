@@ -3,9 +3,9 @@
 return [
 
     // Drivers: simple, daily
-    'driver' => 'simple',
+    'driver' => 'daily',
 
-    'path' => path('tmp', 'amber.log'),
+    'path' => path('tmp/logs', 'amber.log'),
 
     'max_files' => 7,
 ];
