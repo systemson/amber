@@ -6,7 +6,7 @@ use Amber\Controller\ResourceCrudTrait;
 use App\Controllers\Controller;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Models\UserProvider as Model;
-use Amber\Helpers\Hash;
+use Amber\Helpers\Crypto\Hash;
 
 class UsersController extends Controller
 {
@@ -14,7 +14,7 @@ class UsersController extends Controller
 
     protected $provider = Model::class;
 
-    protected function alterResourceBeforeCreate($resource)
+    protected function alterResourceBeforeCreate($request, $resource)
     {
         $resource->password = Hash::make($resource->password);
 
