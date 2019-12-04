@@ -39,6 +39,7 @@
         "aura/sqlquery": "^2.7",
         "aura/sqlschema": "^2.0",
         "defuse/php-encryption": "^2.2",
+        "filp/whoops": "^2.5",
         "fzaninotto/faker": "^1.8",
         "illuminate/database": "^5.8",
         "monolog/monolog": "^1.24",

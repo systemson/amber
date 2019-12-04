@@ -78,6 +78,6 @@ class LocalizationServiceProvider extends ServiceProvider
         });
 
 
-        StrFacade::alias('alpha', 'alpha:áéíóúÁÉÍÓÚñÑ');
+        StrFacade::alias('alpha', 'alpha:áéíóúÁÉÍÓÚñÑ\'');
     }
 }

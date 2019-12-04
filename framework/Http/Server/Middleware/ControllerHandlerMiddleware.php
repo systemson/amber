@@ -36,7 +36,11 @@ class ControllerHandlerMiddleware extends RequestMiddleware
 
         $callback = $this->getControllerCallback($defaults['_controller'], $defaults['_action'], $args);
 
-        $ret = $callback->__invoke();
+        try {
+            $ret = $callback->__invoke();
+        } catch (Exception $e) {
+            return $this->factory()->notFound();
+        }
 
         if ($ret instanceof Response) {
             return $ret;

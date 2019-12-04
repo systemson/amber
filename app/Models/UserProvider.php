@@ -10,9 +10,9 @@ class UserProvider extends ParentProvider
 
     protected $attributes = [
         'id',
-        'name' => 'string-type|alpha|length:10,64',
+        'name' => 'string-type|alpha|length:2,64',
         'email' => 'email|length:null,64',
-        'password' => 'alnum|length:null,64',
+        'password' => 'length:null,64',
         'status' => 'numeric|default:1',
         'description' => 'alnum|optional|length:null,256',
         'remember_token' => 'optional|alnum',
