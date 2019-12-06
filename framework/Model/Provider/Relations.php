@@ -31,7 +31,11 @@ trait Relations
             ->from($related->getName())
             ->whereIn($this->getName() . '.' . $fk, null)
             ->orderBy($related->getName() . '.' . $pk)
-            ->join('inner', $pivot->getName(), $pivot->getName() . '.' . $join1 . ' = ' . $related->getName() . '.' . $pk)
+            ->join(
+                'inner',
+                $pivot->getName(),
+                $pivot->getName() . '.' . $join1 . ' = ' . $related->getName() . '.' . $pk
+            )
             ->join('inner', $this->getName(), $this->getName() . '.' . $fk . ' = ' .  $pivot->getName() . '.' . $join2)
         ;
 

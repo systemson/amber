@@ -157,6 +157,24 @@ trait MessageTrait
     }
 
     /**
+     * Return an instance with the provided values replacing the specified headers.
+     *
+     * @param  array $headers
+     * @return static
+     * @throws \InvalidArgumentException for invalid header names or values.
+     */
+    public function withHeaders(array $headers)
+    {
+        $new = $this->clone();
+
+        foreach ($headers as $name => $value) {
+            $new->headers->set($name, (array) $value);
+        }
+
+        return $new;
+    }
+
+    /**
      * Return an instance with the specified header appended with the given value.
      *
      * Existing values for the specified header will be maintained. The new

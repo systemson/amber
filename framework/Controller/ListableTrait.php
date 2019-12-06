@@ -9,8 +9,10 @@ use Amber\Container\Facades\Str;
 
 trait ListableTrait
 {
-    protected function getWhereAll(iterable $queryString = [], Provider $provider): iterable
-    {
+    protected function getWhereAll(
+        iterable $queryString,
+        Provider $provider
+    ): iterable {
         if (empty($queryString)) {
             return [];
         }

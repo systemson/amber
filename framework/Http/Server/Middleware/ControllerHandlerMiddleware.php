@@ -36,25 +36,40 @@ class ControllerHandlerMiddleware extends RequestMiddleware
 
         $callback = $this->getControllerCallback($defaults['_controller'], $defaults['_action'], $args);
 
-        try {
-            $ret = $callback->__invoke();
-        } catch (Exception $e) {
-            return $this->factory()->notFound();
-        }
+        $ret = $callback->__invoke();
+
+        $response = $handler->handle($request);
 
         if ($ret instanceof Response) {
-            return $ret;
+            return $ret
+                ->withHeaders($response->getHeaders()->toArray())
+            ;
         } elseif (is_string($ret)) {
             $streamFactory = static::getContainer()->get(StreamFactoryInterface::class);
 
             $body = $streamFactory->createStream($ret);
 
-            return $this->createResponse()->withBody($body);
+            return $response
+                ->withBody($body)
+            ;
         } elseif ($ret instanceof StreamInterface) {
-            return $this->createResponse()->withBody($ret);
+            return $response
+                ->withBody($body)
+            ;
+        } elseif (is_null($ret)) {
+            return $response;
         }
 
-        return $handler->handle($request);
+        $message = sprintf(
+            "Return value of [%s::%s()] must be of the type string, null, an instance of [%s] or [%s], %s returned.",
+            $defaults['_controller'],
+            $defaults['_action'],
+            Response::class,
+            StreamInterface::class,
+            gettype($ret)
+        );
+
+        throw new \TypeError($message);
     }
 
     protected function getControllerCallback(string $contoller, string $action = '__invoke', array $args = [])
