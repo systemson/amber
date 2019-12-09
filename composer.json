@@ -28,10 +28,11 @@
         }
     },
     "require": {
-        "php": "^7.2.0",
+        "php": "^7.3.0",
         "amber/collection": "0.6.*",
         "amber/common": "dev-master",
         "amber/container": "^1.1@beta",
+        "amber/http-kernel": "^0.1.0@dev",
         "amber/phraser": "^0.1.0@dev",
         "amber/sketch": "dev-master",
         "amber/validator": "^0.1.0@dev",

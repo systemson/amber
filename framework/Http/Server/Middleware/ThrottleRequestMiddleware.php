@@ -16,7 +16,7 @@ use Psr\SimpleCache\CacheInterface;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class ThrottleRequestMiddleware extends RequestMiddleware
+class ThrottleRequestMiddleware extends Middleware
 {
     private $maxAttempts = 60;
     private $secondsToReset = 60;
@@ -70,7 +70,7 @@ class ThrottleRequestMiddleware extends RequestMiddleware
 
     protected function getCacheHandler(): CacheInterface
     {
-        return $this->getContainer()->get('_session_cache');
+        return $this->container->get('_session_cache');
     }
 
     protected function loadRequestThrottle(string $id)

@@ -15,7 +15,7 @@ use Amber\Container\Facades\Response as ResponseFacade;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class AuthenticatedMiddleware extends RequestMiddleware
+class AuthenticatedMiddleware extends Middleware
 {
     /**
      * Process an incoming server request.

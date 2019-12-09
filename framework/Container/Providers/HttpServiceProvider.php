@@ -17,7 +17,7 @@ use Amber\Http\Routing\Router;
 use Amber\Http\Message\ServerRequest;
 use Amber\Http\Message\Uri;
 use Amber\Http\Security\Csrf;
-use Amber\Http\Server\RequestHandler;
+use Amber\Http\Server\PipeHandler as RequestHandler;
 use Amber\Http\Server\ResponseDispatcher;
 use Amber\Http\Session\Session;
 use App\Models\UserProvider;

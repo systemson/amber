@@ -15,7 +15,7 @@ use Psr\Http\Message\StreamInterface;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class ClosureHandlerMiddleware extends RequestMiddleware
+class ClosureHandlerMiddleware extends Middleware
 {
     /**
      * Process an incoming server request.

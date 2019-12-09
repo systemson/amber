@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 use Psr\Log\LoggerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Participant in processing a server request and response.
@@ -14,7 +15,7 @@ use Psr\Log\LoggerInterface;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class ErrorHandlerMiddleware extends RequestMiddleware
+class ErrorHandlerMiddleware extends Middleware
 {
     /**
      * Process an incoming server request.
@@ -45,11 +46,18 @@ class ErrorHandlerMiddleware extends RequestMiddleware
 
             $message = sprintf("%s in %s on line %s", $e->getMessage(), $e->getFile(), $e->getLine());
 
-            $this->getContainer()->get(LoggerInterface::class)->error("{$class}: {$message}");
+            $this->getLogger()->error("{$class}: {$message}");
         });
 
         $whoops->register();
 
         return $handler->handle($request);
+    }
+
+    public function getLogger(): LoggerInterface
+    {
+        if ($this->container instanceof ContainerInterface) {
+            return $this->container->get(LoggerInterface::class);
+        }
     }
 }

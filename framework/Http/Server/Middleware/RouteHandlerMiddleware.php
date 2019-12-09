@@ -5,17 +5,16 @@ namespace Amber\Http\Server\Middleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Amber\Http\Routing\Matcher;
 use Symfony\Component\Routing\Exception\NoConfigurationException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Amber\Http\Server\Middleware\ActionHandlerMiddleware;
-use Psr\Http\Message\StreamFactoryInterface;
 
 
-use Psr\Http\Server\MiddlewareInterface;
-
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
 
 use Amber\Http\Message\ServerRequest;
 use Amber\Container\Facades\Filesystem;
@@ -28,7 +27,7 @@ use Amber\Http\Routing\Router;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class RouteHandlerMiddleware extends RequestMiddleware
+class RouteHandlerMiddleware extends Middleware
 {
     /**
      * Process an incoming server request.
@@ -42,9 +41,11 @@ class RouteHandlerMiddleware extends RequestMiddleware
         try {
             $defaults = $this->match($request);
         } catch (ResourceNotFoundException $e) {
-            return $this->factory()->notFound($e->getMessage());
+            $response = $this->responseFactory()->notFound();
+            $response->getBody()->write($e->getMessage());
+            return $response;
         } catch (MethodNotAllowedException $e) {
-            return $this->factory()->methodNotAllowed(
+            return $this->responseFactory()->methodNotAllowed(
                 sprintf(
                     "Method [%s] Not Allowed For [%s]",
                     $request->getMethod(),
@@ -52,7 +53,7 @@ class RouteHandlerMiddleware extends RequestMiddleware
                 )
             );
         } catch (NoConfigurationException $e) {
-            return $this->factory()->internalServerError($e->getMessage());
+            return $this->responseFactory()->internalServerError($e->getMessage());
         }
 
         /* Add the matched route's middlewares */
@@ -66,10 +67,20 @@ class RouteHandlerMiddleware extends RequestMiddleware
 
     protected function match(Request $request)
     {
-        $routes = static::getContainer()->get(Router::class);
+        $routes = $this->container->get(Router::class);
 
-        $matcher = new Matcher($routes, $request);
+        $matcher = new UrlMatcher(
+            $routes->toSymfonyCollection(),
+            (new RequestContext())->fromRequest($this->symfonyRequestFromPsr($request))
+        );
 
         return $matcher->match($request->getUri()->getpath());
+    }
+
+    protected function symfonyRequestFromPsr(Request $request): SymfonyRequest
+    {
+        $bridge = new HttpFoundationFactory();
+
+        return $bridge->createRequest($request);
     }
 }

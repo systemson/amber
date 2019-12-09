@@ -5,7 +5,6 @@ namespace App\Controllers\Auth;
 use Amber\Container\Facades\Response;
 use Amber\Container\Facades\View;
 use App\Controllers\Controller;
-use Amber\Http\Message\POST;
 use App\Models\UserProvider;
 use Carbon\Carbon;
 use Psr\Container\ContainerInterface;
@@ -136,8 +135,8 @@ class AccessController extends Controller
 
     protected function getCredentialsFromRequest(ServerRequestInterface $request): array
     {
-        if (POST::hasMultiple($this->required)) {
-            return POST::getMultiple($this->required);
+        if ($request->post->hasMultiple($this->required)) {
+            return $request->post->getMultiple($this->required);
         }
         $required = implode('], [', $this->required);
         throw new \Exception("These parameters are required: [{$required}].");
@@ -163,7 +162,7 @@ class AccessController extends Controller
         $validations = $this->getRequestValidations();
 
         $input = $request
-            ->getParsedBody()
+            ->post
             ->only(['email', 'password'])
             ->toArray()
         ;

@@ -15,7 +15,7 @@ use Amber\Helpers\Crypto\Hash;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class CsfrMiddleware extends RequestMiddleware
+class CsfrMiddleware extends Middleware
 {
     const TOKEN_NAME = '_csrf_token_';
 
@@ -31,7 +31,7 @@ class CsfrMiddleware extends RequestMiddleware
         $request = $this->setToken($request);
 
         if (!in_array($request->getMethod(), ['GET', 'HEAD']) && !$this->validate($request)) {
-            return $this->factory()->forbidden('Invalid CSRF Token');
+            return $this->responseFactory()->forbidden('Invalid CSRF Token');
         }
 
         return $handler->handle($request);
@@ -48,7 +48,7 @@ class CsfrMiddleware extends RequestMiddleware
             $request->withAttribute(static::TOKEN_NAME, $token);
         }
 
-        $this->getContainer()->bind(static::TOKEN_NAME, function () use ($session) {
+        $this->container->bind(static::TOKEN_NAME, function () use ($session) {
             return $session->get(static::TOKEN_NAME);
         });
 
@@ -69,7 +69,7 @@ class CsfrMiddleware extends RequestMiddleware
         $sessionToken = $session->remove(static::TOKEN_NAME);
 
 
-        $postToken = $request->getParsedBody()->get(static::TOKEN_NAME);
+        $postToken = $request->post->get(static::TOKEN_NAME);
 
         if (is_null($sessionToken) || is_null($postToken) || $sessionToken !== $postToken) {
             return false;

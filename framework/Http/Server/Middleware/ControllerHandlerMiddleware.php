@@ -15,7 +15,7 @@ use Psr\Http\Message\StreamInterface;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class ControllerHandlerMiddleware extends RequestMiddleware
+class ControllerHandlerMiddleware extends Middleware
 {
     /**
      * Process an incoming server request.
@@ -42,10 +42,10 @@ class ControllerHandlerMiddleware extends RequestMiddleware
 
         if ($ret instanceof Response) {
             return $ret
-                ->withHeaders($response->getHeaders()->toArray())
+                ->withHeaders($response->getHeaders())
             ;
         } elseif (is_string($ret)) {
-            $streamFactory = static::getContainer()->get(StreamFactoryInterface::class);
+            $streamFactory = $this->container->get(StreamFactoryInterface::class);
 
             $body = $streamFactory->createStream($ret);
 
@@ -74,6 +74,6 @@ class ControllerHandlerMiddleware extends RequestMiddleware
 
     protected function getControllerCallback(string $contoller, string $action = '__invoke', array $args = [])
     {
-        return static::getContainer()->getClosureFor($contoller, $action, $args);
+        return $this->container->getClosureFor($contoller, $action, $args);
     }
 }

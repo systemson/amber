@@ -15,7 +15,7 @@ use Amber\Auth\UserProvider;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class ApiTokenMiddleware extends RequestMiddleware
+class ApiTokenMiddleware extends Middleware
 {
     const API_TOKEN_NAME = 'api_token';
 

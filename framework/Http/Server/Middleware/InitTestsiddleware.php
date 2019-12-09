@@ -5,7 +5,6 @@ namespace Amber\Http\Server\Middleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
-use Psr\Http\Server\MiddlewareInterface as Middleware;
 
 use Amber\Model\QueryBuilder\QueryBuilder;
 use Aura\SqlQuery\QueryFactory;
@@ -17,7 +16,7 @@ use Aura\SqlQuery\QueryFactory;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class InitTestsiddleware extends RequestMiddleware
+class InitTestsiddleware extends Middleware
 {
     /**
      * Process an incoming server request.

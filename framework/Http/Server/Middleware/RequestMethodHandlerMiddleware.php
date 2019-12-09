@@ -13,7 +13,7 @@ use Psr\Http\Server\RequestHandlerInterface as Handler;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class RequestMethodHandlerMiddleware extends RequestMiddleware
+class RequestMethodHandlerMiddleware extends Middleware
 {
     const METHOD_ATTRIBUTE = '_method';
 
@@ -54,6 +54,6 @@ class RequestMethodHandlerMiddleware extends RequestMiddleware
 
     protected function needsMethodChange(Request $request): bool
     {
-        return $request->getMethod() == 'POST' && $request->getParsedBody()->has(static::METHOD_ATTRIBUTE);
+        return $request->getMethod() == 'POST' && $request->post->has(static::METHOD_ATTRIBUTE);
     }
 }

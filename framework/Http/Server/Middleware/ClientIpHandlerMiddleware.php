@@ -15,7 +15,7 @@ use Amber\Auth\UserProvider;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class ClientIpHandlerMiddleware extends RequestMiddleware
+class ClientIpHandlerMiddleware extends Middleware
 {
     const CLIENT_IP_ATTRIBUTE = 'client_ip';
 
@@ -48,7 +48,7 @@ class ClientIpHandlerMiddleware extends RequestMiddleware
 
     public function getRealClientIp(Request $request): string
     {
-        $headers = $request->getServerParams();
+        $headers = $request->server;
 
         foreach ((array) $this->proxy as $key) {
             if ($headers->has($key)) {

@@ -19,7 +19,7 @@ use Amber\Container\Facades\Response as ResponseFacade;
  *
  * @todo This parser MUST be moved to the ServerRequest class.
  */
-class ParseBodyContentMiddleware extends RequestMiddleware
+class ParseBodyContentMiddleware extends Middleware
 {
     /**
      * Process an incoming server request.
@@ -32,7 +32,7 @@ class ParseBodyContentMiddleware extends RequestMiddleware
     {
         if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'])) {
             if (($input = file_get_contents("php://input")) != null) {
-                switch ($request->getServerParams()->get('CONTENT_TYPE')) {
+                switch ($request->server->get('CONTENT_TYPE')) {
                     case 'application/json':
                         $data = json_decode($input, true);
                         break;

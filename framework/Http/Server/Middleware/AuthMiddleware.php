@@ -16,7 +16,7 @@ use Psr\SimpleCache\CacheInterface;
  * by acting on the request, generating the response, or forwarding the
  * request to a subsequent middleware and possibly acting on its response.
  */
-class AuthMiddleware extends RequestMiddleware
+class AuthMiddleware extends Middleware
 {
     /**
      * Process an incoming server request.
@@ -30,14 +30,14 @@ class AuthMiddleware extends RequestMiddleware
         $session = $request->getAttribute('session');
 
         if ($session->has('_token')) {
-            $cache = $this->getContainer()->get('_session_cache');
+            $cache = $this->container->get('_session_cache');
 
             $token = $session->get('_token');
 
             if ($cache->has($token)) {
                 $user = $cache->get($token);
             } else {
-                $userProvider = $this->getContainer()->get(UserProviderContract::class);
+                $userProvider = $this->container->get(UserProviderContract::class);
                 $user = $userProvider->getUserByToken($token);
             }
 
