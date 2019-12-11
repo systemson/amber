@@ -51,7 +51,7 @@ trait ResourceCrudTrait
         $provider = $this->getProvider();
 
         $resource = $provider->new(
-            $request->getParsedBody()->only($provider ->getAttributesNames())->toArray()
+            $request->post->only($provider ->getAttributesNames())->toArray()
         );
 
         if ($resource->isValid()) {
@@ -95,7 +95,7 @@ trait ResourceCrudTrait
             return Response::notFound();
         }
 
-        $values = $request->getParsedBody()->only($provider ->getAttributesNames())->toArray();
+        $values = $request->post->only($provider ->getAttributesNames())->toArray();
 
         if (!empty($values)) {
             foreach ($values as $attr => $value) {

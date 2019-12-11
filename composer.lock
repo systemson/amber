@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0bb49e3cf7b3b2f8bd2420730dfae7c0",
+    "content-hash": "7a8d087469502402ff941ec67f5e8a88",
     "packages": [
         {
             "name": "amber/cache",
@@ -197,12 +197,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/systemson/http-kernel.git",
-                "reference": "cf345e22426fe69023d714182b26cf08f2babdeb"
+                "reference": "7df7230263f5dffc2ec6cba90783512cfad7e330"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/systemson/http-kernel/zipball/cf345e22426fe69023d714182b26cf08f2babdeb",
-                "reference": "cf345e22426fe69023d714182b26cf08f2babdeb",
+                "url": "https://api.github.com/repos/systemson/http-kernel/zipball/7df7230263f5dffc2ec6cba90783512cfad7e330",
+                "reference": "7df7230263f5dffc2ec6cba90783512cfad7e330",
                 "shasum": ""
             },
             "require": {
@@ -242,7 +242,7 @@
                     "email": "systemson@gmail.com"
                 }
             ],
-            "time": "2019-12-09T14:52:25+00:00"
+            "time": "2019-12-09T16:58:14+00:00"
         },
         {
             "name": "amber/phraser",
@@ -1284,16 +1284,16 @@
         },
         {
             "name": "phpoption/phpoption",
-            "version": "1.6.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/php-option.git",
-                "reference": "f4e7a6a1382183412246f0d361078c29fb85089e"
+                "reference": "a8593bf5176bf3d3f2966942c530be19b44ec87c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/f4e7a6a1382183412246f0d361078c29fb85089e",
-                "reference": "f4e7a6a1382183412246f0d361078c29fb85089e",
+                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/a8593bf5176bf3d3f2966942c530be19b44ec87c",
+                "reference": "a8593bf5176bf3d3f2966942c530be19b44ec87c",
                 "shasum": ""
             },
             "require": {
@@ -1334,7 +1334,7 @@
                 "php",
                 "type"
             ],
-            "time": "2019-11-30T20:20:49+00:00"
+            "time": "2019-12-11T13:45:14+00:00"
         },
         {
             "name": "psr/cache",
@@ -3757,7 +3757,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.2.0"
+        "php": "^7.3.0"
     },
     "platform-dev": []
 }

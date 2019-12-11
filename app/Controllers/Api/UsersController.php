@@ -23,7 +23,7 @@ class UsersController extends Controller
 
     protected function alterResourceBeforeUpdate(Request $request, $resource)
     {
-        if ($request->getParsedBody()->has('password')) {
+        if ($request->post->has('password')) {
             $resource->password = Hash::make($resource->password);
         }
 

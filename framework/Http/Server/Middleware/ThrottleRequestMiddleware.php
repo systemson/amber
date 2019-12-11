@@ -18,7 +18,7 @@ use Psr\SimpleCache\CacheInterface;
  */
 class ThrottleRequestMiddleware extends Middleware
 {
-    private $maxAttempts = 60;
+    private $maxAttempts = 6000;
     private $secondsToReset = 60;
     // private $retryAfter;
 
