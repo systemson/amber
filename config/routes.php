@@ -7,7 +7,7 @@ return [
     'routes' => [
 
         'web' => [
-            'path' => path('config', 'routes', 'web.php'),
+            'path' => path('routes', 'web.php'),
             'middlewares' => [
                 Amber\Http\Server\Middleware\SessionMiddleware::class,
                 Amber\Http\Server\Middleware\AuthMiddleware::class,
@@ -19,7 +19,7 @@ return [
 
 
         'api' => [
-            'path' => path('config', 'routes', 'api.php'),
+            'path' => path('routes', 'api.php'),
             'middlewares' => [
                 Amber\Http\Server\Middleware\ThrottleRequestMiddleware::class,
                 Amber\Http\Server\Middleware\CorsMiddleware::class,

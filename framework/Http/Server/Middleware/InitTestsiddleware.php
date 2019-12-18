@@ -6,9 +6,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
 
-use Amber\Model\QueryBuilder\QueryBuilder;
-use Aura\SqlQuery\QueryFactory;
-
 /**
  * Participant in processing a server request and response.
  *
@@ -27,11 +24,6 @@ class InitTestsiddleware extends Middleware
      */
     public function process(Request $request, Handler $handler): Response
     {
-        //$factory = $this->getContainer()->get(QueryFactory::class);
-        //$query = $this->getContainer()->get(QueryBuilder::class);
-
-        //dd($query->select());
-
         return $handler->handle($request);
     }
 }

@@ -46,7 +46,7 @@ class ClientIpHandlerMiddleware extends Middleware
         );
     }
 
-    public function getRealClientIp(Request $request): string
+    public function getRealClientIp(Request $request): ?string
     {
         $headers = $request->server;
 

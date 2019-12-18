@@ -41,7 +41,7 @@
         "aura/sqlschema": "^2.0",
         "defuse/php-encryption": "^2.2",
         "filp/whoops": "^2.5",
-        "fzaninotto/faker": "^1.8",
+        "firebase/php-jwt": "^5.0",
         "illuminate/database": "^5.8",
         "monolog/monolog": "^1.24",
         "psr/event-dispatcher": "^1.0",
@@ -58,12 +58,19 @@
         "vlucas/phpdotenv": "^3.3"
     },
     "require-dev": {
+        "fzaninotto/faker": "^1.9",
+        "guzzlehttp/guzzle": "^6.5",
         "php-coveralls/php-coveralls": "^2.1",
         "symfony/var-dumper": "^4.2"
     },
     "scripts": {
         "sniff": "phpcs --standard=PSR12 ./app ./framework ./config",
-        "fix-cs": "phpcbf --standard=PSR12 ./app ./framework ./config"
+        "fix-cs": "phpcbf --standard=PSR12 ./app ./framework ./config",
+        "test": "phpunit",
+        "restart": [
+            "composer install",
+            "@php amber migrate:restart"
+        ]
     },
     "config": {
         "preferred-install": "dist",
@@ -73,7 +80,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.1.x-dev"
+            "dev-master": "0.2.x-dev"
         }
     }
 }

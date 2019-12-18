@@ -2,12 +2,12 @@
 
 namespace Amber\Helpers\ClassMaker;
 
-use Amber\Validator\Validator;
+use Amber\Validator\ValidatorTrait;
 use Amber\Phraser\Phraser;
 
 class Maker
 {
-    use Validator;
+    use ValidatorTrait;
 
     protected $useStatements = [];
 

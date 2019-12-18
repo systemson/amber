@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    colors="true"
+    verbose="false"
+     bootstrap="./vendor/autoload.php"
+     stopOnFailure="false"
+>
+    <testsuites>
+        <testsuite name="Amber Test Suite">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./app/</directory>
+            <directory suffix=".php">./framework/</directory>
+            <exclude>
+                <directory suffix=".php">./tests/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-html" target="./tmp/report" lowUpperBound="75" highLowerBound="90"/>
+        <log type="coverage-clover" target="./tmp/clover/coverage.xml"/>
+    </logging>
+    <php>
+        <env name="BASE_URL" value="http://amber.localhost"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+        <env name="MAIL_DRIVER" value="array"/>
+    </php>
+</phpunit>

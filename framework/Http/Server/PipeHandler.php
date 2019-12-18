@@ -25,7 +25,10 @@ class PipeHandler extends RequestHandler
         if ($middleware instanceof MiddlewareInterface) {
             return $middleware;
         } elseif ($this->container instanceof ContainerInterface) {
-            return $this->container->get($middleware);
+            if ($this->container->has($middleware)) {
+                return $this->container->get($middleware);
+            }
+            return $this->container->make($middleware);
         } else {
             throw new \Exception('Middleware is invalid');
         }

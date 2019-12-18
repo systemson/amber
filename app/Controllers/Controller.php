@@ -4,8 +4,9 @@ namespace App\Controllers;
 
 use Amber\Phraser\Phraser;
 use Amber\Collection\Vector;
+use Amber\Controller\AbstractController;
 
-abstract class Controller
+abstract class Controller extends AbstractController
 {
     /**
      * @var string $layout The default layout.

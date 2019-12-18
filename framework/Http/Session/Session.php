@@ -17,10 +17,10 @@ class Session extends Collection
 
     public function __construct(array $options = [])
     {
-        $this->init();
+        $this->init($options);
     }
 
-    public function init()
+    public function init(array $options = [])
     {
         self::setCookieParams([
             'lifetime' => $options['lifetime'] ?? 15 * 60,
@@ -70,6 +70,7 @@ class Session extends Collection
     protected function load()
     {
         $this->cookie_params = session_get_cookie_params();
+
         $this->loadParams();
         $this->loadFlash();
         $this->loadMetadata();

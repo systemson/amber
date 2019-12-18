@@ -59,6 +59,10 @@ class RouteHandlerMiddleware extends Middleware
         /* Add the matched route's middlewares */
         $handler->addMiddlewares($defaults['_middlewares']);
 
+        if (isset($defaults['_controller'])) {
+            $handler->addMiddleware($defaults['_controller']);
+        }
+
         /* Set the route defaults */
         $request = $request->withAttribute('defaults', $defaults);
 

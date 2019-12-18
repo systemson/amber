@@ -14,6 +14,13 @@ class ViewServiceProvider extends ServiceProvider
 
         $container->bind(\Amber\Helpers\Amber::class);
 
+        $flash = @Session::flash();
+
+        if (!empty($flash)) {
+            $errors = @$flash->get('errors');
+        }
+
+
         $container->singleton(Sketch::class)
             ->afterConstruct('setViewsFolder', 'assets/views')
             ->afterConstruct('setCacheFolder', 'tmp/framework/views')
@@ -75,7 +82,7 @@ class ViewServiceProvider extends ServiceProvider
             ->afterConstruct(
                 'setGlobals',
                 [
-                    'errors' => Session::flash()->get('errors'),
+                    'errors' =>  $errors ?? [],
                 ]
             )
             ->afterConstruct('dev')

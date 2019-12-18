@@ -17,21 +17,6 @@ return [
         Amber\Auth\AuthClass::class,
         App\Models\UserProvider::class,
         Amber\Sketch\Template\Template::class,
-        Amber\Http\Server\Middleware\InitTestsiddleware::class,
-        Amber\Http\Server\Middleware\SessionMiddleware::class,
-        Amber\Http\Server\Middleware\RouteHandlerMiddleware::class,
-        Amber\Http\Server\Middleware\AuthMiddleware::class,
-        Amber\Http\Server\Middleware\CsfrMiddleware::class,
-        Amber\Http\Server\Middleware\ControllerHandlerMiddleware::class,
-        Amber\Http\Server\Middleware\ClosureHandlerMiddleware::class,
-        Amber\Http\Server\Middleware\AuthenticatedMiddleware::class,
-        Amber\Http\Server\Middleware\ErrorHandlerMiddleware::class,
-        Amber\Http\Server\Middleware\RequestMethodHandlerMiddleware::class,
-        Amber\Http\Server\Middleware\ApiTokenMiddleware::class,
-        Amber\Http\Server\Middleware\ClientIpHandlerMiddleware::class,
-        Amber\Http\Server\Middleware\ThrottleRequestMiddleware::class,
-        Amber\Http\Server\Middleware\ParseBodyContentMiddleware::class,
-        Amber\Http\Server\Middleware\CorsMiddleware::class,
     ],
 
     /*
@@ -55,7 +40,7 @@ return [
     /*
      * The app default middlewares.
      *
-     * This are the default and mandatory middlewares for every server request.
+     * This are the default and mandatory middlewares for every single server request.
      * If your middleware is route dependent add the middleware(s) as a route option.
      */
     'middlewares' => [

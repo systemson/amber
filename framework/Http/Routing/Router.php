@@ -59,9 +59,9 @@ class Router implements RequestMethodInterface
     /**
      * Adds a new route to the route collection.
      */
-    private function addRoute(array $methods, string $url, $defaults): Route
+    private function addRoute(array $methods, string $url, $action): Route
     {
-        $defaults = $this->handleDefaults($defaults);
+        $defaults = $this->handleAction($action);
 
         $realUrl = $this->getRealUrl($url);
 
@@ -74,26 +74,26 @@ class Router implements RequestMethodInterface
         return $route;
     }
 
-    private function handleDefaults($defaults)
+    private function handleAction($action)
     {
-        if (is_string($defaults)) {
-            $defaultArray = $this->getControllerToActionArray($defaults);
-
+        if ($action instanceof \Closure) {
             $middlewares = $this->getMiddlewares();
 
             return [
-                '_controller'  => $defaultArray->first(),
-                '_action'      => $defaultArray->last(),
-                '_middlewares' => array_merge($middlewares, [ControllerHandlerMiddleware::class]),
-            ];
-        } elseif ($defaults instanceof \Closure) {
-            $middlewares = $this->getMiddlewares();
-
-            return [
-                '_callback' => $defaults,
+                '_callback' => $action,
                 '_middlewares' => array_merge($middlewares, [ClosureHandlerMiddleware::class]),
             ];
         }
+        
+        $defaultArray = $this->getControllerToActionArray($action);
+
+        $middlewares = $this->getMiddlewares();
+
+        return [
+            '_controller'  => $defaultArray->first(),
+            '_action'      => $defaultArray->last(),
+            '_middlewares' => $middlewares,
+        ];
     }
 
     /**
