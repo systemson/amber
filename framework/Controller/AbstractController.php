@@ -35,11 +35,9 @@ abstract class AbstractController extends RequestMiddleware
 
     protected function getArgumentsFromDefaults(array $defaults): array
     {
-        $args = array_filter($defaults, function ($key) {
+        return array_filter($defaults, function ($key) {
             return substr($key, 0, 1) != "_";
         }, ARRAY_FILTER_USE_KEY);
-
-        return $args;
     }
 
     protected function geMethodtArguments(string $method, array $args = []): array
