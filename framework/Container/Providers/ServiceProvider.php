@@ -4,15 +4,11 @@ namespace Amber\Container\Providers;
 
 use Amber\Container\StaticContainerAwareTrait;
 use Amber\Container\ContainerAwareClass;
+use Psr\Container\ContainerInterface;
 
 class ServiceProvider extends ContainerAwareClass
 {
-    public static function boot(): void
-    {
-        //
-    }
-
-    public function setUp(): void
+    public function setUp(ContainerInterface $container): void
     {
         //
     }
@@ -22,8 +18,20 @@ class ServiceProvider extends ContainerAwareClass
         return [];
     }
 
-    public function setDown(): void
+    public static function boot(): void
     {
         //
+    }
+
+    public function tearDown(): void
+    {
+        //
+    }
+
+    final public function register(ContainerInterface $container): self
+    {
+        $container->bindMultiple($this->binds());
+
+        return $this;
     }
 }

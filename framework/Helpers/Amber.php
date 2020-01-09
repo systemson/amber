@@ -3,7 +3,7 @@
 namespace Amber\Helpers;
 
 use Carbon\Carbon;
-use Amber\Container\Application;
+use Amber\Container\Facades\Application;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Amber\Http\Server\Middleware\CsfrMiddleware;
 

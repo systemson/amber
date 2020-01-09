@@ -24,10 +24,12 @@ use App\Models\UserProvider;
 use Amber\Auth\UserProviderContract;
 use Amber\Auth\AuthClass;
 use Sunrise\Stream\StreamFactory;
+use Psr\Container\ContainerInterface;
+use Amber\Container\Facades\Router as RouterFacade;
 
 class HttpServiceProvider extends ServiceProvider
 {
-    public function setUp(): void
+    public function setUp(ContainerInterface $container): void
     {
         $container = static::getContainer();
 
@@ -60,5 +62,7 @@ class HttpServiceProvider extends ServiceProvider
         $container->bind(ResponseDispatcher::class);
         $container->bind(StreamFactoryInterface::class, StreamFactory::class);
         $container->bind(UserProviderContract::class, UserProvider::class);
+
+        RouterFacade::boot();
     }
 }

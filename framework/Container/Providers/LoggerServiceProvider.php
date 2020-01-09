@@ -6,13 +6,12 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\RotatingFileHandler;
+use Psr\Container\ContainerInterface;
 
 class LoggerServiceProvider extends ServiceProvider
 {
-    public function setUp(): void
+    public function setUp(ContainerInterface $container): void
     {
-        $container = static::getContainer();
-
         $container->register(LoggerInterface::class, Logger::class)
         ->setArgument('__construct', 'name', 'AmberFramework')
         ->afterConstruct('pushHandler', function () {

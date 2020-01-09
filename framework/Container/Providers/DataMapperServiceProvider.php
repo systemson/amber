@@ -10,13 +10,12 @@ use Amber\Model\Mediator\ArrayMediator;
 use Amber\Model\QueryBuilder\QueryBuilder;
 use Aura\SqlQuery\QueryFactory;
 use Aura\Sql\ExtendedPdo;
+use Psr\Container\ContainerInterface;
 
 class DataMapperServiceProvider extends ServiceProvider
 {
-    public function setUp(): void
+    public function setUp(ContainerInterface $container): void
     {
-        $container = static::getContainer();
-
         $default = config('database.default');
 
         $container->register(QueryFactory::class)

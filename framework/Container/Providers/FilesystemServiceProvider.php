@@ -6,13 +6,12 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Adapter\Local;
+use Psr\Container\ContainerInterface;
 
 class FilesystemServiceProvider extends ServiceProvider
 {
-    public function setUp(): void
+    public function setUp(ContainerInterface $container): void
     {
-        $container = static::getContainer();
-
         $container->register(FilesystemInterface::class, Filesystem::class)
             ->setArgument(
                 '__construct',

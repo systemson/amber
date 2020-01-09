@@ -5,13 +5,12 @@ namespace Amber\Container\Providers;
 use Amber\Sketch\Sketch;
 use Amber\Sketch\Template\Template;
 use Amber\Container\Facades\Session;
+use Psr\Container\ContainerInterface;
 
 class ViewServiceProvider extends ServiceProvider
 {
-    public function setUp(): void
+    public function setUp(ContainerInterface $container): void
     {
-        $container = static::getContainer();
-
         $container->bind(\Amber\Helpers\Amber::class);
 
         $flash = @Session::flash();

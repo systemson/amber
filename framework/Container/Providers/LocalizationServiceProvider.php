@@ -8,13 +8,12 @@ use Amber\Validator\Validator;
 use Amber\Phraser\Phraser as Str;
 use Amber\Container\Facades\Str as StrFacade;
 use Symfony\Component\Inflector\Inflector;
+use Psr\Container\ContainerInterface;
 
 class LocalizationServiceProvider extends ServiceProvider
 {
-    public function setUp(): void
+    public function setUp(ContainerInterface $container): void
     {
-        $container = $this->getContainer();
-
         $container->register(Lang::class)
             ->setArguments(
                 '__construct',

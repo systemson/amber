@@ -5,13 +5,12 @@ namespace Amber\Container\Providers;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Psr16Cache;
 use Psr\SimpleCache\CacheInterface;
+use Psr\Container\ContainerInterface;
 
 class CacheServiceProvider extends ServiceProvider
 {
-    public function setUp(): void
+    public function setUp(ContainerInterface $container): void
     {
-        $container = static::getContainer();
-
         $container->bind(CacheInterface::class, function () {
             $adapter = new FilesystemAdapter('', 0, config('cache.default.path'));
             return new Psr16Cache($adapter);

@@ -13,22 +13,12 @@ define('BASE_DIR', realpath(getcwd() . DIRECTORY_SEPARATOR . '../'));
  */
 require __DIR__.'/../vendor/autoload.php';
 
-use Amber\Container\Application as App;
+use Amber\Container\Bootstrap;
 
 
-/**
- * Loads the application.
- */
-App::boot();
+$app = new Bootstrap();
+$app->boot();
+$app->respond();
+$app->shutDown();
 
-
-/**
- * Sends the response.
- */
-App::respond();
-
-
-/**
- * Shuts down the application.
- */
-App::shutDown();
+die();

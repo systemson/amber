@@ -11,7 +11,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\ContainerInterface;
 
-class Application extends ContainerFacade
+class Applicationsss extends ContainerFacade
 {
     /**
      * @var string The class accessor.
@@ -39,54 +39,26 @@ class Application extends ContainerFacade
      */
     private static $providers = [];
 
-    private static $laps = [];
-
-    private static function lap(string $name): void
-    {
-        if (env('APP_ENV') != 'dev') {
-            return;
-        }
-        if (empty(self::$laps)) {
-            self::$laps['Start'] = [
-                'name' => 'Start',
-                'total' => microtime(true),
-                'time' => 0,
-            ];
-        }
-
-        self::$laps[] = [
-            'name' => $name,
-            'total' => round($time = microtime(true) - self::$laps['Start']['time'], 6),
-            'time' => round($time - end(self::$laps)['time'], 6),
-        ];
-    }
-
     /**
      * Prepares the application for running.
      */
     public static function boot(): void
     {
         $app = new Container();
-        self::lap('Container instantiation');
 
         // Binds the container to itself
         $app->register(ContainerInterface::class)
             ->setInstance($app)
         ;
-        self::lap('Container self registration');
 
         // Pass the container to the container aware class
         ContainerAwareClass::setContainer($app);
-        self::lap('Container passed to ContainerAwareClass');
 
         ContainerFacade::setContainer($app);
-        self::lap('Container passed to ContainerFacade');
 
         static::getInstance();
-        self::lap('Application instantiation');
 
         Router::boot();
-        self::lap('Router booting');
     }
 
     /**
@@ -97,7 +69,6 @@ class Application extends ContainerFacade
     public static function beforeConstruct(): void
     {
         self::bootProviders();
-        self::lap('Providers booting');
     }
 
     /**
@@ -111,10 +82,8 @@ class Application extends ContainerFacade
         foreach ((array) config('app.binds') as $service) {
             static::bind($service);
         }
-        self::lap('Providers binding');
 
         self::setUpProviders();
-        self::lap('Providers setup');
     }
 
     public static function respond()
@@ -124,16 +93,6 @@ class Application extends ContainerFacade
                 static::get(ServerRequestInterface::class)
             )
         );
-        static::lap('Request handled');
-    }
-
-    /**
-     * Shut downs the application after the response is dispatched.
-     */
-    public static function shutDown(): void
-    {
-        self::setDownProviders();
-        self::lap('Providers set-down');
     }
 
     /**
@@ -158,7 +117,7 @@ class Application extends ContainerFacade
     {
         array_map(
             function ($service) {
-                static::make($service)->setUp();
+                static::make($service)->setUp(static::getInstance());
             },
             self::$providers
         );
