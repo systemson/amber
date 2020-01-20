@@ -11,7 +11,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\ContainerInterface;
 
-class Applicationsss extends ContainerFacade
+class Application extends ContainerFacade
 {
     /**
      * @var string The class accessor.
@@ -149,7 +149,6 @@ class Applicationsss extends ContainerFacade
 
         $console->run();
     }
-
 
     /**
      * Prepares the application for CLI running.
