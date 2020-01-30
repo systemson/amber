@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
 
 class DataMapperServiceProvider extends ServiceProvider
 {
-    public function setUp(ContainerInterface $container): void
+    public function boot(ContainerInterface $container): void
     {
         $default = config('database.default');
 
@@ -35,9 +35,5 @@ class DataMapperServiceProvider extends ServiceProvider
             ])->afterConstruct('addConnection', 'default', config("database.connections.{$default}"))
             ->afterConstruct('addConnections', config('database.connections'))
         ;
-    }
-
-    public function setDown(): void
-    {
     }
 }

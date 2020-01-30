@@ -12,7 +12,7 @@ use Psr\Container\ContainerInterface;
 
 class LocalizationServiceProvider extends ServiceProvider
 {
-    public function setUp(ContainerInterface $container): void
+    public function boot(ContainerInterface $container): void
     {
         $container->register(Lang::class)
             ->setArguments(

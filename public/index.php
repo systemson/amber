@@ -15,10 +15,24 @@ require __DIR__.'/../vendor/autoload.php';
 
 use Amber\Container\Bootstrap;
 
-
+/**
+ * Builds the application.
+ */
 $app = new Bootstrap();
-$app->boot();
-$app->respond();
+
+/**
+ * Prepares the application for running.
+ */
+$app->prepare();
+
+/**
+ * Process the request and sends the response.
+ */
+$app->run();
+
+/**
+ * Shuts down the application.
+ */
 $app->shutDown();
 
 die();

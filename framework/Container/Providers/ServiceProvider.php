@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 
 class ServiceProvider extends ContainerAwareClass
 {
-    public function setUp(ContainerInterface $container): void
+    public static function setUp(): void
     {
         //
     }
@@ -18,7 +18,7 @@ class ServiceProvider extends ContainerAwareClass
         return [];
     }
 
-    public static function boot(): void
+    public function boot(ContainerInterface $container): void
     {
         //
     }

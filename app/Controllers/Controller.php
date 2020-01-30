@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use Amber\Phraser\Phraser;
-use Amber\Collection\Vector;
+use Amber\Collection\ArrayCollection;
 use Amber\Controller\AbstractController;
 
 abstract class Controller extends AbstractController
@@ -97,7 +97,7 @@ abstract class Controller extends AbstractController
 
     public function getCalledAction()
     {
-        return (new Vector(debug_backtrace()))
+        return (new ArrayCollection(debug_backtrace()))
             ->where('class', get_called_class())
             ->last()['function'];
     }

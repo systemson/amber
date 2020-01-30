@@ -29,7 +29,7 @@ use Amber\Container\Facades\Router as RouterFacade;
 
 class HttpServiceProvider extends ServiceProvider
 {
-    public function setUp(ContainerInterface $container): void
+    public function boot(ContainerInterface $container): void
     {
         $container = static::getContainer();
 

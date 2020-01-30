@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 
 class CacheServiceProvider extends ServiceProvider
 {
-    public function setUp(ContainerInterface $container): void
+    public function boot(ContainerInterface $container): void
     {
         $container->bind(CacheInterface::class, function () {
             $adapter = new FilesystemAdapter('', 0, config('cache.default.path'));

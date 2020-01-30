@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 
 class ViewServiceProvider extends ServiceProvider
 {
-    public function setUp(ContainerInterface $container): void
+    public function boot(ContainerInterface $container): void
     {
         $container->bind(\Amber\Helpers\Amber::class);
 

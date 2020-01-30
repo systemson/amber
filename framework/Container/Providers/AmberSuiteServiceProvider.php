@@ -8,12 +8,12 @@ use Psr\Container\ContainerInterface;
 
 class AmberSuiteServiceProvider extends ServiceProvider
 {
-    public function setUp(ContainerInterface $container): void
+    public function boot(ContainerInterface $container): void
     {
         //
     }
 
-    public function setDown(): void
+    public function tearDown(): void
     {
         //
     }

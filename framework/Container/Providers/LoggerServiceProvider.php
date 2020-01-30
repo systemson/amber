@@ -10,7 +10,7 @@ use Psr\Container\ContainerInterface;
 
 class LoggerServiceProvider extends ServiceProvider
 {
-    public function setUp(ContainerInterface $container): void
+    public function boot(ContainerInterface $container): void
     {
         $container->register(LoggerInterface::class, Logger::class)
         ->setArgument('__construct', 'name', 'AmberFramework')

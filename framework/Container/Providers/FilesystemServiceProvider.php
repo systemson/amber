@@ -10,7 +10,7 @@ use Psr\Container\ContainerInterface;
 
 class FilesystemServiceProvider extends ServiceProvider
 {
-    public function setUp(ContainerInterface $container): void
+    public function boot(ContainerInterface $container): void
     {
         $container->register(FilesystemInterface::class, Filesystem::class)
             ->setArgument(

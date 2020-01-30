@@ -25,10 +25,10 @@ class Bootstrap extends Container
         }
     }
 
-    public function boot(): void
+    public function prepare(): void
     {
         if (false) {
-            $this->pickUp();
+           // $this->pickUp();
         }
 
         // Binds the container interface to itself.
@@ -53,7 +53,7 @@ class Bootstrap extends Container
 
         $this->bootProviders();
 
-        $this->drop();
+        //$this->drop();
     }
 
     /**
@@ -65,7 +65,7 @@ class Bootstrap extends Container
             function ($service) {
                 $service
                     ->register($this)
-                    ->setUp($this)
+                    ->boot($this)
                 ;
             },
             $this->providers
@@ -78,12 +78,12 @@ class Bootstrap extends Container
     private function setUpProviders(): void
     {
         foreach ($this->providers as $index => $class) {
-            $class::boot();
+            $class::setUp();
             $this->providers[$index] = $this->make($class);
         }
     }
 
-    public function respond()
+    public function run()
     {
         $this->get(ResponseDispatcher::class)->send(
             $this->get(RequestHandlerInterface::class)->handle(
