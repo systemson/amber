@@ -68,7 +68,7 @@ class Application extends ContainerFacade
      */
     public static function beforeConstruct(): void
     {
-        self::bootProviders();
+        self::setUpProviders();
     }
 
     /**
@@ -83,7 +83,7 @@ class Application extends ContainerFacade
             static::bind($service);
         }
 
-        self::setUpProviders();
+        self::bootProviders();
     }
 
     public static function respond()
@@ -98,13 +98,13 @@ class Application extends ContainerFacade
     /**
      * Boots the service providers.
      */
-    private static function bootProviders(): void
+    private static function setUpProviders(): void
     {
         self::$providers = (array) config('app.providers');
 
         array_map(
             function ($service) {
-                $service::boot();
+                $service::setUp();
             },
             self::$providers
         );
@@ -113,11 +113,11 @@ class Application extends ContainerFacade
     /**
      * Set up the service providers.
      */
-    private static function setUpProviders(): void
+    private static function bootProviders(): void
     {
         array_map(
             function ($service) {
-                static::make($service)->setUp(static::getInstance());
+                static::make($service)->boot(static::getInstance());
             },
             self::$providers
         );
