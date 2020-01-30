@@ -18,7 +18,7 @@ class Bootstrap extends Container
         $this->providers = (array) config('app.providers');
     }
 
-    protected function loadBinds(): void
+    protected function loadAppBinds(): void
     {
         foreach ((array) config('app.binds') as $service) {
             $this->bind($service);
@@ -27,33 +27,58 @@ class Bootstrap extends Container
 
     public function prepare(): void
     {
-        if (false) {
-           // $this->pickUp();
-        }
+        /**
+         * Load
+         */
+        $this->loadAppBinds();
+        //$this->loadAppConfigs();
+        $this->loadProviders();
 
+        /**
+         * Set up
+         */
+        $this->setUp();
+        $this->setUpProviders();
+
+        /**
+         * Boot
+         */
+        $this->boot();
+        $this->bootProviders();
+    }
+
+    /**
+     * Set up the service providers.
+     */
+    private function setUp(): void
+    {
         // Binds the container interface to itself.
         $this->register(ContainerInterface::class)
             ->setInstance($this)
         ;
+    }
 
-        // Loads the default binds.
-        $this->loadBinds();
+    /**
+     * Set up the service providers.
+     */
+    private function setUpProviders(): void
+    {
+        foreach ($this->providers as $index => $class) {
+            $class::setUp();
+            $this->providers[$index] = $this->make($class);
+        }
+    }
 
-        // Loads the app providers.
-        $this->loadProviders();
-
-        // Warm up the providers.
-        $this->setUpProviders();
-
+    /**
+     * Boots the application.
+     */
+    public function boot(): void
+    {
         // Passes the container to the container aware class.
         ContainerAwareClass::setContainer($this);
 
         // Passes the container to the container facade.
         ContainerFacade::setContainer($this);
-
-        $this->bootProviders();
-
-        //$this->drop();
     }
 
     /**
@@ -72,17 +97,6 @@ class Bootstrap extends Container
         );
     }
 
-    /**
-     * Set up the service providers.
-     */
-    private function setUpProviders(): void
-    {
-        foreach ($this->providers as $index => $class) {
-            $class::setUp();
-            $this->providers[$index] = $this->make($class);
-        }
-    }
-
     public function run()
     {
         $this->get(ResponseDispatcher::class)->send(
@@ -97,13 +111,22 @@ class Bootstrap extends Container
      */
     public function shutDown(): void
     {
-        $this->shutDownProviders();
+        $this->tearDown();
+        $this->tearDownProviders();
+        die();
     }
 
     /**
-     * Shuts down the service providers.
+     * Tears down the application.
      */
-    private function shutDownProviders(): void
+    private function tearDown(): void
+    {
+    }
+
+    /**
+     * Tears down the service providers.
+     */
+    private function tearDownProviders(): void
     {
         array_map(
             function ($service) {
@@ -111,14 +134,5 @@ class Bootstrap extends Container
             },
             $this->providers
         );
-    }
-
-    protected function drop(): void
-    {
-        if (false) {
-            return;
-        }
-        $cache = $this->get(CacheInterface::class);
-        $cache->set('__container_cache', $this->getCollection()->toArray());
     }
 }

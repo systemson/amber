@@ -34,5 +34,3 @@ $app->run();
  * Shuts down the application.
  */
 $app->shutDown();
-
-die();
