@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Amber/Collection package.
  *
@@ -18,7 +19,7 @@ use Carbon\Carbon;
  */
 class FlashCollection extends ImmutableCollection
 {
-    const FLASH_NAME = '_amber_flash';
+    public const FLASH_NAME = '_amber_flash';
 
     public function __construct()
     {

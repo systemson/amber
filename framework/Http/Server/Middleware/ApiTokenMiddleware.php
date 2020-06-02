@@ -17,7 +17,7 @@ use Amber\Auth\UserProvider;
  */
 class ApiTokenMiddleware extends Middleware
 {
-    const API_TOKEN_NAME = 'api_token';
+    public const API_TOKEN_NAME = 'api_token';
 
     /**
      * Process an incoming server request.

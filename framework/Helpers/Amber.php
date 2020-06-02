@@ -9,8 +9,8 @@ use Amber\Http\Server\Middleware\CsfrMiddleware;
 
 class Amber
 {
-    const VERSION = 'v0.2.x-dev';
-    const NAME = 'Amber Framework';
+    public const VERSION = 'v0.2.x-dev';
+    public const NAME = 'Amber Framework';
 
     public function version(): string
     {

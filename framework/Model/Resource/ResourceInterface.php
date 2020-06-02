@@ -19,7 +19,7 @@ interface ResourceInterface extends
 
     public function setName(string $name): ResourceInterface;
 
-    public function getName():string;
+    public function getName(): string;
 
     public function setAttributes(array $attributes): ResourceInterface;
 

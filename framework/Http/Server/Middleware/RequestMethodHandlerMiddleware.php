@@ -15,9 +15,9 @@ use Psr\Http\Server\RequestHandlerInterface as Handler;
  */
 class RequestMethodHandlerMiddleware extends Middleware
 {
-    const METHOD_ATTRIBUTE = '_method';
+    public const METHOD_ATTRIBUTE = '_method';
 
-    const REAL_METHOD_ATTRIBUTE = 'request_real_method';
+    public const REAL_METHOD_ATTRIBUTE = 'request_real_method';
 
     /**
      * Process an incoming server request.

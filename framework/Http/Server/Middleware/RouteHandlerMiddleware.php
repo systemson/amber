@@ -9,13 +9,10 @@ use Amber\Http\Routing\Matcher;
 use Symfony\Component\Routing\Exception\NoConfigurationException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-
-
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
-
 use Amber\Http\Message\ServerRequest;
 use Amber\Container\Facades\Filesystem;
 use Amber\Http\Routing\Router;

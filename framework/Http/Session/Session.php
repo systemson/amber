@@ -13,7 +13,7 @@ class Session extends Collection
     private $metadata = [];
     private $cookie_params = [];
 
-    const STORAGE_NAME = '_params';
+    public const STORAGE_NAME = '_params';
 
     public function __construct(array $options = [])
     {

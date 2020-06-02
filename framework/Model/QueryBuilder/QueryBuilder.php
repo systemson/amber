@@ -7,10 +7,10 @@ use Aura\SqlQuery\AbstractQuery;
 
 class QueryBuilder
 {
-    use Insertable,
-        Selectable,
-        Updatable,
-        Deletable
+    use Insertable;
+    use Selectable;
+    use Updatable;
+    use Deletable
     ;
 
     protected $query;

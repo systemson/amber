@@ -12,7 +12,6 @@ use Amber\Container\Facades\Str;
 use Amber\Collection\Contracts\CollectionInterface;
 use Amber\Model\Resource\ResourceCollection;
 use Amber\Phraser\Phraser;
-
 use Amber\Model\Traits\AttributesTrait;
 
 /**
@@ -20,11 +19,11 @@ use Amber\Model\Traits\AttributesTrait;
  */
 abstract class AbstractProvider
 {
-    use Insertable,
-        Selectable,
-        Updatable,
-        Deletable,
-        Relations
+    use Insertable;
+    use Selectable;
+    use Updatable;
+    use Deletable;
+    use Relations
     ;
 
     protected $id = 'id';
@@ -46,10 +45,10 @@ abstract class AbstractProvider
     protected $edited_at = true;
     protected $queryBuilder;
 
-    const CREATED_AT = 'created_at';
-    const EDITED_AT = 'updated_at';
+    public const CREATED_AT = 'created_at';
+    public const EDITED_AT = 'updated_at';
 
-    const QUERY_CLASSES = [
+    public const QUERY_CLASSES = [
         'insert' => 'Aura\SqlQuery\Common\Insert',
         'select' => 'Aura\SqlQuery\Common\Select',
         'update' => 'Aura\SqlQuery\Common\Update',

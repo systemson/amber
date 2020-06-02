@@ -17,9 +17,9 @@ use Amber\Auth\UserProvider;
  */
 class ClientIpHandlerMiddleware extends Middleware
 {
-    const CLIENT_IP_ATTRIBUTE = 'client_ip';
+    public const CLIENT_IP_ATTRIBUTE = 'client_ip';
 
-    const PROXY_FALLBACK = 'REMOTE_ADDR';
+    public const PROXY_FALLBACK = 'REMOTE_ADDR';
 
     protected $proxy = [
         'HTTP_CLIENT_IP',

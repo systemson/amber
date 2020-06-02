@@ -8,7 +8,6 @@ use Amber\Utils\Traits\SingletonTrait;
 
 class Auth extends ContainerFacade
 {
-
     use SingletonTrait;
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Amber/Collection package.
  *
@@ -18,9 +19,9 @@ use Carbon\Carbon;
  */
 class MetadataCollection extends ImmutableCollection
 {
-    const METADATA_NAME = '_amber_metadata';
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
+    public const METADATA_NAME = '_amber_metadata';
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'updated_at';
 
     public function __construct()
     {

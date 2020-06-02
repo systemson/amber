@@ -8,7 +8,6 @@ use Amber\Utils\Traits\SingletonTrait;
 
 class Session extends ContainerFacade
 {
-
     use SingletonTrait;
 
     /**

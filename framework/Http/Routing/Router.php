@@ -14,9 +14,9 @@ use Amber\Http\Message\Utils\RequestMethodInterface;
  */
 class Router implements RequestMethodInterface
 {
-    use MiddlewareTrait,
-        PrefixTrait,
-        NamespaceTrait
+    use MiddlewareTrait;
+    use PrefixTrait;
+    use NamespaceTrait
     ;
 
     protected $collection;

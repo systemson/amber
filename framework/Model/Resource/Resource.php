@@ -14,11 +14,11 @@ use Amber\Model\Provider\AbstractProvider;
 
 class Resource implements ResourceInterface
 {
-    use IteratorAggregateTrait,
-        PropertyAccessTrait,
-        SerializableTrait,
-        AttributesTrait,
-        CountableTrait // It's not compatible.
+    use IteratorAggregateTrait;
+    use PropertyAccessTrait;
+    use SerializableTrait;
+    use AttributesTrait;
+    use CountableTrait // It's not compatible.
     ;
 
     private $_name;
@@ -54,7 +54,15 @@ class Resource implements ResourceInterface
     public function setValues(iterable $values = []): ResourceInterface
     {
         foreach ($values as $name => $value) {
-            if ($this->hasAttribute($name) || in_array($name, [AbstractProvider::CREATED_AT, AbstractProvider::EDITED_AT, $this->getId()])) {
+            if (
+                $this->hasAttribute($name)
+                ||
+                in_array($name, [
+                    AbstractProvider::CREATED_AT,
+                    AbstractProvider::EDITED_AT,
+                    $this->getId()
+                ])
+            ) {
                 if ($name == AbstractProvider::CREATED_AT) {
                     $this->setAttribute(AbstractProvider::CREATED_AT, 'date');
                 } elseif ($name == AbstractProvider::EDITED_AT) {

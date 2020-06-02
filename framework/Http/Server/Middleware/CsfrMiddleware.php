@@ -17,7 +17,7 @@ use Amber\Helpers\Crypto\Hash;
  */
 class CsfrMiddleware extends Middleware
 {
-    const TOKEN_NAME = '_csrf_token_';
+    public const TOKEN_NAME = '_csrf_token_';
 
     /**
      * Process an incoming server request.
