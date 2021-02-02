@@ -42,7 +42,7 @@
         "defuse/php-encryption": "^2.2",
         "filp/whoops": "^2.5",
         "firebase/php-jwt": "^5.0",
-        "illuminate/database": "^5.8",
+        "illuminate/database": "^6.20",
         "monolog/monolog": "^1.24",
         "psr/event-dispatcher": "^1.0",
         "psr/http-client": "^1.0",
