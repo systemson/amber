@@ -1,6 +1,6 @@
 <?php
 
-namespace Amber\Helpers\Caster;
+namespace Amber\Helpers\TypeParser;
 
 class Caster
 {
@@ -33,7 +33,7 @@ class Caster
     {
         try {
             return $this->doCast($value, $type);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             if ($this->exceptions) {
                 throw $e;
             }
